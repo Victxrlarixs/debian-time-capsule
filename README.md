@@ -33,7 +33,7 @@ Welcome to a pixel recreation of the Common Desktop Environment (CDE)—living r
 | **XEmacs Editor**          | Real Emacs keybindings (`C-x C-s`, `M-x`, `C-k`), interactive minibuffer, GNU splash screen. It feels **real** | [XEmacs Guide →](docs/user-guide/xemacs.md)                |
 | **Terminal Lab**           | 41 interactive lessons. Watch commands type themselves. Learn Unix by doing—from `ls` to pipes                 | [Terminal Lab Guide →](docs/user-guide/terminal-lab.md)    |
 | **Virtual Filesystem**     | Create files, make directories, navigate with context menus. A real filesystem in your browser                 | [File Manager Guide →](docs/user-guide/file-manager.md)    |
-| **Netscape Navigator**     | Web browsing from 1994. Animated logo. Supports browsing the modern web directly with retro compatibility. | [Netscape Guide →](docs/user-guide/netscape.md)            |
+| **Netscape Navigator**     | Web browsing from 1994. Supports browsing the modern web directly with retro compatibility. | [Netscape Guide →](docs/user-guide/netscape.md)            |
 | **Lynx Browser**           | Text-based web browser from 1992. Keyboard-driven navigation. Pure terminal browsing experience                | [Lynx Guide →](docs/user-guide/lynx.md)                    |
 | **Man Page Viewer**        | Unix manual pages with authentic formatting. 28 essential commands. Clickable examples and navigation          | [Man Viewer Guide →](docs/user-guide/man-viewer.md)        |
 | **4 Virtual Workspaces**   | Just like real CDE. Organize across four desktops. Switch with `Ctrl+Alt+1-4`                                  | [Workspaces Guide →](docs/user-guide/workspaces.md)        |
