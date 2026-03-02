@@ -74,6 +74,8 @@ class NetscapeNavigator {
     if (!url) return '';
     const target = url.trim();
 
+    if (target === 'net-search') return 'https://duckduckgo.com/';
+
     if (NS_PAGES[target] || target.startsWith('about:')) return target;
 
     if (!target.includes('.') || target.includes(' ')) {
