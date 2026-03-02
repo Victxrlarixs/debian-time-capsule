@@ -95,7 +95,6 @@ function showInstallIcon(): void {
       <span>Install PWA</span>
     `;
 
-    // Handle double-click with capture phase to prevent desktop handler
     icon.addEventListener(
       'dblclick',
       (e) => {
@@ -163,7 +162,6 @@ export async function installPWA(): Promise<void> {
       hideInstallIcon();
     } else {
       console.log('[PWA] User dismissed the install prompt');
-      // Keep the icon visible for retry
       deferredInstallPrompt = promptEvent;
     }
   } catch (error) {

@@ -113,7 +113,6 @@ export const DesktopManager = (() => {
     newNames.forEach((name, index) => {
       const node = desktopChildren[name];
       if (!existingNames.has(name)) {
-        // Create only if it doesn't exist
         const pos = savedPositions[name] || findNextAvailableSlot();
         createIcon(name, node.type, pos.left, pos.top);
       }
@@ -128,7 +127,6 @@ export const DesktopManager = (() => {
       }
     });
 
-    // 4. Handle System Icons (Ensure they exist only once)
     SYSTEM_ICONS.forEach((sys) => {
       if (!container.querySelector(`[data-id="${sys.id}"]`)) {
         const pos = savedPositions[sys.id] || findNextAvailableSlot();
@@ -315,8 +313,6 @@ export const DesktopManager = (() => {
     // Collision Detection: If occupied, try to find nearest empty space
     if (isSlotOccupied(snappedX, snappedY, id)) {
       logger.log(`[DesktopManager] Slot ${snappedX},${snappedY} occupied. Finding nearest...`);
-      // Simple logic: if occupied, move back to original or leave as is but it's better to find nearest
-      // For now, we revert or shift slightly. Let's try to revert to saved position if possible
       const savedPositions = (settingsManager.getSection('desktop') as IconPositions) || {};
       const prev = savedPositions[id || ''];
       if (prev) {

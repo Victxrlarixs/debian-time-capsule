@@ -1,5 +1,4 @@
-// src/scripts/workers/xpm-worker.ts
-// Web Worker for XPM parsing to avoid blocking the main thread
+// Web Worker for XPM parsing
 
 interface XPMParseMessage {
   type: 'parse';

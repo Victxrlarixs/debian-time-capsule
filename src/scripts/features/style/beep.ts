@@ -42,7 +42,6 @@ export class BeepModule extends StyleModuleBase<BeepSettings> {
     if (saved && Object.keys(saved).length > 0) {
       Object.assign(this.settings, saved);
     } else {
-      // First time load: ensure volume is set to 90%
       this.settings.volume = 0.9;
       this.save();
     }

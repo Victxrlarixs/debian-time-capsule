@@ -1,11 +1,10 @@
-// src/scripts/features/lynx.ts
 import { WindowManager } from '../core/windowmanager';
 import { logger } from '../utilities/logger';
 import lynxPagesData from '../../data/lynx-pages.json';
 import { openWindow, closeWindow } from '../shared/window-helpers';
 import { HistoryManager } from '../shared/history-manager';
+import { fetchExternalContent } from '../shared/browser-engine';
 
-// ─── Types ───────────────────────────────────────────────────────────────────
 
 interface LynxLink {
   num: number;
@@ -20,36 +19,39 @@ interface LynxPage {
   links: LynxLink[];
 }
 
-// ─── Page content ────────────────────────────────────────────────────────────
+interface HistoryEntry {
+  url: string;
+  title: string;
+}
+
 
 const LYNX_PAGES: Record<string, LynxPage> = lynxPagesData as Record<string, LynxPage>;
 
-// ─── Lynx Browser class ──────────────────────────────────────────────────────
 
 class LynxBrowser {
   private id = 'lynx';
-  private currentUrl = 'lynx://start';
+  private currentUrl = 'about:lynx';
   private currentPage: LynxPage | null = null;
   private selectedLink = 0;
-  private history: HistoryManager<string>;
-  private bookmarks: string[] = ['lynx://start', 'debian.com.mx', 'gnu.org', 'debian.org'];
+  private history: HistoryManager<HistoryEntry>;
+  private bookmarks: string[] = ['about:lynx', 'gnu.org', 'debian.org'];
   private inputMode: 'navigation' | 'prompt' = 'navigation';
   private promptCallback: ((value: string) => void) | null = null;
+  private isLoading = false;
 
   constructor() {
-    this.history = new HistoryManager<string>('lynx://start');
+    this.history = new HistoryManager<HistoryEntry>({ url: 'about:lynx', title: 'About Lynx' });
     this.init();
   }
 
   private init(): void {
     logger.log('[Lynx] Initializing...');
-    this.navigate('lynx://start', false);
+    this.navigate('about:lynx', false);
     this.setupKeyboard();
     this.setupInput();
-    this.setStatus('Lynx start page - Select a site to visit');
+    this.setStatus('Lynx ready');
   }
 
-  // ── Window controls ──────────────────────────────────────────────────────
 
   public open(): void {
     openWindow({
@@ -58,7 +60,6 @@ class LynxBrowser {
       playSound: true,
       focus: true,
       onOpen: () => {
-        // Ensure focus after centering with delay
         setTimeout(() => {
           this.focus();
         }, 50);
@@ -73,35 +74,60 @@ class LynxBrowser {
     logger.log('[Lynx] Window closed');
   }
 
-  // ── Navigation ───────────────────────────────────────────────────────────
 
-  public navigate(url: string, addToHistory = true): void {
-    const page = LYNX_PAGES[url];
-    if (!page) {
-      this.setStatus(`Error: Page not found — ${url}`);
+  public async navigate(url: string, addToHistory = true): Promise<void> {
+    if (this.isLoading) return;
+
+    let target = url.trim();
+    if (!target) return;
+
+    // Default to https if no protocol
+    if (!target.includes('://') && !target.startsWith('about:')) {
+      target = `https://${target}`;
+    }
+
+    this.isLoading = true;
+    this.setStatus(`Connecting to ${target}...`);
+
+    let page: LynxPage | null = LYNX_PAGES[target] || null;
+
+    if (target === 'lynx://bookmarks') {
+      this.viewBookmarks();
+      return;
+    }
+    if (target === 'lynx://history') {
+      this.viewHistory();
       return;
     }
 
-    this.currentUrl = url;
+    if (!page && !target.startsWith('lynx://') && !target.startsWith('about:')) {
+      page = await this.fetchExternalPage(target);
+    }
+
+    if (!page) {
+      this.setStatus(`Error: Could not load URL — ${target}`);
+      this.isLoading = false;
+      return;
+    }
+
+    this.currentUrl = target;
     this.currentPage = page;
     this.selectedLink = 0;
 
-    if (addToHistory) {
-      if (this.historyIndex < this.history.length - 1) {
-        this.history = this.history.slice(0, this.historyIndex + 1);
-      }
-      this.history.push(url);
-      this.historyIndex = this.history.length - 1;
+    const isUtilityPage = target.startsWith('lynx://');
+    if (addToHistory && page && !isUtilityPage) {
+      this.history.push({ url: target, title: page.title });
     }
 
     this.render();
     this.setStatus('Document: Done');
+    this.isLoading = false;
   }
 
   public goBack(): void {
     const prev = this.history.back();
     if (prev) {
-      this.navigate(prev, false);
+      this.navigate(prev.url, false);
     }
   }
 
@@ -113,17 +139,14 @@ class LynxBrowser {
       return;
     }
 
-    // External links
-    if (link.url.startsWith('http')) {
-      window.open(link.url, '_blank');
-      this.setStatus(`Opening external: ${link.url}`);
+    // Navigate to the link URL
+    if (link.url === 'history:back') {
+      this.goBack();
       return;
     }
-
     this.navigate(link.url);
   }
 
-  // ── Rendering ────────────────────────────────────────────────────────────
 
   private render(): void {
     if (!this.currentPage) return;
@@ -134,14 +157,12 @@ class LynxBrowser {
     if (title) title.textContent = `Lynx: ${this.currentPage.title}`;
 
     if (content) {
-      // Header with URL (authentic Lynx style)
       let html = `<div class="lynx-line" style="color: #ffffff; font-weight: bold;">${this.escapeHtml(this.currentPage.url)}</div>`;
       html += `<div class="lynx-line"></div>`;
 
       const lines = this.currentPage.content.trim().split('\n');
 
       lines.forEach((line) => {
-        // Highlight links
         const linkMatch = line.match(/\[(\d+)\]([^\[]+)/g);
         if (linkMatch) {
           let processedLine = line;
@@ -177,7 +198,6 @@ class LynxBrowser {
     }
   }
 
-  // ── Keyboard navigation ──────────────────────────────────────────────────
 
   private setupKeyboard(): void {
     document.addEventListener('keydown', (e) => {
@@ -187,7 +207,6 @@ class LynxBrowser {
       const content = document.getElementById('lynxContent');
       const inputLine = document.getElementById('lynxInputLine');
 
-      // If in prompt mode, don't handle navigation keys
       if (this.inputMode === 'prompt' && inputLine?.style.display !== 'none') {
         return;
       }
@@ -278,7 +297,7 @@ class LynxBrowser {
         break;
       case 'o':
         e.preventDefault();
-        this.showOptions();
+        this.navigate('lynx://options');
         break;
       case 'p':
         e.preventDefault();
@@ -295,22 +314,23 @@ class LynxBrowser {
       case 'h':
       case '?':
         e.preventDefault();
-        this.showHelp();
+        this.navigate('lynx://help');
         break;
       case 'v':
         e.preventDefault();
-        this.viewBookmarks();
+        this.navigate('lynx://bookmarks');
         break;
       case '/':
         e.preventDefault();
         this.search();
         break;
       case 'delete':
+        e.preventDefault();
+        this.navigate('lynx://history');
+        break;
       case 'backspace':
-        if (e.key === 'Delete') {
-          e.preventDefault();
-          this.viewHistory();
-        }
+        e.preventDefault();
+        this.goBack();
         break;
       default:
         // Number keys for direct link access
@@ -350,7 +370,6 @@ class LynxBrowser {
     }
   }
 
-  // ── Commands ─────────────────────────────────────────────────────────────
 
   public openLocation(): void {
     this.showPrompt('URL to open: ', (url) => {
@@ -358,114 +377,95 @@ class LynxBrowser {
         this.setStatus('Cancelled');
         return;
       }
-
-      if (LYNX_PAGES[url]) {
-        this.navigate(url);
-      } else if (url.startsWith('http')) {
-        window.open(url, '_blank');
-        this.setStatus(`Opening external: ${url}`);
-      } else {
-        this.setStatus(`Error: Unknown URL — ${url}`);
-      }
+      this.navigate(url);
     });
   }
 
-  public showHelp(): void {
-    const helpPage: LynxPage = {
-      title: 'Lynx Help',
-      url: 'lynx://help',
-      content: `
-  LYNX KEYBOARD COMMANDS
+  private async fetchExternalPage(url: string): Promise<LynxPage | null> {
+    try {
+      const html = await fetchExternalContent(url);
+      if (!html) return null;
 
-  Navigation:
-  ↑, k         - Move to previous link
-  ↓, j         - Move to next link
-  →, Enter     - Follow current link
-  ←            - Go back to previous page
-  0-9          - Jump to link number
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
 
-  Commands:
-  G            - Go to a URL
-  O            - Show options menu
-  P            - Print to file
-  M            - Return to main screen (home)
-  H, ?         - Show this help
-  Q            - Quit Lynx
-  /            - Search for text in page
-  Delete       - View history list
-  V            - View bookmarks
+      const links: LynxLink[] = [];
+      let linkCounter = 1;
+      const processNode = (node: Node): string => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          return this.escapeHtml(node.textContent || '');
+        }
 
-  Press any key to return to previous page
-`,
-      links: [],
-    };
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          const el = node as HTMLElement;
+          const tagName = el.tagName.toLowerCase();
 
-    const previousPage = this.currentPage;
-    const previousUrl = this.currentUrl;
+          // Skip non-content tags
+          if (['script', 'style', 'head', 'meta', 'link', 'svg', 'canvas', 'iframe'].includes(tagName)) {
+            return '';
+          }
 
-    this.currentPage = helpPage;
-    this.currentUrl = 'lynx://help';
-    this.render();
-    this.setStatus('Press any key to continue');
+          // Handle links
+          if (tagName === 'a') {
+            const href = el.getAttribute('href');
+            if (href && !href.startsWith('#') && !href.startsWith('javascript:')) {
+              const num = linkCounter++;
+              const linkText = this.escapeHtml(el.textContent?.trim() || 'Link');
 
-    // Return to previous page on any key
-    const returnHandler = (e: KeyboardEvent) => {
-      const win = document.getElementById(this.id);
-      if (!win || win.style.display === 'none') return;
+              let absoluteUrl = href;
+              try {
+                absoluteUrl = new URL(href, url).href;
+              } catch (e) { }
 
-      e.preventDefault();
-      this.currentPage = previousPage;
-      this.currentUrl = previousUrl;
-      this.render();
-      this.setStatus('Returned to previous page');
-      document.removeEventListener('keydown', returnHandler);
-    };
+              links.push({ num, text: linkText, url: absoluteUrl });
+              return ` [${num}]${linkText} `;
+            }
+          }
 
-    setTimeout(() => {
-      document.addEventListener('keydown', returnHandler, { once: true });
-    }, 100);
-  }
+          // Handle images (text version)
+          if (tagName === 'img') {
+            const alt = el.getAttribute('alt');
+            return alt ? ` [IMAGE: ${alt}] ` : '[IMAGE]';
+          }
 
-  public showOptions(): void {
-    const optionsPage: LynxPage = {
-      title: 'Lynx Options',
-      url: 'lynx://options',
-      content: `
-  LYNX OPTIONS MENU
+          // Process children
+          let childrenText = '';
+          node.childNodes.forEach((child) => {
+            childrenText += processNode(child);
+          });
 
-  This is a simplified browser simulation.
-  Full options menu not available.
+          // Block level elements add spacing
+          if (['p', 'div', 'h1', 'h2', 'h3', 'h4', 'li', 'tr', 'header', 'footer', 'nav', 'section'].includes(tagName)) {
+            return `\n${childrenText}\n`;
+          }
 
-  Available settings:
-  - Display: Text-only mode (fixed)
-  - Colors: Enabled (fixed)
-  - Character set: UTF-8 (fixed)
+          if (tagName === 'br') return '\n';
 
-  Press any key to return
-`,
-      links: [],
-    };
+          return childrenText;
+        }
 
-    const previousPage = this.currentPage;
-    const previousUrl = this.currentUrl;
+        return '';
+      };
 
-    this.currentPage = optionsPage;
-    this.currentUrl = 'lynx://options';
-    this.render();
-    this.setStatus('Press any key to continue');
+      const rawContent = processNode(doc.body);
 
-    setTimeout(() => {
-      document.addEventListener(
-        'keydown',
-        () => {
-          this.currentPage = previousPage;
-          this.currentUrl = previousUrl;
-          this.render();
-          this.setStatus('Returned to previous page');
-        },
-        { once: true }
-      );
-    }, 100);
+      // Clean up whitespace and newlines for Lynx-like look
+      const cleanContent = rawContent
+        .split('\n')
+        .map(line => line.trim())
+        .filter((line, i, arr) => line !== '' || (arr[i - 1] !== '')) // Max 1 empty line
+        .join('\n');
+
+      return {
+        title: doc.title || url,
+        url: url,
+        content: cleanContent,
+        links: links,
+      };
+    } catch (e) {
+      logger.error(`[Lynx] Fetch error: ${e}`);
+      return null;
+    }
   }
 
   public printPage(): void {
@@ -473,7 +473,7 @@ class LynxBrowser {
   }
 
   public goHome(): void {
-    this.navigate('lynx://start');
+    this.navigate('about:lynx');
   }
 
   public quit(): void {
@@ -515,43 +515,57 @@ class LynxBrowser {
   }
 
   public viewHistory(): void {
-    let content = '\n  HISTORY LIST\n  ============\n\n';
     const allHistory = this.history.getAll();
     const currentIndex = this.history.getCurrentIndex();
 
-    allHistory.forEach((url, i) => {
-      const marker = i === currentIndex ? ' * ' : '   ';
-      content += `${marker}${i + 1}. ${url}\n`;
+    // Authentic Lynx History Page Layout
+    let content = '<div style="float: right; color: #ff00ff; font-weight: bold;">History Page</div>\n';
+    content += '<div style="clear: both;"></div>\n';
+
+    content += '<div style="text-align: center; margin: 10px 0;">\n';
+    content += '  <span style="background: #00aaaa; color: #000; padding: 0 15px; font-weight: bold;">History Page (Lynx Version 2.8.9rel.1)</span>\n';
+    content += '</div>\n\n';
+
+    content += 'You selected:\n';
+
+    const links: LynxLink[] = [];
+    // Lynx shows history newest first usually in this view
+    const reversed = [...allHistory].reverse();
+    const totalCount = allHistory.length;
+
+    reversed.forEach((entry, i) => {
+      const num = totalCount - 1 - i;
+      const isCurrent = num === currentIndex;
+      const displayNum = num.toString().padStart(2, ' ');
+      const linkNum = i + 1;
+
+      // Lynx uses white/yellow for titles and grey for URLs in this view
+      const titleColor = isCurrent ? '#ffff00' : '#ffffff';
+      content += `  ${displayNum}. <span style="color: ${titleColor};">[${linkNum}]${entry.title}</span>\n`;
+      content += `      <span style="color: #cccccc;">${entry.url}</span>\n`;
+
+      links.push({ num: linkNum, text: entry.title, url: entry.url });
     });
-    content += '\n  * = current page\n  Press any key to return';
+
+    // Right-aligned status messages placeholder (authentic look)
+    content += '\n<div style="float: right; color: #00aaaa; font-weight: bold;">[Your recent statusline messages]</div>\n';
+    content += '<div style="clear: both;"></div>\n';
+
+    // Status bar at bottom (integrated into content for authenticity)
+    content += '\n<div style="background: #00aaaa; color: #000; padding: 2px 5px; width: 100%; position: sticky; bottom: 0;">Commands: Use arrow keys to move, \'?\' for help, \'q\' to quit, \'&lt;-\' to go back.</div>';
 
     const historyPage: LynxPage = {
-      title: 'History',
+      title: 'History Page',
       url: 'lynx://history',
       content,
-      links: [],
+      links: links,
     };
-
-    const previousPage = this.currentPage;
-    const previousUrl = this.currentUrl;
 
     this.currentPage = historyPage;
     this.currentUrl = 'lynx://history';
+    this.selectedLink = 0;
     this.render();
-    this.setStatus('Press any key to continue');
-
-    setTimeout(() => {
-      document.addEventListener(
-        'keydown',
-        () => {
-          this.currentPage = previousPage;
-          this.currentUrl = previousUrl;
-          this.render();
-          this.setStatus('Returned to previous page');
-        },
-        { once: true }
-      );
-    }, 100);
+    this.setStatus('History Page - Select a page to visit');
   }
 
   public search(): void {
@@ -579,7 +593,6 @@ class LynxBrowser {
     });
   }
 
-  // ── Utilities ────────────────────────────────────────────────────────────
 
   private focus(): void {
     const content = document.getElementById('lynxContent');
@@ -598,7 +611,6 @@ class LynxBrowser {
   }
 }
 
-// ─── Global exposure ─────────────────────────────────────────────────────────
 
 if (typeof window !== 'undefined') {
   const lynx = new LynxBrowser();
@@ -606,4 +618,4 @@ if (typeof window !== 'undefined') {
   (window as any).openLynx = () => lynx.open();
 }
 
-export {};
+export { };

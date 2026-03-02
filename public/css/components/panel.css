@@ -27,7 +27,7 @@
     0 -2px 3px rgba(0, 0, 0, 0.2);
 }
 
-/* Handle - Manija para mover el panel */
+/* Handle - Drag handle for panel */
 .cde-handle {
   width: 18px;
   height: 50px;
@@ -56,7 +56,7 @@
   );
 }
 
-/* CDE Control Wrapper - Grid de 2 filas (flecha arriba, icono abajo) */
+/* CDE Control Wrapper - 2-row grid (arrow top, icon bottom) */
 .cde-control-wrapper {
   display: grid;
   grid-template-rows: 16px 58px;
@@ -64,7 +64,7 @@
   align-items: stretch;
 }
 
-/* Subpanel arrow - Fila superior del grid */
+/* Subpanel arrow - Top row of grid */
 .subpanel-arrow {
   width: 100%;
   height: 16px;
@@ -97,7 +97,7 @@
   border-bottom-color: var(--border-light);
 }
 
-/* Spacer para controles sin flecha - con textura especial */
+/* Spacer for controls without arrow - with special texture */
 .subpanel-arrow-spacer {
   width: 100%;
   height: 16px;
@@ -111,7 +111,7 @@
   border-bottom-color: var(--border-dark);
 }
 
-/* CDE Control - Botón principal */
+/* CDE Control - Main button */
 .cde-control {
   display: flex;
   flex-direction: column;

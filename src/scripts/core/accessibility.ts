@@ -213,7 +213,6 @@ class AccessibilityManager {
       });
     }
 
-    // Common Desktop Shortcuts (Visual inclusion only)
     this.registerShortcut({
       key: 'c',
       ctrl: true,
@@ -250,7 +249,6 @@ class AccessibilityManager {
    * Handle keyboard shortcuts
    */
   private handleKeyDown(e: KeyboardEvent): void {
-    // Don't trigger shortcuts when typing in inputs
     const target = e.target as HTMLElement;
     if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
       // Allow Escape to blur inputs
@@ -339,7 +337,6 @@ class AccessibilityManager {
 
     const elements = Array.from(document.querySelectorAll(selector)) as HTMLElement[];
 
-    // Filter visible elements only
     this.focusableElements = elements.filter((el) => {
       const style = window.getComputedStyle(el);
       return style.display !== 'none' && style.visibility !== 'hidden' && el.offsetParent !== null;

@@ -122,7 +122,6 @@ export async function loadSharedConfig(): Promise<boolean> {
     if (backdropPath) {
       logger.log('[ShareConfig] Applying backdrop:', backdropPath);
       if (window.styleManager?.backdrop?.update) {
-        // Only XPM backdrops are supported
         window.styleManager.backdrop.update('xpm', backdropPath);
         logger.log('[ShareConfig] Backdrop applied');
       } else {

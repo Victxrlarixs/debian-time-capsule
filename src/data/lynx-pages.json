@@ -1,84 +1,73 @@
 {
-  "lynx://start": {
-    "title": "Lynx Start Page",
-    "url": "lynx://start",
-    "content": "\n  LYNX BROWSER - START PAGE\n  =========================\n\n  Welcome to Lynx, the text-based web browser.\n\n  Available Sites:\n  ----------------\n\n  [1]Debian CDE Home - Main project page\n  [2]GNU Project - Free software foundation\n  [3]Debian Linux - Universal operating system\n  [4]About Lynx - Information about this browser\n\n  Navigation Help:\n  ----------------\n  * Use arrow keys (↑↓) to move between links\n  * Press Enter or → to follow a link\n  * Press ← to go back\n  * Press G to enter a URL directly\n  * Press H for help\n  * Press Q to quit\n\n  Type a number (1-4) to visit a site directly.\n",
-    "links": [
-      { "num": 1, "text": "Debian CDE Home", "url": "debian.com.mx" },
-      { "num": 2, "text": "GNU Project", "url": "gnu.org" },
-      { "num": 3, "text": "Debian Linux", "url": "debian.org" },
-      { "num": 4, "text": "About Lynx", "url": "about:lynx" }
-    ]
-  },
-  "debian.com.mx": {
-    "title": "DEBIAN CDE - Common Desktop Environment",
-    "url": "http://debian.com.mx/",
-    "content": "\n  DEBIAN CDE - COMMON DESKTOP ENVIRONMENT\n  =======================================\n\n  A pixel-perfect recreation of the Common Desktop Environment\n  running in your browser.\n\n  Navigation:\n  [1]Home  [2]Documentation  [3]GitHub  [4]About\n\n  Features:\n  * [5]Getting Started Guide\n  * [6]User Documentation\n  * [7]Keyboard Shortcuts\n  * [8]Workspaces Guide\n  * [9]Terminal Laboratory\n\n  Applications:\n  * [10]XEmacs Text Editor\n  * [11]File Manager\n  * [12]Netscape Navigator\n  * [13]Style Manager\n  * [14]Process Monitor\n\n  External Links:\n  * [15]GitHub Repository\n  * [16]GNU Project\n  * [17]Debian Linux\n\n  [18]← Back to Start Page\n",
-    "links": [
-      { "num": 1, "text": "Home", "url": "debian.com.mx" },
-      { "num": 2, "text": "Documentation", "url": "debian.com.mx/docs" },
-      { "num": 3, "text": "GitHub", "url": "github.com/debian-cde" },
-      { "num": 4, "text": "About", "url": "about:lynx" },
-      { "num": 5, "text": "Getting Started Guide", "url": "debian.com.mx/docs/getting-started" },
-      { "num": 6, "text": "User Documentation", "url": "debian.com.mx/docs" },
-      { "num": 7, "text": "Keyboard Shortcuts", "url": "debian.com.mx/docs/shortcuts" },
-      { "num": 8, "text": "Workspaces Guide", "url": "debian.com.mx/docs/workspaces" },
-      { "num": 9, "text": "Terminal Laboratory", "url": "debian.com.mx/docs/terminal" },
-      { "num": 10, "text": "XEmacs Text Editor", "url": "debian.com.mx/docs/xemacs" },
-      { "num": 11, "text": "File Manager", "url": "debian.com.mx/docs/filemanager" },
-      { "num": 12, "text": "Netscape Navigator", "url": "debian.com.mx/docs/netscape" },
-      { "num": 13, "text": "Style Manager", "url": "debian.com.mx/docs/stylemanager" },
-      { "num": 14, "text": "Process Monitor", "url": "debian.com.mx/docs/process" },
-      {
-        "num": 15,
-        "text": "GitHub Repository",
-        "url": "https://github.com/Victxrlarixs/debian-cde"
-      },
-      { "num": 16, "text": "GNU Project", "url": "gnu.org" },
-      { "num": 17, "text": "Debian Linux", "url": "debian.org" },
-      { "num": 18, "text": "Back to Start Page", "url": "lynx://start" }
-    ]
-  },
   "about:lynx": {
     "title": "About Lynx",
     "url": "about:lynx",
-    "content": "\n  ABOUT LYNX\n  ==========\n\n  Lynx Version 2.8.9rel.1 (25 May 2014)\n  Built on Linux debian 5.10.0-20-amd64\n\n  Lynx is a fully-featured World Wide Web (WWW) client for\n  users running cursor-addressable, character-cell display\n  devices (e.g., vt100 terminals, terminal emulators).\n\n  It will display Hypertext Markup Language (HTML) documents\n  containing links to files on the local system, as well as\n  files on remote systems running http, gopher, ftp, wais,\n  nntp, finger, or cso/ph/qi servers.\n\n  Lynx can be used to access information on the WWW, or to\n  build information systems intended primarily for local\n  access.\n\n  Copyright (C) 1997-2014 Thomas E. Dickey\n  Copyright (C) 1994-1996 University of Kansas\n\n  [1]Back to Start Page\n  [2]Debian CDE Home\n\n  Press 'g' to enter a new URL\n  Press 'q' to quit\n",
+    "content": "\n  About Lynx - Who, What, and When - Where it is now (p1 of 2)\n\n  About Lynx\n\n  Lynx is a fully-featured World Wide Web (WWW) browser for users on Unix, VMS, \n  and other platforms running cursor-addressable, character-cell terminals \n  or emulators. That includes vt100 terminals, other character-cell displays, \n  and vt100 emulators such as Kermit or Procomm running on PCs or Macs.\n\n  For information on how to use [1]Lynx see the [2]Lynx User's Guide, or \n  the [3]Lynx help files.\n\n  Credits and Copyright\n\n  Lynx was a product of the Distributed Computing Group within Academic \n  Computing Services of [4]The University of Kansas.\n\n  Lynx was originally developed by Lou Montulli, Michael Grobe, and \n  Charles Rezac. Garrett Blythe created DosLynx and later joined the \n  Lynx effort as well. Following the departures of Lou and Garrett for \n  positions at Netscape in the summer of 1994, Craig Lavender provided \n  support services for Lynx, and Ravikumar Kolli for DosLynx.\n\n  Lynx is maintained and supported by members of the Internet community \n  coordinated via the [5]lynx-dev mailing list.\n\n  Lynx is derived from material copyrighted by the University of Kansas. \n  However most of the release (and corresponding copyright) is the work of \n  developers on the [6]lynx-dev mailing list. It is distributed without \n  restrictions on usage or redistribution under the [7]GNU General Public \n  License (Version 2).\n\n  Lynx was built over an early version of the Common Code Library developed \n  by the CERN WWW Project. That code is copyrighted by CERN. Lynx contains \n  other sections of code that are copyrighted by other institutions or \n  individuals. The Lynx copyright does not override or invalidate those \n  copyrights.\n\n  [8]Back to Start Page\n",
     "links": [
-      { "num": 1, "text": "Back to Start Page", "url": "lynx://start" },
-      { "num": 2, "text": "Debian CDE Home", "url": "debian.com.mx" }
+      {
+        "num": 1,
+        "text": "Lynx",
+        "url": "https://lynx.invisible-island.net/"
+      },
+      {
+        "num": 2,
+        "text": "Lynx User's Guide",
+        "url": "https://lynx.invisible-island.net/lynx_help/Lynx_users_guide.html"
+      },
+      {
+        "num": 3,
+        "text": "Lynx help files",
+        "url": "https://lynx.invisible-island.net/lynx_help/lynx_help_main.html"
+      },
+      {
+        "num": 4,
+        "text": "The University of Kansas",
+        "url": "https://www.ku.edu/"
+      },
+      {
+        "num": 5,
+        "text": "lynx-dev mailing list",
+        "url": "https://lists.nongnu.org/mailman/listinfo/lynx-dev"
+      },
+      {
+        "num": 6,
+        "text": "lynx-dev mailing list",
+        "url": "https://lists.nongnu.org/mailman/listinfo/lynx-dev"
+      },
+      {
+        "num": 7,
+        "text": "GNU General Public License",
+        "url": "https://www.gnu.org/licenses/old-licenses/gpl-2.0.html"
+      },
+      {
+        "num": 8,
+        "text": "Back to Start Page",
+        "url": "about:lynx"
+      }
     ]
   },
-  "gnu.org": {
-    "title": "The GNU Operating System",
-    "url": "http://www.gnu.org/",
-    "content": "\n  THE GNU OPERATING SYSTEM\n  ========================\n\n  [IMAGE: GNU Head]\n\n  The GNU Project\n  ---------------\n\n  The GNU Project was launched in 1984 to develop a complete\n  Unix-like operating system which is free software: the GNU\n  system.\n\n  What is Free Software?\n  ----------------------\n\n  \"Free software\" means software that respects users' freedom\n  and community. The users have the freedom to run, copy,\n  distribute, study, change and improve the software.\n\n  Navigation:\n  [1]Philosophy  [2]Licenses  [3]Software  [4]Documentation\n\n  GNU Software:\n  * [5]GNU Emacs - Extensible text editor\n  * [6]GCC - GNU Compiler Collection\n  * [7]GNU Bash - Bourne Again Shell\n  * [8]GNU Coreutils - Core utilities\n\n  [9]Back to Start Page\n  [10]Debian CDE Home\n",
+  "lynx://help": {
+    "title": "Lynx Help",
+    "url": "lynx://help",
+    "content": "\n  LYNX KEYBOARD COMMANDS\n\n  Navigation:\n  ↑, k         - Move to previous link\n  ↓, j         - Move to next link\n  →, Enter     - Follow current link\n  ←            - Go back to previous page\n  0-9          - Jump to link number\n\n  Commands:\n  G            - Go to a URL\n  O            - Show options menu\n  P            - Print to file\n  M            - Return to main screen (home)\n  H, ?         - Show this help\n  Q            - Quit Lynx\n  /            - Search for text in page\n  Delete       - View history list\n  Backspace    - Go back to previous page\n  V            - View bookmarks\n\n  [1]Back to where you were\n",
     "links": [
-      { "num": 1, "text": "Philosophy", "url": "gnu.org/philosophy" },
-      { "num": 2, "text": "Licenses", "url": "gnu.org/licenses" },
-      { "num": 3, "text": "Software", "url": "gnu.org/software" },
-      { "num": 4, "text": "Documentation", "url": "gnu.org/doc" },
-      { "num": 5, "text": "GNU Emacs", "url": "gnu.org/software/emacs" },
-      { "num": 6, "text": "GCC", "url": "gnu.org/software/gcc" },
-      { "num": 7, "text": "GNU Bash", "url": "gnu.org/software/bash" },
-      { "num": 8, "text": "GNU Coreutils", "url": "gnu.org/software/coreutils" },
-      { "num": 9, "text": "Back to Start Page", "url": "lynx://start" },
-      { "num": 10, "text": "Debian CDE Home", "url": "debian.com.mx" }
+      {
+        "num": 1,
+        "text": "Back",
+        "url": "history:back"
+      }
     ]
   },
-  "debian.org": {
-    "title": "Debian -- The Universal Operating System",
-    "url": "http://www.debian.org/",
-    "content": "\n  DEBIAN GNU/LINUX\n  ================\n\n  The Universal Operating System\n\n  Debian is a free operating system (OS) for your computer.\n  An operating system is the set of basic programs and\n  utilities that make your computer run.\n\n  Why Debian?\n  -----------\n\n  * Free: Debian is completely free software\n  * Stable: Rock-solid reliability\n  * Secure: Security updates and patches\n  * Universal: Runs on many architectures\n\n  Navigation:\n  [1]About  [2]Getting Debian  [3]Support  [4]Developers\n\n  Latest News:\n  * [5]Debian 11 \"Bullseye\" released\n  * [6]Security Advisory DSA-4xxx\n  * [7]New packages in stable\n\n  [8]Back to Start Page\n  [9]Debian CDE Home\n",
+  "lynx://options": {
+    "title": "Lynx Options",
+    "url": "lynx://options",
+    "content": "\n  LYNX OPTIONS MENU\n\n  Available settings:\n  - Display: Text-only mode (fixed)\n  - Colors: Enabled (fixed)\n  - Character set: UTF-8 (fixed)\n\n  [1]Back to where you were\n",
     "links": [
-      { "num": 1, "text": "About", "url": "debian.org/intro/about" },
-      { "num": 2, "text": "Getting Debian", "url": "debian.org/distrib" },
-      { "num": 3, "text": "Support", "url": "debian.org/support" },
-      { "num": 4, "text": "Developers", "url": "debian.org/devel" },
-      { "num": 5, "text": "Debian 11 released", "url": "debian.org/News" },
-      { "num": 6, "text": "Security Advisory", "url": "debian.org/security" },
-      { "num": 7, "text": "New packages", "url": "debian.org/distrib/packages" },
-      { "num": 8, "text": "Back to Start Page", "url": "lynx://start" },
-      { "num": 9, "text": "Debian CDE Home", "url": "debian.com.mx" }
+      {
+        "num": 1,
+        "text": "Back",
+        "url": "history:back"
+      }
     ]
   }
 }

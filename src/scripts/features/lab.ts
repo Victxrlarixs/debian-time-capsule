@@ -134,7 +134,6 @@ class TerminalLabManager {
 
     if (!this.body) return;
 
-    // Don't re-initialize if already done
     if (this.input.dataset.initialized) return;
     this.input.dataset.initialized = '1';
 

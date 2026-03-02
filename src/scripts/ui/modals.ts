@@ -142,7 +142,6 @@ class CDEModalClass {
       this.modalElement.appendChild(actionbar);
     }
 
-    // Ensure close button functionality
     const closeBtn = this.modalElement.querySelector('.close-btn');
     if (closeBtn) {
       (closeBtn as HTMLElement).onclick = (e: MouseEvent) => {
@@ -156,7 +155,6 @@ class CDEModalClass {
     const titlebarEl = this.modalElement.querySelector('.titlebar');
     if (titlebarEl) {
       (titlebarEl as HTMLElement).onpointerdown = (e: PointerEvent) => {
-        // Only trigger drag if it's not the close button
         if (!(e.target as HTMLElement).closest('.close-btn')) {
           WindowManager.drag(e, this.modalElement!.id);
         }

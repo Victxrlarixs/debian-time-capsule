@@ -1,5 +1,4 @@
 ---
-// src/components/features/NetscapeNavigator.astro
 import WindowControls from '../common/WindowControls.astro';
 import WindowMinimize from '../common/WindowMinimize.astro';
 ---
@@ -11,7 +10,7 @@ import WindowMinimize from '../common/WindowMinimize.astro';
     <WindowControls windowId="netscape" closeFunction="window.Netscape.close" />
   </div>
 
-  <!-- ── Netscape Menu Bar ─────────────────────────────────────────────── -->
+  <!-- Netscape Menu Bar -->
   <div class="ns-menubar">
     <div class="ns-menu">
       <span class="ns-menu-label">File</span>
@@ -145,7 +144,7 @@ import WindowMinimize from '../common/WindowMinimize.astro';
     </div>
   </div>
 
-  <!-- ── Toolbar (Back, Forward, Home, Reload, Images, Open, Print, Find, Stop, N logo) ── -->
+  <!-- Toolbar -->
   <div class="ns-toolbar" id="nsToolbar">
     <div class="ns-toolbar-inner">
       <button class="ns-tool-btn" id="ns-btn-back" onclick="window.Netscape.goBack()" title="Back">
@@ -202,7 +201,7 @@ import WindowMinimize from '../common/WindowMinimize.astro';
     </div>
   </div>
 
-  <!-- ── Location Bar ───────────────────────────────────────────────────── -->
+  <!-- Location Bar -->
   <div class="ns-location-bar" id="nsLocationBar">
     <span class="ns-location-label">Location:</span>
     <input
@@ -215,7 +214,7 @@ import WindowMinimize from '../common/WindowMinimize.astro';
     />
   </div>
 
-  <!-- ── Directory Button Bar ───────────────────────────────────────────── -->
+  <!-- Directory Button Bar -->
   <div class="ns-dir-bar" id="nsDirBar">
     <button class="ns-dir-btn" onclick="window.Netscape.navigate('welcome')">Welcome</button>
     <button class="ns-dir-btn active" onclick="window.Netscape.navigate('whats-new')"
@@ -230,7 +229,7 @@ import WindowMinimize from '../common/WindowMinimize.astro';
     >
   </div>
 
-  <!-- ── Content Area ───────────────────────────────────────────────────── -->
+  <!-- Content Area -->
   <div class="ns-content-wrapper">
     <div class="ns-content" id="nsContent"></div>
     <iframe
@@ -241,7 +240,7 @@ import WindowMinimize from '../common/WindowMinimize.astro';
       title="Netscape External View"></iframe>
   </div>
 
-  <!-- ── Status Bar ─────────────────────────────────────────────────────── -->
+  <!-- Status Bar -->
   <div class="ns-statusbar">
     <div class="ns-status-security">
       <div class="ns-lock" id="nsLock" title="Unsecure connection">

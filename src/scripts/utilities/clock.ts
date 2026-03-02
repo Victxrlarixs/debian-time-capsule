@@ -4,7 +4,6 @@
 
 import { logger } from './logger';
 
-// Store interval ID to be able to clear it if needed
 let clockInterval: number | null = null;
 let lastTimeString: string = '';
 
@@ -28,7 +27,6 @@ function updateClock(): void {
     second: showSeconds ? '2-digit' : undefined,
   });
 
-  // Solo actualizar DOM si el tiempo cambió
   if (timeString !== lastTimeString) {
     clockEl.textContent = timeString;
     lastTimeString = timeString;
@@ -67,7 +65,6 @@ if (typeof window !== 'undefined') {
 function initClock(): void {
   logger.log('[Clock] initClock: initializing system clock');
 
-  // Clear any existing interval first (prevents duplicates)
   if (clockInterval !== null) {
     clearInterval(clockInterval);
     logger.log('[Clock] initClock: cleared previous interval');
@@ -76,14 +73,11 @@ function initClock(): void {
   // Initial update
   updateClock();
 
-  // Use requestAnimationFrame for better performance when tab is inactive
-  // Fallback to setInterval for browsers that don't support it well
   if (typeof requestAnimationFrame === 'function') {
     let lastUpdate = Date.now();
 
     function tick() {
       const now = Date.now();
-      // Update every second, but don't hammer the CPU
       if (now - lastUpdate >= 1000) {
         updateClock();
         lastUpdate = now;

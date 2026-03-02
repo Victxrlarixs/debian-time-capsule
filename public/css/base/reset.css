@@ -117,10 +117,8 @@ input[type='reset']:active {
   border-bottom-color: var(--border-light);
 }
 
-/* Checkboxes and radio buttons keep native appearance */
 input[type='checkbox'],
 input[type='radio'] {
-  /* Keep native appearance for better usability */
 }
 
 /* Range sliders (horizontal) with Motif style */

@@ -83,11 +83,7 @@ export class VersionManager {
   private async clearCache(): Promise<void> {
     logger.log('[VersionManager] Clearing storage cache...');
 
-    // List of keys to preserve (if you want to keep user preferences)
-    const preserveKeys: string[] = [
-      // 'cde-system-settings', // Uncomment to preserve user settings
-      // 'cde_high_contrast',   // Uncomment to preserve accessibility settings
-    ];
+    const preserveKeys: string[] = [];
 
     // Get all keys from localStorage
     const allKeys = Object.keys(localStorage);

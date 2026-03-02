@@ -122,7 +122,6 @@ export const AudioManager = (() => {
     type: OscillatorType = 'sine',
     volume: number = 1.0
   ): void {
-    // Try to ensure context is ready
     if (!audioCtx) {
       init();
     }

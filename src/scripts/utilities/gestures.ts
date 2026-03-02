@@ -60,7 +60,6 @@ export class GestureManager {
     }
     this.lastTapTime = now;
 
-    // Standard tap callback (might be useful for selection)
     this.config.onTap(e);
   }
 

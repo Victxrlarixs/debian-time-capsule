@@ -33,11 +33,9 @@ interface WindowState {
 
 const windowStates: Record<string, WindowState> = {};
 
-// Debounce timer for resize handling (module-scoped, avoids window pollution)
 let resizeTimer: ReturnType<typeof setTimeout> | undefined;
 
 const WindowManager = (() => {
-  // Start z-index higher than TopBar (9998) to ensure focused windows are on top
   let zIndex = CONFIG.WINDOW.BASE_Z_INDEX;
   const dragState: DragState = {
     element: null,
@@ -99,14 +97,11 @@ const WindowManager = (() => {
     if (!win) return;
 
     if (!dragState.isDragging) {
-      // Remove active class only from the last focused window
       if (lastFocusedWindowId) {
         const prevWin = document.getElementById(lastFocusedWindowId);
         if (prevWin) prevWin.classList.remove('active');
       }
 
-      // Special case: Ensure other windows are cleaned up if state got desynced
-      // (Rare, but helpful for stability without a full loop every time)
       if (Math.random() < 0.05) {
         // Occasional garbage collection of classes
         document.querySelectorAll('.active').forEach((el) => {
@@ -129,7 +124,6 @@ const WindowManager = (() => {
    * Normalizes a window's position to ensure it is draggable.
    */
   function normalizeWindowPosition(win: HTMLElement): void {
-    // If hidden, don't normalize yet because getBoundingClientRect will be 0,0
     if (window.getComputedStyle(win).display === 'none') {
       return;
     }
@@ -181,7 +175,6 @@ const WindowManager = (() => {
     let left = (viewportWidth - winWidth) / 2;
     let top = (viewportHeight - winHeight) / 2;
 
-    // Strict clamping to prevent ANY overflow
     const minX = 0;
     const maxX = Math.max(0, viewportWidth - winWidth);
     const minY = TOP_BAR_HEIGHT;
@@ -190,7 +183,6 @@ const WindowManager = (() => {
     left = Math.max(minX, Math.min(left, maxX));
     top = Math.max(minY, Math.min(top, maxY));
 
-    // Ensure body doesn't scroll
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
 
@@ -215,13 +207,11 @@ const WindowManager = (() => {
       return;
     }
 
-    // Only handle primary pointer (usually left click or single touch)
     if (!e.isPrimary) return;
 
     const el = document.getElementById(id);
     if (!el) return;
 
-    // Prevent default actions like text selection or touch scrolling
     e.preventDefault();
     e.stopPropagation();
 
@@ -293,13 +283,9 @@ const WindowManager = (() => {
     const TOP_BAR_HEIGHT = CONFIG.WINDOW.TOP_BAR_HEIGHT;
     const PANEL_HEIGHT = isMobile() ? 65 : 85;
 
-    // --- STRICT VIEWPORT CLAMPING ---
-    // Prevent horizontal overflow (no right/left overflow)
     const minX = 0;
     const maxX = Math.max(0, viewportWidth - winWidth);
 
-    // Prevent vertical overflow (no top/bottom overflow)
-    // Account for TopBar (minY) and Panel (PANEL_HEIGHT)
     const minY = TOP_BAR_HEIGHT;
     const maxY = Math.max(minY, viewportHeight - winHeight - PANEL_HEIGHT);
 
@@ -384,7 +370,6 @@ const WindowManager = (() => {
         focusWindow(win.id);
       }
 
-      // 3. BUTTON FEEDBACK (Temporary toggled icons)
       const minBtn = target.closest('.min-btn');
       if (minBtn) {
         const img = minBtn.querySelector('img');
@@ -404,12 +389,8 @@ const WindowManager = (() => {
         const img = maxBtn.querySelector('img');
         if (img) {
           const original = img.src;
-          // Use toggled icon while pressed
           img.src = '/icons/ui/maximize-toggled-inactive.png';
           const restore = () => {
-            // Note: maximizeWindow will update the icon permanently if state changes,
-            // so we only restore here if the click wasn't completed or if we need a base state.
-            // Actually, maximizeWindow handles the final state.
             img.src = original;
             window.removeEventListener('pointerup', restore);
           };
@@ -546,7 +527,6 @@ const WindowManager = (() => {
         }
         logger.log(`[WindowManager] Restored session for: ${id}`);
       } else {
-        // Only normalize if it's already visible, otherwise wait for normalization on drag
         if (window.getComputedStyle(win).display !== 'none') {
           setTimeout(() => {
             normalizeWindowPosition(win);
@@ -554,7 +534,6 @@ const WindowManager = (() => {
         }
       }
 
-      // Essential for touch support: prevent browser default behavior
       (titlebar as HTMLElement).style.touchAction = 'none';
 
       titlebar.addEventListener('pointerdown', titlebarDragHandler as any);
@@ -573,8 +552,6 @@ const WindowManager = (() => {
         );
       }
 
-      // CRITICAL: Only assign workspace if window is currently visible
-      // Hidden windows will get their workspace assigned when they're first shown
       const isVisible = window.getComputedStyle(win).display !== 'none';
 
       if (!win.getAttribute('data-workspace')) {
@@ -588,8 +565,6 @@ const WindowManager = (() => {
             requestAnimationFrame(() => centerWindow(win));
           }
         } else {
-          // Window is hidden, don't assign workspace yet
-          // It will be assigned when showWindow() is called
           logger.log(
             `[WindowManager] Hidden window registered: ${id}, workspace will be assigned on first show`
           );
@@ -635,7 +610,6 @@ const WindowManager = (() => {
     const previousWorkspace = currentWorkspace;
     currentWorkspace = id;
 
-    // Second pass: Show ONLY windows of new workspace, hide all others
     windows.forEach((win) => {
       const el = win as HTMLElement;
       const winWorkspace = el.getAttribute('data-workspace');
@@ -788,7 +762,7 @@ const WindowManager = (() => {
               e.stopPropagation();
               e.stopImmediatePropagation();
               shadeWindow(win.id);
-              lastClickTime = 0; // Reset to prevent triple-click issues
+              lastClickTime = 0;
               lastClickTarget = null;
               return;
             }
@@ -872,9 +846,7 @@ function shadeWindow(id: string): void {
     if (window.AudioManager) window.AudioManager.windowShade();
     logger.log(`[WindowManager] Window "${id}" unshaded`);
   } else {
-    // Shade: collapse to titlebar only
     if (!isMaximized) {
-      // Only save height if not maximized
       windowStates[id] = {
         ...windowStates[id],
         height: win.style.height || getComputedStyle(win).height,

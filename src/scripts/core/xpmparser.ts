@@ -28,7 +28,7 @@ const CDE_SEMANTIC_MAP: Record<string, string> = {
 // Worker pool for parallel processing
 let workerPool: Worker[] = [];
 let workerIndex = 0;
-const MAX_WORKERS = 2; // Limit concurrent workers to avoid blocking
+const MAX_WORKERS = 2;
 
 // Queue for throttling requests
 let processingQueue: Array<() => void> = [];
@@ -132,7 +132,6 @@ async function parseXpmWithWorker(xpmText: string): Promise<string | null> {
       // Generate unique ID for this request
       const requestId = Math.random().toString(36).substring(7);
 
-      // Add timeout to prevent hanging
       const timeout = setTimeout(() => {
         worker.removeEventListener('message', handleMessage);
         activeProcessing--;
@@ -142,7 +141,6 @@ async function parseXpmWithWorker(xpmText: string): Promise<string | null> {
       }, 5000); // 5 second timeout
 
       const handleMessage = (e: MessageEvent) => {
-        // Only process messages with matching requestId
         if (e.data.type === 'result' && e.data.requestId === requestId) {
           clearTimeout(timeout);
           worker.removeEventListener('message', handleMessage);

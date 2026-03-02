@@ -84,7 +84,7 @@ class EmacsManager {
     this.textarea.addEventListener('input', () => this.onInput());
     this.textarea.addEventListener('keyup', () => this.updateModeLine());
     this.textarea.addEventListener('click', () => {
-      this.textarea?.focus(); // Ensure it stays focused
+      this.textarea?.focus();
       this.updateModeLine();
     });
 
@@ -625,7 +625,6 @@ class EmacsManager {
           break;
       }
     } else if (isCtrl || e.altKey) {
-      // Allow other shortcuts to bubble if needed
     } else if (
       document.activeElement !== this.textarea &&
       this.editorArea &&

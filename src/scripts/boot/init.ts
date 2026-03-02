@@ -86,7 +86,6 @@ class DebianRealBoot {
         // Format text based on mode
         let text: string;
         if (this.isUpdateMode) {
-          // Update mode: no timestamps, just messages
           text = msg.text;
         } else {
           // Boot mode: add timestamps for kernel/system messages
@@ -313,7 +312,6 @@ async function initDesktop(): Promise<void> {
       window.AudioManager.playStartupChime();
     }
 
-    // 3. APPLY PRELOADED BACKDROP (before WindowManager to ensure it's visible ASAP)
     const { applyPreloadedBackdrop } = await import('../boot/backdrop-preloader');
     await applyPreloadedBackdrop();
     logger.log('[initDesktop] Preloaded backdrop applied');
@@ -373,7 +371,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Mark boot start for performance tracking
   performance.mark('boot-start');
 
-  // Check version and clear cache if needed (before anything else)
   try {
     await VersionManager.checkVersion();
   } catch (error) {

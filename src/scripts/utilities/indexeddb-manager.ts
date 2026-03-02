@@ -206,7 +206,6 @@ class IndexedDBManager {
         logger.log('[IndexedDB] Migrated session');
       }
 
-      // Keep localStorage as fallback for now
       logger.log('[IndexedDB] Migration completed');
     } catch (error) {
       logger.error('[IndexedDB] Migration failed:', error);

@@ -95,9 +95,8 @@ export const CalendarManager = (() => {
   function open(): void {
     const win = document.getElementById('calendar-window');
     if (win) {
-      win.classList.remove('maximized'); // Ensure it's not maximized
+      win.classList.remove('maximized');
       win.style.display = 'flex';
-      // Use requestAnimationFrame to ensure display: flex is applied and dimensions are available
       requestAnimationFrame(() => {
         WindowManager.centerWindow(win);
         if (window.focusWindow) window.focusWindow('calendar-window');

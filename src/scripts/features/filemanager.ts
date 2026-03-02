@@ -647,7 +647,6 @@ function setupMenuBar(): void {
       const name = span.textContent?.trim() || '';
       let items = fmMenus[name];
 
-      // Conditional items: Empty Trash only in trash
       if (name === 'File') {
         // Robust check for trash path (ignoring trailing slashes)
         const normalize = (p: string) => (p.endsWith('/') ? p : p + '/');
@@ -845,7 +844,6 @@ function initFileManager(): void {
     const win = document.getElementById('fm');
     if (!win || win.style.display === 'none') return;
 
-    // Don't intercept if typing in input
     if (e.target instanceof HTMLInputElement) return;
 
     if (e.ctrlKey || e.metaKey) {

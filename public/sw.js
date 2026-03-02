@@ -1,10 +1,7 @@
 // Cache version is automatically updated from package.json version
-// This ensures cache is cleared when app version changes
-// Preloading disabled to fix icon caching issues
 const CACHE_VERSION = 'v1.0.26-no-preload';
 const STATIC_CACHE = `static-cache-${CACHE_VERSION}`;
 
-// Minimal precache - only essential CSS
 const PRECACHE_URLS = ['/', '/css/main.css', '/css/responsive.css'];
 
 self.addEventListener('install', (event) => {
@@ -59,7 +56,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Navegación: estrategia network-first con fallback a caché
+  // Navigation: network-first strategy with cache fallback
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
@@ -73,7 +70,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Recursos estáticos propios: estrategia estándar
+  // Static resources: standard strategy
   if (url.origin === self.location.origin) {
     // CSS, backdrops, palettes: cache-first
     if (
@@ -98,6 +95,5 @@ self.addEventListener('fetch', (event) => {
     }
   }
 
-  // Resto: network-first con fallback opcional a caché
   event.respondWith(fetch(request).catch(() => caches.match(request)));
 });

@@ -359,7 +359,7 @@
     height: 28px;
   }
 
-  /* Paneles del Style Manager */
+  /* Style Manager panels */
   #styleManagerFont.style-manager-font {
     width: 300px !important;
     height: 480px !important;
@@ -474,7 +474,7 @@
     width: 60px;
   }
 
-  /* Menús desplegables */
+  /* Dropdown menus */
   .fm-dropdown,
   .fm-contextmenu,
   #utilitiesDropdown {

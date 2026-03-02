@@ -1,4 +1,4 @@
-/* Style Manager Color - Versión final */
+/* Style Manager Color - Final version */
 #styleManagerColor.style-manager-color {
   width: 350px;
 }
@@ -12,7 +12,7 @@
   overflow-y: auto;
 }
 
-/* Palettes con scroll */
+/* Palettes with scroll */
 #styleManagerColor .color-palettes-section {
   border-bottom: 1px solid var(--separator-color);
   padding-bottom: 10px;

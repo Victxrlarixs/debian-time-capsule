@@ -42,7 +42,6 @@ export class WindowModule {
    * Applies the current window settings to the system.
    */
   public apply(): void {
-    // Expose settings via CSS variables or global flags if needed
     document.documentElement.setAttribute(
       'data-focus-mode',
       this.settings.pointToFocus ? 'point' : 'click'

@@ -44,7 +44,6 @@ export function openWindow(config: WindowOpenConfig): HTMLElement | null {
 
   // Center window
   if (center) {
-    // Use requestAnimationFrame to ensure proper layout calculation
     requestAnimationFrame(() => {
       WindowManager.centerWindow(win);
     });

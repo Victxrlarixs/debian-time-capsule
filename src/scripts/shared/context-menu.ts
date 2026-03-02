@@ -62,7 +62,6 @@ export function createContextMenu(items: ContextMenuItem[], x: number, y: number
 
   document.body.appendChild(menu);
 
-  // Prevent menu from going off-screen
   const rect = menu.getBoundingClientRect();
   if (rect.right > window.innerWidth) {
     menu.style.left = window.innerWidth - rect.width - 5 + 'px';

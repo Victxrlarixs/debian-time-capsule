@@ -111,7 +111,6 @@ export class WorkspacePreview {
       const ws = element.getAttribute('data-workspace');
       const wasOpened = element.getAttribute('data-was-opened');
 
-      // Only include windows that belong to this workspace and were opened
       if (ws === workspaceId && wasOpened === 'true') {
         const rect = element.getBoundingClientRect();
         const computedStyle = window.getComputedStyle(element);
@@ -134,7 +133,6 @@ export class WorkspacePreview {
   }
 
   private getWindowIcon(windowId: string): string {
-    // Map window IDs to their icons (using only existing icons)
     const iconMap: Record<string, string> = {
       emacs: '/icons/apps/xemacs.png',
       'terminal-lab': '/icons/apps/konsole.png',

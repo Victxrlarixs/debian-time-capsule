@@ -53,10 +53,6 @@ Click the **Share Theme** button (found in the Panel, Desktop, or right-click me
 Your theme configuration gets encoded into a compact link that others can use to instantly load your color palette and backdrop combo.
 Post your themes in [GitHub Discussions](https://github.com/Victxrlarixs/debian-cde/discussions) with a screenshot and watch the retro magic spread!
 
-<p align="center">
-  <img src="public/images/Share_Themes.png" alt="CDE Preview" width="600"/>
-</p>
-
 ## 📱 Works Everywhere
 
 <table>

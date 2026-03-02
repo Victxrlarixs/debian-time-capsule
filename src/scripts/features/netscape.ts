@@ -3,6 +3,7 @@ import { WindowManager } from '../core/windowmanager';
 import { logger } from '../utilities/logger';
 import { openWindow, closeWindow } from '../shared/window-helpers';
 import { HistoryManager } from '../shared/history-manager';
+import { getEngineUrl } from '../shared/browser-engine';
 
 import netscapePages from '../../data/netscape-pages.json';
 
@@ -394,7 +395,6 @@ class NetscapeNavigator {
   }
 
   public newWindow(): void {
-    // Spawn a clone — just re-open this one for simulation
     this.open();
     this.setStatus('New window opened.');
   }

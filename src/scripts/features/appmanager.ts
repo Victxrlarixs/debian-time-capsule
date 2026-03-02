@@ -28,8 +28,6 @@ export class AppManager {
       win.style.display = 'flex';
       win.style.zIndex = '10000';
 
-      // Use requestAnimationFrame to ensure dimensions are ready for centering,
-      // especially on mobile where layout changes might cause overflows.
       requestAnimationFrame(() => {
         WindowManager.centerWindow(win);
         if (window.focusWindow) {

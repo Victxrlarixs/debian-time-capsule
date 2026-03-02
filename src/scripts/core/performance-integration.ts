@@ -25,7 +25,6 @@ export async function initPerformanceOptimizations(): Promise<void> {
     // 3. Initialize IndexedDB
     await indexedDBManager.init();
 
-    // 4. Migrate from localStorage if needed
     const migrated = localStorage.getItem('cde-indexeddb-migrated');
     if (!migrated) {
       await indexedDBManager.migrateFromLocalStorage();

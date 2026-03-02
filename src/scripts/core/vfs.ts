@@ -71,7 +71,6 @@ let rootNode: VFSFolder | null = null;
  * Recursively flattens the nested filesystem structure.
  */
 function flatten(basePath: string, node: VFSNode): void {
-  // Ensure default metadata if missing
   if (!node.metadata) {
     node.metadata = {
       size: node.type === 'file' ? node.content.length : 0,
@@ -276,7 +275,6 @@ export const VFS: IVFS = {
     rootNode = root;
     flatten(rootPath, rootNode);
 
-    // Ensure Trash exists on init
     if (!fsMap[CONFIG.FS.TRASH]) {
       const parts = CONFIG.FS.TRASH.split('/').filter(Boolean);
       const trashName = parts.pop()!;

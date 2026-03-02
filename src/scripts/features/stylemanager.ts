@@ -308,7 +308,6 @@ export class StyleManager {
   }
 
   private showWindow(id: string): void {
-    // Use WindowManager.showWindow to ensure proper workspace assignment
     WindowManager.showWindow(id);
 
     const win = document.getElementById(id);
