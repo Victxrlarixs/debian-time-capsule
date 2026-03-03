@@ -75,6 +75,8 @@ class NetscapeNavigator {
     if (!url) return '';
     const target = url.trim();
 
+    if (target === 'net-search') return 'https://duckduckgo.com/';
+
     if (NS_PAGES[target] || target.startsWith('about:')) return target;
 
     if (!target.includes('.') || target.includes(' ')) {
@@ -161,7 +163,8 @@ class NetscapeNavigator {
       const dirBtns = document.querySelectorAll('.ns-dir-btn');
       if (dirBtns) dirBtns.forEach((btn) => (btn as HTMLElement).classList.remove('active'));
 
-      const engineUrl = getEngineUrl(target);
+      // Restauramos el "Motor Invisible" que permite cargar Google/GNU
+      const engineUrl = `https://web.archive.org/web/2d_/${target}`;
       this.setStatus(`Loading ${target}...`);
 
       if (animate) {
