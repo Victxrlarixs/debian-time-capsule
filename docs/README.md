@@ -2,9 +2,13 @@
 
 Welcome to the **Debian Time Capsule** documentation! Whether you're here to rediscover the magic of CDE or to help us build the next generation of nostalgia, you'll find everything you need below.
 
+<p align="center">
+  <img src="/public/images/Explore.png" alt="CDE Preview" width="600"/>
+</p>
+
 ---
 
-## 👤 For Users
+## For Users
 Discover how to navigate and enjoy your virtual 90s Unix workstation.
 
 **[Explore the User Guide →](user-guide/README.md)**
@@ -25,7 +29,7 @@ Discover how to navigate and enjoy your virtual 90s Unix workstation.
 
 ---
 
-## 👨‍💻 For Developers
+## For Developers
 Technical insights for contributors and those curious about the internals.
 
 **[Dive into Technical Docs →](technical/README.md)**
@@ -41,7 +45,7 @@ Technical insights for contributors and those curious about the internals.
 
 ---
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```text
 docs/
@@ -59,7 +63,7 @@ docs/
 
 ---
 
-## 🎯 Quick Navigation
+## Quick Navigation
 
 | I want to... | Link |
 | :--- | :--- |
