@@ -118,7 +118,7 @@ It was experience authenticity.
 
 ---
 
-Documentation
+## Documentation
 
 The desktop is fun to explore.
 But if you want to understand how it works under the hood, start here:
