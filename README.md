@@ -20,8 +20,6 @@ There was a time when desktops were heavy, monitors were beige, and opening a te
 
 This project is a recreation of the **Unix Experience using Common Desktop Environment (CDE)** — running entirely in your browser.
 
-Post it in [GitHub Discussions](https://github.com/Victxrlarixs/debian-cde/discussions) and see what others are building.
-
 https://github.com/user-attachments/assets/d5e5447e-269d-4001-ba73-b656cac3c33f
 
 ## 🚀 [Try It →](https://debian.com.mx)
@@ -41,6 +39,7 @@ Make it feel like *your* workstation.
 And if you build something great, share it.
 
 Your theme can be exported as a link and anyone can load it instantly — same colors, same backdrop, same vibe.
+Post it in [GitHub Discussions](https://github.com/Victxrlarixs/debian-cde/discussions) and see what others are building.
 
 ## Features
 
