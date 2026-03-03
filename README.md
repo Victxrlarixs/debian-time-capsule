@@ -11,7 +11,6 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat)](CONTRIBUTING.md)
 ![GitHub stars](https://img.shields.io/github/stars/Victxrlarixs/debian-cde?style=flat&logo=github)
 
-
 > You’re not visiting a website.  
 > You just logged into a Unix workstation.
 
@@ -39,9 +38,7 @@ Your theme can be exported as a link and anyone can load it instantly — same c
 
 Post it in [GitHub Discussions](https://github.com/Victxrlarixs/debian-cde/discussions) and see what others are building.
 
-<p align="center">
-  <img src="public/images/Explore.png" alt="CDE Preview" width="600"/>
-</p>
+https://github.com/user-attachments/assets/d5e5447e-269d-4001-ba73-b656cac3c33f
 
 ## 🚀 [Try It →](https://debian.com.mx)
 
@@ -98,25 +95,21 @@ Post it in [GitHub Discussions](https://github.com/Victxrlarixs/debian-cde/discu
 
 ## Works everywhere
 
+<img src="public/images/Install_PWA.png" width="200" align="left" style="margin-right: 24px; margin-bottom: 12px;" />
+
 Desktop feels native.  
 Mobile adapts with touch gestures.  
 Keyboard shortcuts still work.
-
 It behaves like a real system — not a responsive layout pretending to be one.
 
 You can even install it.
-
 Click the icon labeled **Install PWA** and the browser handles the rest.  
 No custom installer. Just native installation.
 
 The goal wasn’t pixel perfection.  
 It was experience authenticity.
 
-<p align="left">
-  <img src="public/images/Install_PWA.png" width="200" />
-</p>
-
----
+<br clear="left"/>
 
 ---
 
@@ -145,7 +138,6 @@ Everything organized in one place.
 ---
 
 ## Contributing
-
 If you like weird frontend projects, you’ll probably enjoy this one.
 
 You can:
