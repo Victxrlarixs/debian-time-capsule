@@ -118,27 +118,29 @@ It was experience authenticity.
 
 ---
 
+---
+
 ## Documentation
 
-The desktop is fun to explore.
+The desktop is fun to explore.  
 But if you want to understand how it works under the hood, start here:
 
-Getting Started
-Installation, PWA setup, first launch experience, and basic navigation.
-→ docs/user-guide/getting-started.md
+### Getting Started  
+Installation, PWA setup, first launch experience, and basic navigation.  
+→ **[docs/user-guide/getting-started.md](https://github.com/Victxrlarixs/debian-cde/blob/main/docs/user-guide/getting-started.md)**
 
-User Guide
-Shortcuts, window behavior, workspaces, customization, and daily usage.
-→ docs/user-guide/keyboard-shortcuts.md
+### User Guide  
+Shortcuts, window behavior, workspaces, customization, and daily usage.  
+→ **[docs/user-guide/keyboard-shortcuts.md](https://github.com/Victxrlarixs/debian-cde/blob/main/docs/user-guide/keyboard-shortcuts.md)**
 
-Architecture
-How the desktop is structured internally.
-Window manager model, virtual filesystem layer, state persistence, and IndexedDB usage.
-→ docs/technical/architecture.md
+### Architecture  
+How the desktop is structured internally.  
+Window manager model, virtual filesystem layer, state persistence, and IndexedDB usage.  
+→ **[docs/technical/architecture.md](https://github.com/Victxrlarixs/debian-cde/blob/main/docs/technical/architecture.md)**
 
-Full Documentation Index
-Everything organized in one place.
-→ docs/README.md
+### Full Documentation Index  
+Everything organized in one place.  
+→ **[docs/README.md](https://github.com/Victxrlarixs/debian-cde/blob/main/docs/README.md)**
 
 ---
 

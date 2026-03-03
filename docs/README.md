@@ -1,138 +1,79 @@
-# CDE Time Capsule Documentation
+# 📚 Documentation Portal
 
-Welcome to the CDE Time Capsule documentation! Choose your path:
+Welcome to the **Debian Time Capsule** documentation! Whether you're here to rediscover the magic of CDE or to help us build the next generation of nostalgia, you'll find everything you need below.
+
+---
 
 ## 👤 For Users
+Discover how to navigate and enjoy your virtual 90s Unix workstation.
 
-Learn how to use CDE Time Capsule effectively.
+**[Explore the User Guide →](user-guide/README.md)**
 
-**Start Here:** [User Guide](user-guide/README.md)
+### Essential Apps
+- [XEmacs](user-guide/xemacs.md) - The powerful text editor.
+- [Terminal Lab](user-guide/terminal-lab.md) - Learn Unix commands interactively.
+- [File Manager](user-guide/file-manager.md) - Manage your virtual filesystem.
+- [Netscape Navigator](user-guide/netscape.md) - Browse the "web" (and the real one).
+- [Lynx](user-guide/lynx.md) - Text-based browsing experience.
+- [Man Viewer](user-guide/man-viewer.md) - Access system documentation.
 
-### Quick Links
+### Customization & Tips
+- [Style Manager](user-guide/style-manager.md) - Change colors, fonts, and backdrops.
+- [Workspaces](user-guide/workspaces.md) - Master virtual desktops.
+- [Keyboard Shortcuts](user-guide/keyboard-shortcuts.md) - Productivity at your fingertips.
+- [Tips & Tricks](user-guide/tips-and-tricks.md) - Hidden features and expert advice.
 
-- [Getting Started](user-guide/getting-started.md) - First steps
-- [Keyboard Shortcuts](user-guide/keyboard-shortcuts.md) - Essential shortcuts
-- [XEmacs Guide](user-guide/xemacs.md) - Text editor
-- [Terminal Lab](user-guide/terminal-lab.md) - Interactive terminal
-- [Style Manager](user-guide/style-manager.md) - Customize your desktop
+---
 
 ## 👨‍💻 For Developers
+Technical insights for contributors and those curious about the internals.
 
-Technical documentation for contributors and learners.
+**[Dive into Technical Docs →](technical/README.md)**
 
-**Start Here:** [Technical Documentation](technical/README.md)
+### System Internals
+- [Architecture](technical/architecture.md) - Modular design & event-driven system.
+- [Storage & Cache](technical/storage.md) - Persistent data and performance.
+- [Version Updates](technical/version-updates.md) - Evolution of the project.
 
-### Quick Links
+### Getting Involved
+- [Contributing Guide](../CONTRIBUTING.md) - Guidelines, standards, and workflow.
+- [Issue Tracker](https://github.com/Victxrlarixs/debian-cde/issues) - Report bugs or suggest features.
 
-- [Architecture](technical/architecture.md) - System design
-- [Storage & Cache](technical/storage.md) - Data persistence
-- [Performance](technical/performance.md) - Optimizations
-- [Contributing](technical/contributing.md) - How to contribute
+---
 
-## 📚 API Reference
+## 🗂️ Project Structure
 
-Complete API documentation for all modules.
-
-**Start Here:** [API Documentation](api/README.md)
-
-## 🗂️ Documentation Structure
-
-```
+```text
 docs/
-├── user-guide/          # End-user guides
-│   ├── xemacs.md       # XEmacs usage
-│   ├── terminal-lab.md # Terminal guide
-│   ├── file-manager.md # File Manager
-│   ├── netscape.md     # Netscape Navigator
-│   ├── style-manager.md# Customization
-│   ├── workspaces.md   # Virtual desktops
-│   └── keyboard-shortcuts.md # All shortcuts
-│
-├── technical/          # Developer docs
-│   ├── architecture.md # System design
-│   ├── vfs.md         # Virtual File System
-│   ├── window-manager.md # Window system
-│   ├── storage.md     # Storage & cache
-│   ├── workers.md     # Web Workers
-│   ├── performance.md # Optimizations
-│   └── accessibility.md # A11y implementation
-│
-└── api/               # API reference
-    ├── core-api.md
-    ├── utilities-api.md
-    └── components-api.md
+├── user-guide/          # End-user manuals
+│   ├── getting-started.md
+│   ├── xemacs.md
+│   ├── terminal-lab.md
+│   ├── lynx.md
+│   └── ...
+└── technical/          # Developer documentation
+    ├── architecture.md
+    ├── storage.md
+    └── version-updates.md
 ```
+
+---
 
 ## 🎯 Quick Navigation
 
-### I want to...
+| I want to... | Link |
+| :--- | :--- |
+| **Start using CDE** | [User Guide](user-guide/README.md) |
+| **Learn Unix** | [Terminal Lab](user-guide/terminal-lab.md) |
+| **Understand the code** | [Architecture Overview](technical/architecture.md) |
+| **Contribute code/docs** | [Contributing Guide](../CONTRIBUTING.md) |
+| **Change the look** | [Style Manager](user-guide/style-manager.md) |
 
-**Learn to use CDE**
-→ [User Guide](user-guide/README.md)
+---
 
-**Understand the architecture**
-→ [Architecture Overview](technical/architecture.md)
+## � External Resources
 
-**Contribute code**
-→ [Contributing Guide](technical/contributing.md)
+- [Official Repository](https://github.com/Victxrlarixs/debian-cde)
+- [Live Experience](https://debian.com.mx)
 
-**Use the API**
-→ [API Reference](api/README.md)
-
-**Customize my desktop**
-→ [Style Manager Guide](user-guide/style-manager.md)
-
-**Learn keyboard shortcuts**
-→ [Keyboard Shortcuts](user-guide/keyboard-shortcuts.md)
-
-## 📖 Documentation Philosophy
-
-### User Guides
-
-- Written for end-users
-- Focus on "how to use"
-- Step-by-step instructions
-- Screenshots and examples
-- No technical jargon
-
-### Technical Docs
-
-- Written for developers
-- Focus on "how it works"
-- Code examples and architecture
-- Implementation details
-- Best practices
-
-### API Reference
-
-- Complete function signatures
-- Parameter descriptions
-- Return types
-- Usage examples
-- TypeScript types
-
-## 🤝 Contributing to Docs
-
-Found an error or want to improve the documentation?
-
-1. Edit the relevant `.md` file
-2. Submit a pull request
-3. Follow the [Contributing Guide](technical/contributing.md)
-
-## 📝 Documentation Standards
-
-- Use clear, concise language
-- Include code examples
-- Add screenshots where helpful
-- Keep sections focused
-- Update table of contents
-
-## 🔗 External Resources
-
-- [GitHub Repository](https://github.com/Victxrlarixs/debian-cde)
-- [Live Demo](https://debian.com.mx)
-- [Issue Tracker](https://github.com/Victxrlarixs/debian-cde/issues)
-
-## 📄 License
-
-Documentation is licensed under GPL License - see [LICENSE](../LICENSE) for details.
+---

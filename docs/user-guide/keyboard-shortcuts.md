@@ -1,6 +1,6 @@
 # Keyboard Shortcuts Reference
 
-Complete keyboard shortcuts for CDE Time Capsule.
+Complete keyboard shortcuts for Debian Time Capsule.
 
 ## Global Shortcuts
 

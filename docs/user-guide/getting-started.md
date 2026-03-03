@@ -1,14 +1,14 @@
-# Getting Started with CDE Time Capsule
+# Getting Started with Debian Time Capsule
 
-Welcome to CDE Time Capsule! This guide will help you get started with your 1990s Unix desktop experience.
+Welcome to Debian Time Capsule! This guide will help you get started with your 1990s Unix desktop experience.
 
 ## What is CDE?
 
-The Common Desktop Environment (CDE) was the standard desktop for Unix workstations in the 1990s. It ran on systems like Sun Solaris, HP-UX, and IBM AIX. CDE Time Capsule recreates this experience in your modern web browser.
+The Common Desktop Environment (CDE) was the standard desktop for Unix workstations in the 1990s. It ran on systems like Sun Solaris, HP-UX, and IBM AIX. Debian Time Capsule recreates this experience in your modern web browser.
 
 ## First Launch
 
-When you first open CDE Time Capsule, you'll see:
+When you first open Debian Time Capsule, you'll see:
 
 1. **Desktop Background** - The workspace area
 2. **Front Panel** - Icon bar at the bottom
@@ -344,6 +344,6 @@ Now that you know the basics:
 
 ## Welcome to CDE!
 
-You're now ready to explore CDE Time Capsule. Take your time, experiment, and enjoy the nostalgia!
+You're now ready to explore Debian Time Capsule. Take your time, experiment, and enjoy the nostalgia!
 
 Have questions? Check the other guides or visit our [GitHub repository](https://github.com/Victxrlarixs/debian-cde).

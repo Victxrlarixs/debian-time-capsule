@@ -1,10 +1,10 @@
 # Architecture Overview
 
-Technical overview of CDE Time Capsule's system architecture.
+Technical overview of Debian Time Capsule's system architecture.
 
 ## System Design
 
-CDE Time Capsule follows a modular, event-driven architecture built on Astro's islands pattern.
+Debian Time Capsule follows a modular, event-driven architecture built on Astro's islands pattern.
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -105,7 +105,7 @@ class VirtualFileSystem {
 }
 ```
 
-See [VFS Documentation](vfs.md) for details.
+See the [Virtual File System (VFS)](#virtual-file-system-vfs) section above for details.
 
 ### Window Manager
 
@@ -145,7 +145,7 @@ class WindowManager {
 }
 ```
 
-See [Window Manager Documentation](window-manager.md) for details.
+See the [Window Manager](#window-manager) section above for details.
 
 ### Settings Manager
 

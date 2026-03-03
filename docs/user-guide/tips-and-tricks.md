@@ -1,6 +1,6 @@
 # Tips & Tricks
 
-Advanced tips and hidden features to master CDE Time Capsule.
+Advanced tips and hidden features to master Debian Time Capsule.
 
 ## Productivity Hacks
 

@@ -18,51 +18,21 @@ import ManViewer from '../components/features/ManViewer.astro';
 ---
 
 <Layout title="Time Capsule">
-  <!-- Pantalla de boot -->
   <BootSequence />
-  <!-- Escritorio CDE -->
   <div id="desktop-ui">
-    <!-- Topbar -->
     <TopBar />
-
-    <!-- Desktop Icons -->
     <DesktopIcons />
-
-    <!-- Terminal Laboratory -->
     <TerminalLab />
-
-    <!-- FileManager -->
     <FileManager />
-
-    <!-- Panel CDE -->
     <Panel />
-
-    <!-- StyleManager -->
     <StyleManager />
-
-    <!-- Emacs -->
     <Emacs />
-
-    <!-- Process Monitor -->
     <ProcessMonitor />
-
-    <!-- Calendar -->
     <Calendar />
-
-    <!-- Application Manager -->
     <AppManager />
-
-    <!-- Time Manager -->
     <TimeManager />
-
-    <!-- Netscape Navigator -->
     <NetscapeNavigator />
-
-    <!-- Lynx Browser -->
     <Lynx />
-
-    <!-- Man Page Viewer -->
     <ManViewer />
   </div>
-  <!-- cierre desktop-ui -->
 </Layout>

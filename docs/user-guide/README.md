@@ -1,31 +1,49 @@
-# User Guide
+# 📖 User Guide
 
-Welcome to CDE Time Capsule! This guide will help you get the most out of your 1990s Unix desktop experience.
+Welcome to the **Debian Time Capsule**! This guide is designed to help you master your virtual Unix workstation and get the most out of the retro experience.
 
-## Quick Start
+---
 
-New to CDE? Start here:
+## 🚀 Getting Started
 
-- [Getting Started](getting-started.md) - First steps and basic navigation
-- [Keyboard Shortcuts](keyboard-shortcuts.md) - Essential shortcuts for productivity
+If this is your first time using CDE, we recommend starting here:
+- **[Introduction to CDE](getting-started.md)**: Navigation, the Front Panel, and basic desktop concepts.
+- **[Keyboard Shortcuts](keyboard-shortcuts.md)**: Boost your productivity with essential hotkeys.
 
-## Applications
+---
 
-Learn how to use each application:
+## 🖥️ Built-in Applications
 
-- [XEmacs](xemacs.md) - Text editor with Emacs keybindings
-- [Terminal Lab](terminal-lab.md) - Interactive Unix terminal lessons
-- [File Manager](file-manager.md) - Browse and manage files
-- [Netscape Navigator](netscape.md) - 1990s web browser experience
-- [Style Manager](style-manager.md) - Customize your desktop
+Every tool on your desktop is designed to work like a vintage Unix application.
 
-## Desktop Features
+### Productivity & Editing
+- **[XEmacs](xemacs.md)**: A classic power-user text editor.
+- **[File Manager](file-manager.md)**: Browse and organize your virtual files.
+- **[Man Viewer](man-viewer.md)**: Read manual pages for system commands.
 
-- [Workspaces](workspaces.md) - Using virtual desktops
-- [Tips & Tricks](tips-and-tricks.md) - Hidden features and productivity tips
+### Communication & Web
+- **[Terminal Lab](terminal-lab.md)**: Explore the command line with interactive lessons.
+- **[Netscape Navigator](netscape.md)**: Experience the 90s web in all its glory.
+- **[Lynx](lynx.md)**: Fast, text-only web browsing.
 
-## Need Help?
+### System Utilities
+- **[Style Manager](style-manager.md)**: Customize colors, backdrops, mouse, and keyboard.
+- **[Workspaces](workspaces.md)**: Organize your work across multiple virtual desktops.
 
-- Check [Keyboard Shortcuts](keyboard-shortcuts.md) for quick reference
-- Visit [Tips & Tricks](tips-and-tricks.md) for advanced usage
-- Report issues on [GitHub](https://github.com/Victxrlarixs/debian-cde/issues)
+---
+
+## 💡 Productivity Tips
+
+- **[Tips & Tricks](tips-and-tricks.md)**: Hidden features and expert workflows.
+- **[PWA Installation](pwa-installation.md)**: Install CDE as a desktop app for the best experience.
+
+---
+
+## 🆘 Troubleshooting & Help
+
+- **Resetting your Desktop**: If things look weird, you can reset your settings in the Style Manager.
+- **Found a Bug?**: Please report it on our [GitHub Issues](https://github.com/Victxrlarixs/debian-cde/issues).
+
+---
+
+*Enjoy the nostalgia of a simpler time, with the speed of today.*

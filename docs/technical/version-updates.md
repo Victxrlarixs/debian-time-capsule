@@ -2,7 +2,7 @@
 
 ## Overview
 
-The CDE Time Capsule includes an automatic version management system that handles cache clearing and displays an authentic Unix-style package update sequence when the application version changes.
+The Debian Time Capsule includes an automatic version management system that handles cache clearing and displays an authentic Unix-style package update sequence when the application version changes.
 
 ## How It Works
 

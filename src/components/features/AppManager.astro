@@ -12,85 +12,71 @@ import WindowMinimize from '../common/WindowMinimize.astro';
 
   <div class="modal-body app-manager-body">
     <div class="app-grid">
-      <!-- Terminal Lab -->
       <div class="app-item" onclick="TerminalLab.open(); appManager.close()">
         <img src="/icons/devices/computer.png" alt="Terminal Lab" />
         <span>Terminal Lab</span>
       </div>
 
-      <!-- File Manager -->
       <div class="app-item" onclick="toggleFileManager(); appManager.close()">
         <img src="/icons/apps/filemanager.png" alt="File Manager" />
         <span>File Manager</span>
       </div>
 
-      <!-- Style Manager -->
       <div class="app-item" onclick="styleManager.openMain(); appManager.close()">
         <img src="/icons/apps/org.xfce.settings.appearance.png" alt="Style Manager" />
         <span>Style Manager</span>
       </div>
 
-      <!-- Audio Manager -->
       <div class="app-item" onclick="styleManager.openBeep(); appManager.close()">
         <img src="/icons/devices/multimedia-volume-control.png" alt="Audio Manager" />
         <span>Audio Setup</span>
       </div>
 
-      <!-- Process Monitor -->
       <div class="app-item" onclick="openTaskManagerInTerminal(); appManager.close()">
         <img src="/icons/apps/org.xfce.taskmanager.png" alt="Process Monitor" />
         <span>Process Monitor</span>
       </div>
 
-      <!-- Calendar -->
       <div class="app-item" onclick="openCalendar(); appManager.close()">
         <img src="/icons/system/calendar.png" alt="Calendar" />
         <span>Calendar</span>
       </div>
 
-      <!-- Clock -->
       <div class="app-item" onclick="timeManager.open(); appManager.close()">
         <img src="/icons/system/gtkclocksetup.png" alt="Clock" />
         <span>Clock</span>
       </div>
 
-      <!-- XEmacs -->
       <div class="app-item" onclick="window.Emacs?.openSplash(); appManager.close()">
         <img src="/icons/apps/xemacs.png" alt="XEmacs" class="emacs-pixelated" />
         <span>XEmacs</span>
       </div>
 
-      <!-- Screenshot -->
       <div class="app-item" onclick="captureFullPageScreenshot(); appManager.close()">
         <img src="/icons/apps/org.xfce.screenshooter.png" alt="Screenshot" />
         <span>Screenshooter</span>
       </div>
 
-      <!-- Netscape Navigator -->
       <div class="app-item" onclick="window.Netscape?.open(); appManager.close()">
         <img src="/icons/apps/netscape_classic.png" alt="Netscape Navigator" />
         <span>Netscape</span>
       </div>
 
-      <!-- Lynx Browser -->
       <div class="app-item" onclick="window.Lynx?.open(); appManager.close()">
         <img src="/icons/apps/Lynx.svg" alt="Lynx Browser" />
         <span>Lynx</span>
       </div>
 
-      <!-- Man Page Viewer -->
       <div class="app-item" onclick="window.ManViewer?.open(); appManager.close()">
         <img src="/icons/apps/man.png" alt="Man Page Viewer" />
         <span>Man Pages</span>
       </div>
 
-      <!-- Share Theme -->
       <div class="app-item" onclick="shareThemeToDiscussions(); appManager.close()">
         <img src="/icons/apps/org.xfce.PanelProfiles.png" alt="Share Theme" />
         <span>Share Theme</span>
       </div>
 
-      <!-- Keyboard Shortcuts -->
       <div class="app-item" onclick="AccessibilityManager.showShortcutsHelp(); appManager.close()">
         <img
           src="/icons/apps/preferences-desktop-keyboard-shortcuts.png"

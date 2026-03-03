@@ -1,123 +1,66 @@
-# Technical Documentation
+# 🛠️ Technical Documentation
 
-Technical documentation for developers contributing to or learning from CDE Time Capsule.
+Welcome to the internal engine of the Debian Time Capsule. This project is built with modern technologies to recreate a classic experience.
 
-## Architecture
+---
 
-- [Architecture Overview](architecture.md) - System design and component structure
-- [Virtual File System](vfs.md) - VFS implementation details
-- [Window Manager](window-manager.md) - Window management system
-- [Performance](performance.md) - Optimization techniques and metrics
+## 🏗️ Core Architecture
 
-## Core Systems
+- **[System Architecture](architecture.md)**
+  Detailed overview of the modular design, event-driven communication, and component structure. Includes details on:
+  - **VFS (Virtual File System)**: In-memory Unix-like filesystem.
+  - **Window Manager**: Z-index management and window lifecycle.
+  - **Web Workers**: Offloading heavy tasks like XPM parsing and filesystem operations.
+  - **Lazy Loading**: Dynamic hydration of applications on demand.
 
-- [Storage & Cache](storage.md) - IndexedDB, localStorage, and caching strategies
-- [Web Workers](workers.md) - Background processing implementation
-- [Accessibility](accessibility.md) - A11y implementation details
+- **[Storage & Cache](storage.md)**
+  Deep dive into data persistence using IndexedDB and localStorage, and our multi-layered caching strategy.
 
-## Development
+---
 
-- [Contributing Guide](contributing.md) - How to contribute to the project
-- [API Reference](../api/README.md) - Complete API documentation
+## 💻 Tech Stack
 
-## Quick Links
+- **Framework**: [Astro 5](https://astro.build/) - Islands architecture for minimal JS overhead.
+- **Language**: [TypeScript](https://www.typescriptlang.org/) - Strict typing for system-level stability.
+- **State**: Event-driven bus for decoupled component communication.
+- **Styling**: Vanilla CSS with modern Custom Properties (Variables).
+- **Vite**: Ultra-fast bundling and development.
 
-### For New Contributors
+---
 
-1. Read [Architecture Overview](architecture.md)
-2. Check [Contributing Guide](contributing.md)
-3. Review [API Reference](../api/README.md)
+## 🚀 Performance Targets
 
-### For Learning
+We aim for a "snappy" 1990s feel with 2020s performance:
+- **Zero CLS**: Layout stability is paramount for the desktop feel.
+- **Off-Main-Thread**: Heavy parsing (XPM, Man pages) happens in Web Workers.
+- **Lazy Hydration**: Only the components you use are loaded into memory.
 
-- [VFS Implementation](vfs.md) - Learn about virtual filesystems
-- [Performance Optimizations](performance.md) - Modern web performance techniques
-- [Web Workers](workers.md) - Offloading work to background threads
+---
 
-## Technology Stack
+## 🤝 Development Workflow
 
-- **Framework:** Astro 5.x
-- **Language:** TypeScript 5.x
-- **Styling:** Vanilla CSS with CSS Custom Properties
-- **Storage:** IndexedDB with localStorage fallback
-- **Build:** Vite
-- **Testing:** (To be implemented)
+Ready to contribute? Please follow these guides:
 
-## Project Structure
+1. **[Contributing Guidelines](../../CONTRIBUTING.md)**
+   - Setup instructions
+   - PR requirements
+   - Code standards & style
+2. **[Version Updates](version-updates.md)**
+   - Track recent architectural changes and updates.
 
-```
+---
+
+## 📂 Project Organization
+
+```text
 src/
-├── components/          # Astro components
-│   ├── common/         # Shared UI components
-│   ├── desktop/        # Desktop shell components
-│   └── features/       # Application components
-├── scripts/
-│   ├── core/           # Core systems (VFS, WindowManager, etc.)
-│   ├── features/       # Application logic
-│   ├── utilities/      # Helper functions and utilities
-│   └── workers/        # Web Workers
-├── layouts/            # Astro layouts
-└── pages/              # Astro pages
-
-public/
-├── backdrops/          # XPM backdrop files
-├── palettes/           # Color palette files
-├── icons/              # UI icons
-└── css/                # Global styles
-
-docs/
-├── user-guide/         # End-user documentation
-├── technical/          # Developer documentation
-└── api/                # API reference
+├── core/           # System foundations (WindowManager, VFS, Events)
+├── features/       # Application-specific logic (XEmacs, Lynx, etc.)
+├── components/     # UI Islands (Astro & TS)
+├── utilities/      # Shared helpers
+└── workers/        # Performance-critical background scripts
 ```
 
-## Development Workflow
+---
 
-### Setup
-
-```bash
-npm install
-npm run dev
-```
-
-### Build
-
-```bash
-npm run build
-npm run preview
-```
-
-### Code Style
-
-- TypeScript strict mode enabled
-- ESLint configuration (to be added)
-- Prettier for formatting
-
-## Performance Targets
-
-- **FCP:** <2s
-- **LCP:** <3s
-- **FID:** <100ms
-- **CLS:** <0.1
-- **Bundle Size:** <200KB (initial)
-
-## Browser Support
-
-- Chrome/Edge 80+
-- Firefox 74+
-- Safari 13.1+
-
-Graceful degradation for older browsers.
-
-## Contributing
-
-See [Contributing Guide](contributing.md) for detailed information on:
-
-- Code style
-- Commit conventions
-- Pull request process
-- Testing requirements
-
-## License
-
-GPL License - see [LICENSE](../../LICENSE) for details.
+*For API specifics, please refer to the source code comments. We are working on auto-generating full API docs.*

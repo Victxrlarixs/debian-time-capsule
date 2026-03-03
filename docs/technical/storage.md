@@ -1,6 +1,6 @@
 # Storage & Cache Management
 
-Technical documentation for the storage and caching system in CDE Time Capsule.
+Technical documentation for the storage and caching system in Debian Time Capsule.
 
 ## Overview
 

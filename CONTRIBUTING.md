@@ -125,6 +125,25 @@ For detailed information, see:
 - **Technical Docs**: `docs/technical/`
 - **Architecture**: `docs/technical/architecture.md`
 
+### Documentation Standards
+
+- **Language**: Use clear, concise English. Avoid unnecessary jargon.
+- **Formatting**: Use standard Markdown. Include code examples for technical sections.
+- **Visuals**: Add screenshots for UI changes when possible.
+- **Completeness**: Ensure all new features are documented in both the User Guide and Technical Docs.
+- **Types**: Include TypeScript types and interface definitions in API references.
+
+### Contributing to Documentation
+
+Found an error or want to improve the documentation?
+
+1. **Identify**: Find the relevant `.md` file in the `docs/` directory.
+2. **Edit**: Make your changes, ensuring they follow the standards above.
+3. **Verify**: Check that all links are working and formatting is correct.
+4. **PR**: Submit a pull request with a description of the documentation improvements.
+
+For major documentation changes, please open an issue first to discuss the structure.
+
 ## Issues and Discussions
 
 - **Bug Reports**: Use GitHub Issues with reproduction steps
