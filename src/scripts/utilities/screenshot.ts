@@ -81,10 +81,14 @@ export function captureFullPageScreenshot(): void {
         (clonedToast as HTMLElement).style.display = 'none';
         logger.log('[Screenshot] Toast hidden in cloned document');
       }
-      // Hide screenshot button in clone
       const clonedBtn = clonedDoc.getElementById('screenshot-btn');
       if (clonedBtn) {
         (clonedBtn as HTMLElement).style.display = 'none';
+      }
+      const clonedPanel = clonedDoc.getElementById('cde-panel');
+      if (clonedPanel) {
+        (clonedPanel as HTMLElement).style.overflow = 'visible';
+        logger.log('[Screenshot] Panel overflow set to visible for complete capture');
       }
     },
   };
