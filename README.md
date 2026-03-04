@@ -91,16 +91,9 @@ Post it in [GitHub Discussions](https://github.com/Victxrlarixs/debian-cde/discu
 - **Sound Synthesis**  
   Authentic system beeps via Web Audio API.
 
-## Works everywhere
-
-<img src="public/images/Install_PWA.png" width="190" align="left" style="margin-right: 24px; margin-bottom: 12px;" />
-
-Desktop feels native.  
-Mobile adapts with touch gestures.  
-Keyboard shortcuts still work.
+- **Works Everywhere**  
+Desktop feels native. Mobile adapts with touch gestures. Keyboard shortcuts still work.
 It behaves like a real system — not a responsive layout pretending to be one.
-
-<br clear="left"/>
 
 ---
 
@@ -111,19 +104,7 @@ But if you want to understand how it works under the hood, start here:
 
 ---
 
-### 🌐 Documentation Portal
-
-Want the full experience? Explore the interactive documentation.
-
-→ **[debian.com.mx/docs](https://debian.com.mx/docs)**
-
-A structured, navigable version of the documentation — designed to feel like part of the system.
-
----
-
 ### 📘 Repository Documentation
-
-Prefer reading directly from the source?
 
 #### Getting Started  
 Installation, PWA setup, first launch experience, and basic navigation.  
@@ -131,7 +112,7 @@ Installation, PWA setup, first launch experience, and basic navigation.
 
 #### User Guide  
 Shortcuts, window behavior, workspaces, customization, and daily usage.  
-→ **[User Guide](https://github.com/Victxrlarixs/debian-cde/blob/main/docs/user-guide/keyboard-shortcuts.md)**
+→ **[User Guide](https://github.com/Victxrlarixs/debian-cde/blob/main/docs/user-guide/README.md)**
 
 #### Architecture  
 How the desktop is structured internally.  
