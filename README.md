@@ -110,7 +110,7 @@ But if you want to understand how it works under the hood, start here:
 
 Want the full experience? Explore the interactive documentation.
 
-→ **[Visit the Documentation Portal](docs.debian.com.mx)**
+→ **[Visit the Documentation Portal](https;//docs.debian.com.mx)**
 
 A structured, navigable version of the documentation — designed to feel like part of the system.
 
