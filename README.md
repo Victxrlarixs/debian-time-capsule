@@ -104,7 +104,19 @@ But if you want to understand how it works under the hood, start here:
 
 ---
 
+### 🌐 Documentation Portal
+
+Want the full experience? Explore the interactive documentation.
+
+→ **[Visit the Documentation Portal](docs.debian.com.mx)**
+
+A structured, navigable version of the documentation — designed to feel like part of the system.
+
+---
+
 ### 📘 Repository Documentation
+
+Prefer reading directly from the source?
 
 #### Getting Started  
 Installation, PWA setup, first launch experience, and basic navigation.  
