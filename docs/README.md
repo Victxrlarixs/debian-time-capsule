@@ -82,6 +82,6 @@ docs/
 
 - [Official Repository](https://github.com/Victxrlarixs/debian-cde)
 - [Live Experience](https://debian.com.mx)
-- [Documentation Portal](https://docs.debian.com.mx) - Dive deeper into the rabbit hole 🐰 
+- [Documentation Portal](https://docs.debian.com.mx) - Dive deeper into the rabbit hole 🐰
 
 ---

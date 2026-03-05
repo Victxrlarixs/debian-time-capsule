@@ -24,7 +24,7 @@ import WindowMinimize from '../../common/WindowMinimize.astro';
       <img src="/icons/mimetypes/font-x-generic.png" alt="Font" width="48" height="48" />
     </div>
 
-    <!-- Font Theme (ahora sin el texto "Font Theme", solo el icono lo representa) -->
+    <!-- Font Presets - Classic presets only -->
     <div class="font-preset-row">
       <button class="cde-preset" data-preset="classic-cde">Classic CDE</button>
       <button class="cde-preset" data-preset="modern">Modern</button>
@@ -35,21 +35,14 @@ import WindowMinimize from '../../common/WindowMinimize.astro';
     <div class="cde-controlrow">
       <label class="cde-label">UI Font Family:</label>
       <select class="cde-select" id="font-family-base" data-var="--font-family-base">
-        <option value='"Fixedsys", "Lucida Console", monospace'>Fixedsys (Default)</option>
-        <option value='"MS Sans Serif", sans-serif'>MS Sans Serif</option>
-        <option value='"Times New Roman", serif'>Times New Roman</option>
-        <option value="Arial, sans-serif">Arial</option>
-        <option value='"Courier New", monospace'>Courier New</option>
+        <!-- Options will be populated by JavaScript from fonts.json -->
       </select>
     </div>
 
     <div class="cde-controlrow">
       <label class="cde-label">Terminal Font:</label>
       <select class="cde-select" id="font-family-terminal" data-var="--font-family-terminal">
-        <option value='"Courier New", monospace'>Courier New (Default)</option>
-        <option value='"Lucida Console", monospace'>Lucida Console</option>
-        <option value="Consolas, monospace">Consolas</option>
-        <option value='"Fixedsys", monospace'>Fixedsys</option>
+        <!-- Options will be populated by JavaScript from fonts.json -->
       </select>
     </div>
 

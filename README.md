@@ -94,8 +94,8 @@ Post it in [GitHub Discussions](https://github.com/Victxrlarixs/debian-cde/discu
   Authentic system beeps via Web Audio API.
 
 - **Works Everywhere**  
-Desktop feels native. Mobile adapts with touch gestures. Keyboard shortcuts still work.
-It behaves like a real system — not a responsive layout pretending to be one.
+  Desktop feels native. Mobile adapts with touch gestures. Keyboard shortcuts still work.
+  It behaves like a real system — not a responsive layout pretending to be one.
 
 ---
 
@@ -120,20 +120,24 @@ A structured, navigable version of the documentation — designed to feel like p
 
 Prefer reading directly from the source?
 
-#### Getting Started  
+#### Getting Started
+
 Installation, PWA setup, first launch experience, and basic navigation.  
 → **[Getting Started](https://github.com/Victxrlarixs/debian-cde/blob/main/docs/user-guide/getting-started.md)**
 
-#### User Guide  
+#### User Guide
+
 Shortcuts, window behavior, workspaces, customization, and daily usage.  
 → **[User Guide](https://github.com/Victxrlarixs/debian-cde/blob/main/docs/user-guide/README.md)**
 
-#### Architecture  
+#### Architecture
+
 How the desktop is structured internally.  
 Window manager model, virtual filesystem layer, state persistence, and IndexedDB usage.  
 → **[Architecture](https://github.com/Victxrlarixs/debian-cde/blob/main/docs/technical/architecture.md)**
 
-#### Full Documentation Index  
+#### Full Documentation Index
+
 Everything organized in one place.  
 → **[Documentation Index](https://github.com/Victxrlarixs/debian-cde/blob/main/docs/README.md)**
 

@@ -48,5 +48,205 @@
     "--font-weight-normal": "400",
     "--font-weight-bold": "700",
     "--line-height-base": "1.4"
+  },
+  "bitstreamverasans": {
+    "--line-height-base": "1.45",
+    "--font-size-small": "10px",
+    "--font-family-base": "\"Bitstream Vera Sans\", Verdana, sans-serif",
+    "--font-size-base": "11px",
+    "--font-weight-normal": "500",
+    "--font-size-title": "12px",
+    "--font-weight-bold": "700",
+    "--font-family-terminal": "\"Bitstream Vera Sans Mono\", Courier, monospace"
+  },
+  "bitstreamveraserif": {
+    "--line-height-base": "1.45",
+    "--font-size-small": "10px",
+    "--font-family-base": "\"Bitstream Vera Serif\", Georgia, serif",
+    "--font-size-base": "11px",
+    "--font-weight-normal": "500",
+    "--font-size-title": "12px",
+    "--font-weight-bold": "700",
+    "--font-family-terminal": "\"Bitstream Vera Sans Mono\", Courier, monospace"
+  },
+  "cabin": {
+    "--line-height-base": "1.45",
+    "--font-size-small": "10px",
+    "--font-family-base": "\"Cabin\", Arial, sans-serif",
+    "--font-size-base": "11px",
+    "--font-weight-normal": "500",
+    "--font-weight-bold": "700",
+    "--font-family-terminal": "\"Monospace\", \"Courier New\", monospace",
+    "--font-size-title": "13px"
+  },
+  "croscore": {
+    "--line-height-base": "1.45",
+    "--font-size-small": "10px",
+    "--font-weight-bold": "700",
+    "--font-family-base": "\"Arimo\", Arial, sans-serif",
+    "--font-size-base": "12px",
+    "--font-weight-normal": "500",
+    "--font-family-terminal": "\"Cousine\", Arial, sans-serif",
+    "--font-size-title": "14px"
+  },
+  "dejavusans": {
+    "--line-height-base": "1.45",
+    "--font-size-small": "9px",
+    "--font-family-base": "\"DejaVu Sans\", Verdana, sans-serif",
+    "--font-size-base": "11px",
+    "--font-weight-normal": "500",
+    "--font-size-title": "12px",
+    "--font-weight-bold": "700",
+    "--font-family-terminal": "\"DejaVu Sans Mono\", Courier, monospace"
+  },
+  "dejavuserif": {
+    "--line-height-base": "1.45",
+    "--font-size-small": "10px",
+    "--font-family-base": "\"DejaVu Serif\", Georgia, serif",
+    "--font-size-base": "11px",
+    "--font-weight-normal": "500",
+    "--font-size-title": "12px",
+    "--font-weight-bold": "700",
+    "--font-family-terminal": "\"DejaVu Sans Mono\", Courier, monospace"
+  },
+  "fancy": {
+    "--line-height-base": "1.45",
+    "--font-size-small": "10px",
+    "--font-family-base": "\"Comic Neue\", Arial, sans-serif",
+    "--font-size-base": "12px",
+    "--font-weight-normal": "500",
+    "--font-size-title": "14px",
+    "--font-weight-bold": "700",
+    "--font-family-terminal": "\"Source Code Pro\", Arial, sans-serif"
+  },
+  "fira": {
+    "--line-height-base": "1.45",
+    "--font-size-small": "9px",
+    "--font-family-base": "\"Fira Sans\", Helvetica, Arial, sans-serif",
+    "--font-size-base": "10px",
+    "--font-weight-normal": "500",
+    "--font-size-title": "12px",
+    "--font-weight-bold": "700",
+    "--font-family-terminal": "\"Fira Mono\", \"Courier New\", monospace"
+  },
+  "freesans": {
+    "--line-height-base": "1.45",
+    "--font-size-small": "9px",
+    "--font-family-base": "\"FreeSans\", Arial, sans-serif",
+    "--font-size-base": "11px",
+    "--font-weight-normal": "500",
+    "--font-size-title": "13px",
+    "--font-weight-bold": "700",
+    "--font-family-terminal": "\"FreeMono\", \"Courier New\", monospace"
+  },
+  "freeserif": {
+    "--line-height-base": "1.45",
+    "--font-size-small": "10px",
+    "--font-family-base": "\"FreeSerif\", Georgia, serif",
+    "--font-size-base": "11px",
+    "--font-weight-normal": "500",
+    "--font-size-title": "13px",
+    "--font-weight-bold": "700",
+    "--font-family-terminal": "\"FreeMono\", \"Courier New\", monospace"
+  },
+  "liberationsans": {
+    "--line-height-base": "1.45",
+    "--font-size-small": "10px",
+    "--font-family-base": "\"Liberation Sans\", Arial, sans-serif",
+    "--font-size-base": "11px",
+    "--font-weight-normal": "500",
+    "--font-size-title": "14px",
+    "--font-weight-bold": "700",
+    "--font-family-terminal": "\"Liberation Mono\", \"Courier New\", monospace"
+  },
+  "liberationserif": {
+    "--line-height-base": "1.45",
+    "--font-size-small": "11px",
+    "--font-family-base": "\"Liberation Serif\", \"Times New Roman\", serif",
+    "--font-size-base": "12px",
+    "--font-weight-normal": "500",
+    "--font-size-title": "14px",
+    "--font-weight-bold": "700",
+    "--font-family-terminal": "\"Liberation Mono\", \"Courier New\", monospace"
+  },
+  "linuxbiolinum": {
+    "--line-height-base": "1.45",
+    "--font-size-small": "10px",
+    "--font-family-base": "\"Linux Biolinum\", Arial, sans-serif",
+    "--font-size-base": "11px",
+    "--font-weight-normal": "500",
+    "--font-size-title": "14px",
+    "--font-weight-bold": "700",
+    "--font-family-terminal": "\"Source Code Pro\", Arial, sans-serif"
+  },
+  "lucidasans": {
+    "--line-height-base": "1.45",
+    "--font-size-small": "9px",
+    "--font-family-base": "\"Lucida Sans\", \"Lucida Grande\", sans-serif",
+    "--font-size-base": "10px",
+    "--font-weight-normal": "500",
+    "--font-size-title": "12px",
+    "--font-weight-bold": "700",
+    "--font-family-terminal": "\"Lucida Sans Typewriter\", Arial, sans-serif"
+  },
+  "luxisans": {
+    "--line-height-base": "1.45",
+    "--font-size-small": "10px",
+    "--font-family-base": "\"Luxi Sans\", Arial, sans-serif",
+    "--font-size-base": "11px",
+    "--font-weight-normal": "500",
+    "--font-size-title": "12px",
+    "--font-weight-bold": "700",
+    "--font-family-terminal": "\"Luxi Mono\", \"Courier New\", monospace"
+  },
+  "luxiserif": {
+    "--line-height-base": "1.45",
+    "--font-size-small": "10px",
+    "--font-family-base": "\"Luxi Serif\", Georgia, serif",
+    "--font-size-base": "11px",
+    "--font-weight-normal": "500",
+    "--font-size-title": "12px",
+    "--font-weight-bold": "700",
+    "--font-family-terminal": "\"Luxi Mono\", \"Courier New\", monospace"
+  },
+  "monteserrat": {
+    "--line-height-base": "1.45",
+    "--font-size-small": "9px",
+    "--font-family-base": "\"Montserrat\", Arial, sans-serif",
+    "--font-size-base": "10px",
+    "--font-weight-normal": "500",
+    "--font-size-title": "12px",
+    "--font-weight-bold": "700",
+    "--font-family-terminal": "\"Source Code Pro\", Arial, sans-serif"
+  },
+  "roboto": {
+    "--line-height-base": "1.45",
+    "--font-size-small": "10px",
+    "--font-family-base": "\"Roboto\", Arial, sans-serif",
+    "--font-size-base": "11px",
+    "--font-weight-normal": "500",
+    "--font-size-title": "15px",
+    "--font-weight-bold": "700",
+    "--font-family-terminal": "\"Roboto Mono\", \"Courier New\", monospace"
+  },
+  "texgyrepagella": {
+    "--line-height-base": "1.45",
+    "--font-size-small": "10px",
+    "--font-family-base": "\"TeX Gyre Pagella\", Georgia, serif",
+    "--font-size-base": "12px",
+    "--font-weight-normal": "500",
+    "--font-weight-bold": "700",
+    "--font-family-terminal": "\"Monospace\", \"Courier New\", monospace",
+    "--font-size-title": "15px"
+  },
+  "ubuntu": {
+    "--line-height-base": "1.45",
+    "--font-size-small": "10px",
+    "--font-family-base": "\"Ubuntu\", Arial, sans-serif",
+    "--font-size-base": "11px",
+    "--font-weight-normal": "500",
+    "--font-weight-bold": "700",
+    "--font-family-terminal": "\"Ubuntu Mono\", \"Courier New\", monospace",
+    "--font-size-title": "14px"
   }
 }

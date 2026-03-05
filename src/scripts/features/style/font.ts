@@ -12,6 +12,64 @@ export class FontModule {
     this.fontStyles = { ...CONFIG.DEFAULT_STYLES.FONTS };
     this.fontPresets = { ...CONFIG.FONT_PRESETS };
     this.defaultFontStyles = { ...this.fontStyles };
+    this.populateFontDropdowns();
+  }
+
+  /**
+   * Populate font family dropdowns with all available fonts from fonts.json
+   */
+  private populateFontDropdowns(): void {
+    // Extract unique font families from all presets
+    const baseFonts = new Set<string>();
+    const terminalFonts = new Set<string>();
+
+    // Add default fonts
+    baseFonts.add(CONFIG.DEFAULT_STYLES.FONTS['--font-family-base']);
+    terminalFonts.add(CONFIG.DEFAULT_STYLES.FONTS['--font-family-terminal']);
+
+    // Extract fonts from all presets
+    for (const preset of Object.values(this.fontPresets)) {
+      if (preset['--font-family-base']) {
+        baseFonts.add(preset['--font-family-base']);
+      }
+      if (preset['--font-family-terminal']) {
+        terminalFonts.add(preset['--font-family-terminal']);
+      }
+    }
+
+    // Populate UI Font Family dropdown
+    const baseFontSelect = document.getElementById('font-family-base') as HTMLSelectElement;
+    if (baseFontSelect) {
+      baseFontSelect.innerHTML = '';
+      const sortedBaseFonts = Array.from(baseFonts).sort();
+      sortedBaseFonts.forEach((font) => {
+        const option = document.createElement('option');
+        option.value = font;
+        // Extract first font name for display
+        const displayName = font.replace(/['"]/g, '').split(',')[0].trim();
+        option.textContent = displayName;
+        baseFontSelect.appendChild(option);
+      });
+    }
+
+    // Populate Terminal Font dropdown
+    const terminalFontSelect = document.getElementById('font-family-terminal') as HTMLSelectElement;
+    if (terminalFontSelect) {
+      terminalFontSelect.innerHTML = '';
+      const sortedTerminalFonts = Array.from(terminalFonts).sort();
+      sortedTerminalFonts.forEach((font) => {
+        const option = document.createElement('option');
+        option.value = font;
+        // Extract first font name for display
+        const displayName = font.replace(/['"]/g, '').split(',')[0].trim();
+        option.textContent = displayName;
+        terminalFontSelect.appendChild(option);
+      });
+    }
+
+    logger.log(
+      `[FontModule] Populated ${baseFonts.size} UI fonts and ${terminalFonts.size} terminal fonts`
+    );
   }
 
   public applyFontStyle(cssVar: string, value: string): void {
