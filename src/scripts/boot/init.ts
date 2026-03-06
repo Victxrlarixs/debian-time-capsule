@@ -12,6 +12,8 @@ import VersionManager from '../core/version-manager';
 import { initPerformanceOptimizations } from '../core/performance-integration';
 import { registerModules, moduleLoader } from '../shared/module-loader';
 import { initWorkspacePreview } from '../features/workspace-preview';
+import { initializeContainer } from '../core/container.init';
+import { initializeCDENamespace } from '../core/cde-namespace';
 
 /**
  * Global interface declarations for CDE desktop environment.
@@ -289,7 +291,15 @@ async function initDesktop(): Promise<void> {
   }
 
   try {
-    // 0. Register all modules for lazy loading
+    // 0. Initialize Dependency Injection Container
+    initializeContainer();
+    logger.log('[initDesktop] DI Container initialized');
+
+    // 0.1. Initialize CDE Namespace
+    initializeCDENamespace();
+    logger.log('[initDesktop] CDE Namespace initialized');
+
+    // 0.2. Register all modules for lazy loading
     registerModules();
     logger.log('[initDesktop] Modules registered for lazy loading');
 

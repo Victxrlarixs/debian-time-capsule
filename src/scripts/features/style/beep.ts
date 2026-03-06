@@ -3,7 +3,8 @@
 import { logger } from '../../utilities/logger';
 import { CONFIG } from '../../core/config';
 import { StyleModuleBase } from '../../shared/style-module-base';
-import { settingsManager } from '../../core/settingsmanager';
+import { container } from '../../core/container';
+import type { ISettingsManager } from '../../core/interfaces/settings-manager.interface';
 
 /**
  * System beep and sound settings.
@@ -36,8 +37,9 @@ export class BeepModule extends StyleModuleBase<BeepSettings> {
    * Always ensures volume starts at 90% (0.9) if not previously configured.
    */
   public load(): void {
+    const settingsManager = container.get<ISettingsManager>('settings');
     const saved = this.config.settingsKey
-      ? settingsManager.getSection(this.config.settingsKey)
+      ? settingsManager.getSection(this.config.settingsKey as keyof import('../../core/settingsmanager').SystemSettings)
       : {};
     if (saved && Object.keys(saved).length > 0) {
       Object.assign(this.settings, saved);

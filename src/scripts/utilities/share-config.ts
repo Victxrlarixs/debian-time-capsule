@@ -1,7 +1,8 @@
 // src/scripts/utilities/share-config.ts
 // Share and load CDE theme configurations via URL
 
-import { settingsManager } from '../core/settingsmanager';
+import { container } from '../core/container';
+import type { ISettingsManager } from '../core/interfaces/settings-manager.interface';
 import { logger } from './logger';
 
 interface SharedConfig {
@@ -20,6 +21,7 @@ interface SharedConfig {
  */
 export function encodeConfigToURL(): string {
   try {
+    const settingsManager = container.get<ISettingsManager>('settings');
     const themeSettings = settingsManager.getSection('theme');
     const paletteId = window.styleManager?.theme?.currentPaletteId;
     const backdropPath = themeSettings.backdrop?.value;

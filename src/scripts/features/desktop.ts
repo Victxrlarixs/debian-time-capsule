@@ -1,7 +1,8 @@
 // src/scripts/features/desktop.ts
 import { CONFIG } from '../core/config';
 import { logger } from '../utilities/logger';
-import { settingsManager } from '../core/settingsmanager';
+import { container } from '../core/container';
+import type { ISettingsManager } from '../core/interfaces/settings-manager.interface';
 import { VFS, type IVFS, type VFSFile } from '../core/vfs';
 import { copyToClipboard, cutToClipboard, pasteFromClipboard } from '../shared/clipboard';
 import { createContextMenu, type ContextMenuItem } from '../shared/context-menu';
@@ -57,9 +58,10 @@ const SYSTEM_ICONS: any[] = [
  * Desktop Manager: Handles icons, shortcuts and desktop background interactions.
  */
 export const DesktopManager = (() => {
-  const container = document.getElementById('desktop-icons-container');
+  const containerEl = document.getElementById('desktop-icons-container');
   let icons: HTMLElement[] = [];
   let selectedIcon: HTMLElement | null = null;
+  const settingsManager = container.get<ISettingsManager>('settings');
 
   // Drag state
   let isDragging = false;

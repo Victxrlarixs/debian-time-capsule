@@ -11,7 +11,8 @@ import { BackdropModule } from './style/backdrop';
 import { WindowModule } from './style/windowmodule';
 import { ScreenModule } from './style/screen';
 import { StartupModule } from './style/startup';
-import { settingsManager } from '../core/settingsmanager';
+import { container } from '../core/container';
+import type { ISettingsManager } from '../core/interfaces/settings-manager.interface';
 import { WindowManager } from '../core/windowmanager';
 
 /**
@@ -20,9 +21,7 @@ import { WindowManager } from '../core/windowmanager';
  */
 export class StyleManager {
   public theme: ThemeModule;
-
   public font: FontModule;
-
   public mouse: MouseModule;
   public keyboard: KeyboardModule;
   public beep: BeepModule;
@@ -30,8 +29,10 @@ export class StyleManager {
   public windowBehavior: WindowModule;
   public screen: ScreenModule;
   public startup: StartupModule;
+  private settingsManager: ISettingsManager;
 
   constructor() {
+    this.settingsManager = container.get<ISettingsManager>('settings');
     this.theme = new ThemeModule();
     this.font = new FontModule();
     this.mouse = new MouseModule();
@@ -61,7 +62,7 @@ export class StyleManager {
    * Initializes the Style Manager and all its modules.
    */
   public init(): void {
-    const themeSettings = settingsManager.getSection('theme');
+    const themeSettings = this.settingsManager.getSection('theme');
 
     // If no saved colors, apply LateSummer as the system default
     if (!themeSettings.colors || Object.keys(themeSettings.colors).length === 0) {
@@ -355,16 +356,16 @@ export class StyleManager {
   }
 
   public saveColor(): void {
-    const theme = settingsManager.getSection('theme');
+    const theme = this.settingsManager.getSection('theme');
     theme.colors = this.theme.styles;
-    theme.paletteId = this.theme.currentPaletteId;
-    settingsManager.setSection('theme', theme);
+    theme.paletteId = this.theme.currentPaletteId || undefined;
+    this.settingsManager.setSection('theme', theme);
   }
 
   public saveFont(): void {
-    const theme = settingsManager.getSection('theme');
+    const theme = this.settingsManager.getSection('theme');
     theme.fonts = this.font.fontStyles;
-    settingsManager.setSection('theme', theme);
+    this.settingsManager.setSection('theme', theme);
   }
 
   private updateStatus(msg: string, id: string): void {

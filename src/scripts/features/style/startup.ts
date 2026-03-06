@@ -1,7 +1,8 @@
 // src/scripts/features/style/startup.ts
 
 import { logger } from '../../utilities/logger';
-import { settingsManager } from '../../core/settingsmanager';
+import { container } from '../../core/container';
+import type { ISettingsManager } from '../../core/interfaces/settings-manager.interface';
 
 /**
  * Session startup settings.
@@ -19,12 +20,17 @@ export class StartupModule {
     restoreSession: true,
     onStartup: 'session',
   };
+  private settingsManager: ISettingsManager;
+
+  constructor() {
+    this.settingsManager = container.get<ISettingsManager>('settings');
+  }
 
   /**
    * Initializes the startup module.
    */
   public load(): void {
-    const saved = settingsManager.getSection('theme').startup;
+    const saved = this.settingsManager.getSection('theme').startup;
     if (saved) {
       Object.assign(this.settings, saved);
     }
@@ -35,9 +41,9 @@ export class StartupModule {
    * Clears the current session (window positions, etc.)
    */
   public clearSession(): void {
-    const session = settingsManager.getSection('session');
+    const session = this.settingsManager.getSection('session');
     session.windows = {};
-    settingsManager.setSection('session', session);
+    this.settingsManager.setSection('session', session);
     logger.log('[StartupModule] Session cleared');
     window.location.reload();
   }
@@ -51,9 +57,9 @@ export class StartupModule {
   }
 
   private save(): void {
-    const theme = settingsManager.getSection('theme');
+    const theme = this.settingsManager.getSection('theme');
     theme.startup = this.settings;
-    settingsManager.setSection('theme', theme);
+    this.settingsManager.setSection('theme', theme);
   }
 
   /**

@@ -10,7 +10,7 @@ import { openWindow, closeWindow, createZIndexManager } from '../shared/window-h
  */
 declare global {
   interface Window {
-    openEmacs: (filename: string, content: string, path?: string) => Promise<void>;
+    openEmacs?: (filename: string, content: string, path?: string) => Promise<void>;
     closeEmacs: () => void;
     Emacs: {
       open: (filename?: string, content?: string) => Promise<void>;
@@ -209,7 +209,7 @@ class EmacsManager {
     this.message(`Loaded: ${filename}`);
 
     WindowManager.showWindow('emacs');
-    this.win.style.zIndex = String(++this.zIndex);
+    this.win.style.zIndex = String(WindowManager.getNextZIndex());
 
     // Reset size to defaults
     this.win.style.width = 'min(900px, 95vw)';

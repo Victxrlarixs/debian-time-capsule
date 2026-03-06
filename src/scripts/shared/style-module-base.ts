@@ -2,7 +2,8 @@
 // Base class for Style Manager modules to eliminate duplication
 
 import { logger } from '../utilities/logger';
-import { settingsManager } from '../core/settingsmanager';
+import { container } from '../core/container';
+import type { ISettingsManager } from '../core/interfaces/settings-manager.interface';
 
 /**
  * Configuration for a Style Module
@@ -21,14 +22,18 @@ export interface StyleModuleConfig<T> {
 /**
  * Base class for Style Manager modules
  * Eliminates duplicated load/save/apply patterns
+ * Uses Dependency Injection via container
  */
 export abstract class StyleModuleBase<T extends Record<string, any>> {
   protected config: StyleModuleConfig<T>;
   public settings: T;
+  protected settingsManager: ISettingsManager;
 
-  constructor(config: StyleModuleConfig<T>) {
+  constructor(config: StyleModuleConfig<T>, injectedSettings?: ISettingsManager) {
     this.config = config;
     this.settings = { ...config.defaultSettings };
+    // Use injected settings manager or get from container
+    this.settingsManager = injectedSettings || container.get<ISettingsManager>('settings');
   }
 
   /**
@@ -36,7 +41,7 @@ export abstract class StyleModuleBase<T extends Record<string, any>> {
    * Override to add custom loading logic
    */
   public load(): void {
-    const saved = settingsManager.getSection(this.config.settingsKey as any);
+    const saved = this.settingsManager.getSection(this.config.settingsKey as any);
     if (saved && Object.keys(saved).length > 0) {
       Object.assign(this.settings, saved);
       logger.log(`[${this.config.name}] Loaded from SettingsManager:`, this.settings);
@@ -49,7 +54,7 @@ export abstract class StyleModuleBase<T extends Record<string, any>> {
    * Override to add custom saving logic
    */
   public save(): void {
-    settingsManager.setSection(this.config.settingsKey as any, this.settings);
+    this.settingsManager.setSection(this.config.settingsKey as any, this.settings);
     logger.log(`[${this.config.name}] Saved to SettingsManager:`, this.settings);
   }
 

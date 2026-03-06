@@ -125,7 +125,7 @@ export const CalendarManager = (() => {
 // Global exposure
 declare global {
   interface Window {
-    calendarManager: typeof CalendarManager;
+    calendarManager?: typeof CalendarManager;
     openCalendar: () => void;
   }
 }

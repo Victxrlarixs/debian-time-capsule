@@ -1,7 +1,8 @@
 // src/scripts/features/style/backdrop.ts
 
 import { logger } from '../../utilities/logger';
-import { settingsManager } from '../../core/settingsmanager';
+import { container } from '../../core/container';
+import type { ISettingsManager } from '../../core/interfaces/settings-manager.interface';
 import { CONFIG } from '../../core/config';
 import {
   loadXpmBackdropCached,
@@ -26,14 +27,19 @@ export class BackdropModule {
     type: 'xpm',
     value: CONFIG.BACKDROP.DEFAULT_BACKDROP,
   };
+  private settingsManager: ISettingsManager;
+
+  constructor() {
+    this.settingsManager = container.get<ISettingsManager>('settings');
+  }
 
   /**
    * Initializes the backdrop module and applies saved settings.
    */
   public load(): void {
-    const saved = settingsManager.getSection('theme').backdrop;
-    if (saved && saved.type === 'xpm') {
-      this.settings = saved;
+    const saved = this.settingsManager.getSection('theme').backdrop;
+    if (saved && typeof saved === 'object' && 'type' in saved && saved.type === 'xpm') {
+      this.settings = saved as BackdropSettings;
     }
     this.apply();
     logger.log('[BackdropModule] Loaded and applied:', this.settings);
@@ -162,9 +168,9 @@ export class BackdropModule {
    * Persists the current backdrop settings to logical storage.
    */
   private save(): void {
-    const theme = settingsManager.getSection('theme');
+    const theme = this.settingsManager.getSection('theme');
     theme.backdrop = this.settings;
-    settingsManager.setSection('theme', theme);
+    this.settingsManager.setSection('theme', theme);
   }
 
   /**

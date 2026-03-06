@@ -1,7 +1,8 @@
 // src/scripts/features/style/windowmodule.ts
 
 import { logger } from '../../utilities/logger';
-import { settingsManager } from '../../core/settingsmanager';
+import { container } from '../../core/container';
+import type { ISettingsManager } from '../../core/interfaces/settings-manager.interface';
 
 /**
  * Window behavior settings for CDE.
@@ -25,12 +26,17 @@ export class WindowModule {
     opaqueDragging: true,
     useIconBox: false,
   };
+  private settingsManager: ISettingsManager;
+
+  constructor() {
+    this.settingsManager = container.get<ISettingsManager>('settings');
+  }
 
   /**
    * Initializes the window module and applies saved settings.
    */
   public load(): void {
-    const saved = settingsManager.getSection('theme').windowBehavior;
+    const saved = this.settingsManager.getSection('theme').windowBehavior;
     if (saved) {
       Object.assign(this.settings, saved);
     }
@@ -67,9 +73,9 @@ export class WindowModule {
    * Persists the current window settings.
    */
   private save(): void {
-    const theme = settingsManager.getSection('theme');
+    const theme = this.settingsManager.getSection('theme');
     theme.windowBehavior = this.settings;
-    settingsManager.setSection('theme', theme);
+    this.settingsManager.setSection('theme', theme);
   }
 
   /**

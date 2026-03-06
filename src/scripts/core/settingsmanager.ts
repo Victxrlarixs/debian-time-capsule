@@ -2,11 +2,18 @@
 
 import { logger } from '../utilities/logger';
 import { storageAdapter } from '../utilities/storage-adapter';
+import type { ISettingsManager } from './interfaces/settings-manager.interface';
+import type { ISessionStorage, WindowState } from './interfaces/window-manager.interface';
 
 export interface SystemSettings {
   theme: {
     colors: Record<string, string>;
     fonts: Record<string, string>;
+    paletteId?: string;
+    backdrop?: Record<string, any>;
+    screen?: Record<string, any>;
+    startup?: Record<string, any>;
+    windowBehavior?: Record<string, any>;
   };
   mouse: Record<string, any>;
   keyboard: Record<string, any>;
@@ -27,7 +34,11 @@ export interface SystemSettings {
 
 const STORAGE_KEY = 'cde-system-settings';
 
-class SettingsManager {
+/**
+ * SettingsManager - Manages system-wide settings with persistence
+ * Now implements ISettingsManager and ISessionStorage for DI compatibility
+ */
+class SettingsManager implements ISettingsManager, ISessionStorage {
   private static instance: SettingsManager;
   private settings: SystemSettings;
   private readonly CURRENT_VERSION = '1.1.1';
@@ -63,7 +74,15 @@ class SettingsManager {
 
   private getDefaultSettings(): SystemSettings {
     return {
-      theme: { colors: {}, fonts: {} },
+      theme: { 
+        colors: {}, 
+        fonts: {}, 
+        paletteId: undefined,
+        backdrop: undefined,
+        screen: undefined,
+        startup: undefined,
+        windowBehavior: undefined
+      },
       mouse: {},
       keyboard: {},
       beep: {},
@@ -143,6 +162,15 @@ class SettingsManager {
 
   public getAll(): SystemSettings {
     return this.settings;
+  }
+
+  // ISessionStorage implementation
+  saveWindowState(id: string, state: WindowState): void {
+    this.updateWindowSession(id, state);
+  }
+
+  loadWindowState(id: string): WindowState | null {
+    return this.settings.session.windows[id] || null;
   }
 }
 

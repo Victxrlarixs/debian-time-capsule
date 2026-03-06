@@ -1,7 +1,8 @@
 // src/scripts/features/style/screen.ts
 
 import { logger } from '../../utilities/logger';
-import { settingsManager } from '../../core/settingsmanager';
+import { container } from '../../core/container';
+import type { ISettingsManager } from '../../core/interfaces/settings-manager.interface';
 
 /**
  * Screen and screensaver settings.
@@ -24,12 +25,17 @@ export class ScreenModule {
 
   private idleTimer: any = null;
   private overlay: HTMLElement | null = null;
+  private settingsManager: ISettingsManager;
+
+  constructor() {
+    this.settingsManager = container.get<ISettingsManager>('settings');
+  }
 
   /**
    * Initializes the screen module.
    */
   public load(): void {
-    const saved = settingsManager.getSection('theme').screen;
+    const saved = this.settingsManager.getSection('theme').screen;
     if (saved) {
       Object.assign(this.settings, saved);
     }
@@ -119,9 +125,9 @@ export class ScreenModule {
   }
 
   private save(): void {
-    const theme = settingsManager.getSection('theme');
+    const theme = this.settingsManager.getSection('theme');
     theme.screen = this.settings;
-    settingsManager.setSection('theme', theme);
+    this.settingsManager.setSection('theme', theme);
   }
 
   /**
