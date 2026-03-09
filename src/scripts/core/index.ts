@@ -13,6 +13,8 @@ import '../features/panel';
 // Export event system for features
 export { EventBus, eventBus } from './event-bus';
 export { SystemEvent } from './system-events';
+export { ErrorHandler, errorHandler, ErrorSeverity } from './error-handler';
+export type { ErrorContext, AppError } from './error-handler';
 export type {
   FileEventData,
   FolderEventData,

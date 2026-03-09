@@ -91,20 +91,16 @@ window.addEventListener('cde-fs-change', (e: any) => {
 });
 
 function subscribeToEvents(): void {
-  try {
-    if (!eventBus) {
-      eventBus = container.has('eventBus') ? container.get<EventBus>('eventBus') : null;
-    }
-    if (eventBus) {
-      eventBus.on(SystemEvent.FOLDER_OPENED, (data: any) => {
-        if (data.path) {
-          openPath(data.path);
-        }
-      });
-      logger.log('[FileManager] Subscribed to FOLDER_OPENED events');
-    }
-  } catch (error) {
-    logger.error('[FileManager] Failed to subscribe to events:', error);
+  if (!eventBus) {
+    eventBus = container.has('eventBus') ? container.get<EventBus>('eventBus') : null;
+  }
+  if (eventBus) {
+    eventBus.on(SystemEvent.FOLDER_OPENED, (data: any) => {
+      if (data.path) {
+        openPath(data.path);
+      }
+    });
+    logger.log('[FileManager] Subscribed to FOLDER_OPENED events');
   }
 }
 
@@ -229,11 +225,7 @@ async function rename(oldName: string, newName: string): Promise<void> {
 
 async function openTextWindow(name: string, content: string, path?: string): Promise<void> {
   if (!eventBus) {
-    try {
-      eventBus = container.has('eventBus') ? container.get<EventBus>('eventBus') : null;
-    } catch {
-      eventBus = null;
-    }
+    eventBus = container.has('eventBus') ? container.get<EventBus>('eventBus') : null;
   }
 
   if (eventBus) {

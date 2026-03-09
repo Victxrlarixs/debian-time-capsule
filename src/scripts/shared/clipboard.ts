@@ -3,6 +3,7 @@
 
 import { VFS } from '../core/vfs';
 import { logger } from '../utilities/logger';
+import { ErrorSeverity } from '../core/error-handler';
 
 export interface ClipboardItem {
   path: string;
@@ -52,22 +53,27 @@ export async function pasteFromClipboard(destDir: string): Promise<boolean> {
   const name = parts[parts.length - 1];
   const destPath = destDir + name + (window.fmClipboard.path.endsWith('/') ? '/' : '');
 
-  try {
-    if (window.fmClipboard.operation === 'copy') {
-      await VFS.copy(window.fmClipboard.path, destPath);
-      logger.log(`[Clipboard] Pasted (copy): ${window.fmClipboard.path} -> ${destPath}`);
+  const { errorHandler } = await import('../core/error-handler');
+  const result = await errorHandler.wrapAsync(async () => {
+    if (window.fmClipboard!.operation === 'copy') {
+      await VFS.copy(window.fmClipboard!.path, destPath);
+      logger.log(`[Clipboard] Pasted (copy): ${window.fmClipboard!.path} -> ${destPath}`);
     } else {
-      await VFS.move(window.fmClipboard.path, destPath);
-      logger.log(`[Clipboard] Pasted (move): ${window.fmClipboard.path} -> ${destPath}`);
-      window.fmClipboard = null; // Clear after cut
+      await VFS.move(window.fmClipboard!.path, destPath);
+      logger.log(`[Clipboard] Pasted (move): ${window.fmClipboard!.path} -> ${destPath}`);
+      window.fmClipboard = null;
     }
 
     if (window.AudioManager) window.AudioManager.success();
     return true;
-  } catch (error) {
-    logger.error('[Clipboard] Paste failed:', error);
-    return false;
-  }
+  }, {
+    module: 'Clipboard',
+    action: 'paste',
+    severity: ErrorSeverity.MEDIUM,
+    data: { source: window.fmClipboard.path, dest: destPath }
+  });
+
+  return result ?? false;
 }
 
 /**

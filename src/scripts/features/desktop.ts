@@ -84,17 +84,13 @@ export const DesktopManager = (() => {
    * Initializes the desktop icons.
    */
   async function init(): Promise<void> {
-    const container = document.getElementById('desktop-icons-container');
-    if (!container) {
+    const containerEl = document.getElementById('desktop-icons-container');
+    if (!containerEl) {
       logger.warn('[DesktopManager] Container #desktop-icons-container not found.');
       return;
     }
 
-    try {
-      eventBus = container.has('eventBus') ? container.get<EventBus>('eventBus') : null;
-    } catch {
-      eventBus = null;
-    }
+    eventBus = container.has('eventBus') ? container.get<EventBus>('eventBus') : null;
 
     logger.log('[DesktopManager] Initializing desktop icons...');
     await syncIcons();

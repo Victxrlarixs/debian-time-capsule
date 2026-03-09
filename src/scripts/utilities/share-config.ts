@@ -4,6 +4,7 @@
 import { container } from '../core/container';
 import type { ISettingsManager } from '../core/interfaces/settings-manager.interface';
 import { logger } from './logger';
+import { errorHandler, ErrorSeverity } from '../core/error-handler';
 
 interface SharedConfig {
   p?: string; // palette
@@ -20,7 +21,7 @@ interface SharedConfig {
  * Uses compact format: ?t=palette.backdrop for minimal URL length
  */
 export function encodeConfigToURL(): string {
-  try {
+  return errorHandler.wrapSync(() => {
     const settingsManager = container.get<ISettingsManager>('settings');
     const themeSettings = settingsManager.getSection('theme');
     const paletteId = window.styleManager?.theme?.currentPaletteId;
@@ -33,8 +34,6 @@ export function encodeConfigToURL(): string {
       return window.location.href;
     }
 
-    // Ultra-compact format: palette.backdrop
-    // Example: ?t=broica.CircuitBoards
     const backdropName = backdropPath ? backdropPath.split('/').pop()?.replace('.pm', '') : '';
     const compactValue = `${paletteId || ''}.${backdropName || ''}`;
 
@@ -44,10 +43,11 @@ export function encodeConfigToURL(): string {
     logger.log('[ShareConfig] Compact theme encoded:', compactValue);
     logger.log('[ShareConfig] Full URL:', url.toString());
     return url.toString();
-  } catch (err) {
-    logger.error('[ShareConfig] Failed to encode config:', err);
-    return window.location.href;
-  }
+  }, {
+    module: 'ShareConfig',
+    action: 'encodeConfigToURL',
+    severity: ErrorSeverity.LOW
+  }) ?? window.location.href;
 }
 
 /**
@@ -55,7 +55,7 @@ export function encodeConfigToURL(): string {
  * Supports both compact format (palette.backdrop) and legacy JSON format
  */
 export async function loadSharedConfig(): Promise<boolean> {
-  try {
+  return errorHandler.wrapAsync(async () => {
     const params = new URLSearchParams(window.location.search);
     const themeParam = params.get('t') || params.get('theme');
 
@@ -66,7 +66,6 @@ export async function loadSharedConfig(): Promise<boolean> {
     let paletteId: string | undefined;
     let backdropPath: string | undefined;
 
-    // Try compact format first (palette.backdrop)
     if (!themeParam.includes('%') && !themeParam.includes('{')) {
       const parts = themeParam.split('.');
       paletteId = parts[0] || undefined;
@@ -76,26 +75,30 @@ export async function loadSharedConfig(): Promise<boolean> {
       }
       logger.log('[ShareConfig] Decoded compact format:', { paletteId, backdropPath });
     } else {
-      // Legacy JSON format
-      try {
+      const result = errorHandler.wrapSync(() => {
         const json = decodeURIComponent(atob(themeParam));
         const config: SharedConfig = JSON.parse(json);
-        paletteId = config.p || (config as any).palette;
-        backdropPath = config.b || (config as any).backdrop;
-        logger.log('[ShareConfig] Decoded legacy format:', config);
-      } catch (err) {
-        logger.error('[ShareConfig] Failed to decode legacy format:', err);
-        return false;
-      }
+        return {
+          paletteId: config.p || (config as any).palette,
+          backdropPath: config.b || (config as any).backdrop
+        };
+      }, {
+        module: 'ShareConfig',
+        action: 'decodeLegacyFormat',
+        severity: ErrorSeverity.LOW
+      });
+
+      if (!result) return false;
+      paletteId = result.paletteId;
+      backdropPath = result.backdropPath;
+      logger.log('[ShareConfig] Decoded legacy format:', result);
     }
 
-    // Wait for StyleManager to be ready
     if (!window.styleManager) {
       logger.warn('[ShareConfig] StyleManager not ready yet');
       return false;
     }
 
-    // Apply palette
     if (paletteId) {
       logger.log('[ShareConfig] Applying palette:', paletteId);
 
@@ -105,12 +108,10 @@ export async function loadSharedConfig(): Promise<boolean> {
         window.styleManager.theme.updateUI();
         window.styleManager.saveColor();
 
-        // Clear XPM cache and re-render backdrop with new colors
         if (window.styleManager?.backdrop) {
           window.styleManager.backdrop.clearCache();
           window.styleManager.backdrop.apply();
         }
-        // Clear backdrop thumbnail cache
         if ((window as any).clearBackdropThumbnailCache) {
           (window as any).clearBackdropThumbnailCache();
         }
@@ -120,7 +121,6 @@ export async function loadSharedConfig(): Promise<boolean> {
       }
     }
 
-    // Apply backdrop
     if (backdropPath) {
       logger.log('[ShareConfig] Applying backdrop:', backdropPath);
       if (window.styleManager?.backdrop?.update) {
@@ -131,7 +131,6 @@ export async function loadSharedConfig(): Promise<boolean> {
       }
     }
 
-    // Show notification
     if (window.CDEModal) {
       setTimeout(() => {
         window.CDEModal.alert('Shared theme loaded successfully!');
@@ -140,27 +139,26 @@ export async function loadSharedConfig(): Promise<boolean> {
 
     logger.log('[ShareConfig] Shared theme applied successfully');
     return true;
-  } catch (err) {
-    logger.error('[ShareConfig] Failed to load shared config:', err);
-    if (window.CDEModal) {
-      window.CDEModal.alert('Failed to load shared theme. Invalid URL parameter.');
-    }
-    return false;
-  }
+  }, {
+    module: 'ShareConfig',
+    action: 'loadSharedConfig',
+    severity: ErrorSeverity.MEDIUM
+  }) ?? false;
 }
 /**
  * Copy theme URL to clipboard
  */
 export async function copyThemeURL(): Promise<boolean> {
-  try {
+  return errorHandler.wrapAsync(async () => {
     const url = encodeConfigToURL();
     await navigator.clipboard.writeText(url);
     logger.log('[ShareConfig] Theme URL copied to clipboard');
     return true;
-  } catch (err) {
-    logger.error('[ShareConfig] Failed to copy to clipboard:', err);
-    return false;
-  }
+  }, {
+    module: 'ShareConfig',
+    action: 'copyThemeURL',
+    severity: ErrorSeverity.LOW
+  }) ?? false;
 }
 
 /**

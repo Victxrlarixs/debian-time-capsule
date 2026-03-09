@@ -6,6 +6,7 @@ import { AudioManagerAdapter } from './adapters/audiomanager.adapter';
 import { settingsManager } from './settingsmanager';
 import { logger } from '../utilities/logger';
 import { EventBus } from './event-bus';
+import { errorHandler } from './error-handler';
 
 // Window management classes
 import { ZIndexManager } from './window-management/z-index-manager';
@@ -21,7 +22,12 @@ export function initializeContainer(): void {
   logger.log('[Container] Initializing services...');
 
   // Register event bus (singleton)
-  container.registerInstance('eventBus', new EventBus());
+  const eventBusInstance = new EventBus();
+  container.registerInstance('eventBus', eventBusInstance);
+
+  // Register error handler and connect to event bus
+  errorHandler.setEventBus(eventBusInstance);
+  container.registerInstance('errorHandler', errorHandler);
 
   // Register filesystem services
   container.registerInstance('fs', new VFSAdapter());

@@ -7,6 +7,7 @@ import { container } from '../core/container';
 import { SystemEvent } from '../core/system-events';
 import type { EventBus } from '../core/event-bus';
 import type { FileEventData } from '../core/system-events';
+import { ErrorSeverity } from '../core/error-handler';
 
 /**
  * Emacs-style Editor Manager (Rebranded)
@@ -72,18 +73,14 @@ class EmacsManager {
   }
 
   private subscribeToEvents(): void {
-    try {
-      this.eventBus = container.has('eventBus') ? container.get<EventBus>('eventBus') : null;
-      if (this.eventBus) {
-        const unsub = this.eventBus.on<FileEventData>(
-          SystemEvent.FILE_OPENED,
-          this.handleFileOpened
-        );
-        this.unsubscribe.push(unsub);
-        logger.log('[Emacs] Subscribed to FILE_OPENED events');
-      }
-    } catch (error) {
-      logger.error('[Emacs] Failed to subscribe to events:', error);
+    this.eventBus = container.has('eventBus') ? container.get<EventBus>('eventBus') : null;
+    if (this.eventBus) {
+      const unsub = this.eventBus.on<FileEventData>(
+        SystemEvent.FILE_OPENED,
+        this.handleFileOpened
+      );
+      this.unsubscribe.push(unsub);
+      logger.log('[Emacs] Subscribed to FILE_OPENED events');
     }
   }
 
@@ -368,7 +365,9 @@ class EmacsManager {
       await this.saveAs();
       return;
     }
-    try {
+    
+    const { errorHandler } = await import('../core/error-handler');
+    const result = await errorHandler.wrapAsync(async () => {
       const existing = VFS.getNode(this.currentFilePath);
       if (!existing) {
         const parts = this.currentFilePath.split('/');
@@ -381,7 +380,14 @@ class EmacsManager {
       this.updateModeLine();
       this.message(`Wrote ${this.currentFilePath}`);
       if (window.AudioManager) window.AudioManager.success();
-    } catch {
+    }, {
+      module: 'Emacs',
+      action: 'save',
+      severity: ErrorSeverity.HIGH,
+      data: { path: this.currentFilePath }
+    });
+
+    if (!result) {
       this.message('Error: could not save file.');
       if (window.AudioManager) window.AudioManager.error();
     }

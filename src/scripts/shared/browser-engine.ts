@@ -1,5 +1,6 @@
 // src/scripts/shared/browser-engine.ts
 import { logger } from '../utilities/logger';
+import { errorHandler, ErrorSeverity } from '../core/error-handler';
 
 /**
  * Shared logic for the transparent "2d_" engine used across the project browsers.
@@ -35,12 +36,18 @@ export async function fetchExternalContent(url: string): Promise<string | null> 
   // will hit CORS blocks even on the Archive engine.
   const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(engineUrl)}`;
 
-  try {
-    const response = await fetch(proxyUrl);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    return await response.text();
-  } catch (e) {
-    logger.error(`[BrowserEngine] Failed to fetch: ${e}`);
-    return null;
-  }
+  return await errorHandler.wrapAsync(
+    async () => {
+      const response = await fetch(proxyUrl);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.text();
+    },
+    {
+      module: 'BrowserEngine',
+      action: 'fetchExternalContent',
+      data: { url },
+      severity: ErrorSeverity.MEDIUM,
+      userMessage: 'Failed to load external content',
+    }
+  );
 }

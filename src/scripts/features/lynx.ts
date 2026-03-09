@@ -4,6 +4,7 @@ import lynxPagesData from '../../data/lynx-pages.json';
 import { openWindow, closeWindow } from '../shared/window-helpers';
 import { HistoryManager } from '../shared/history-manager';
 import { fetchExternalContent } from '../shared/browser-engine';
+import { ErrorSeverity } from '../core/error-handler';
 
 interface LynxLink {
   num: number;
@@ -374,7 +375,9 @@ class LynxBrowser {
   }
 
   private async fetchExternalPage(url: string): Promise<LynxPage | null> {
-    try {
+    const { errorHandler } = await import('../core/error-handler');
+    
+    return errorHandler.wrapAsync(async () => {
       const html = await fetchExternalContent(url);
       if (!html) return null;
 
@@ -392,14 +395,12 @@ class LynxBrowser {
           const el = node as HTMLElement;
           const tagName = el.tagName.toLowerCase();
 
-          // Skip non-content tags
           if (
             ['script', 'style', 'head', 'meta', 'link', 'svg', 'canvas', 'iframe'].includes(tagName)
           ) {
             return '';
           }
 
-          // Handle links
           if (tagName === 'a') {
             const href = el.getAttribute('href');
             if (href && !href.startsWith('#') && !href.startsWith('javascript:')) {
@@ -416,19 +417,16 @@ class LynxBrowser {
             }
           }
 
-          // Handle images (text version)
           if (tagName === 'img') {
             const alt = el.getAttribute('alt');
             return alt ? ` [IMAGE: ${alt}] ` : '[IMAGE]';
           }
 
-          // Process children
           let childrenText = '';
           node.childNodes.forEach((child) => {
             childrenText += processNode(child);
           });
 
-          // Block level elements add spacing
           if (
             [
               'p',
@@ -458,11 +456,10 @@ class LynxBrowser {
 
       const rawContent = processNode(doc.body);
 
-      // Clean up whitespace and newlines for Lynx-like look
       const cleanContent = rawContent
         .split('\n')
         .map((line) => line.trim())
-        .filter((line, i, arr) => line !== '' || arr[i - 1] !== '') // Max 1 empty line
+        .filter((line, i, arr) => line !== '' || arr[i - 1] !== '')
         .join('\n');
 
       return {
@@ -471,10 +468,12 @@ class LynxBrowser {
         content: cleanContent,
         links: links,
       };
-    } catch (e) {
-      logger.error(`[Lynx] Fetch error: ${e}`);
-      return null;
-    }
+    }, {
+      module: 'Lynx',
+      action: 'fetchExternalPage',
+      severity: ErrorSeverity.MEDIUM,
+      data: { url }
+    });
   }
 
   public printPage(): void {

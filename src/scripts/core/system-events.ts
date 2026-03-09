@@ -38,6 +38,8 @@ export enum SystemEvent {
   
   PROCESS_STARTED = 'process:started',
   PROCESS_ENDED = 'process:ended',
+  
+  ERROR_OCCURRED = 'error:occurred',
 }
 
 export interface FileEventData {
@@ -83,4 +85,18 @@ export interface ProcessEventData {
   pid: number;
   name: string;
   status?: string;
+}
+
+export interface ErrorEventData {
+  id: string;
+  timestamp: number;
+  error: Error;
+  context: {
+    module: string;
+    action?: string;
+    data?: any;
+    severity?: string;
+    userMessage?: string;
+  };
+  stack?: string;
 }

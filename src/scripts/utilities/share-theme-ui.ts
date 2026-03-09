@@ -2,6 +2,7 @@
 // UI for sharing themes to GitHub Discussions
 
 import { logger } from './logger';
+import { ErrorSeverity } from '../core/error-handler';
 
 const DISCUSSIONS_URL =
   'https://github.com/Victxrlarixs/debian-cde/discussions/categories/-dev-random';
@@ -23,7 +24,9 @@ declare global {
  * Show modal to share theme with community
  */
 export async function shareThemeToDiscussions(): Promise<void> {
-  try {
+  const { errorHandler } = await import('../core/error-handler');
+  
+  await errorHandler.wrapAsync(async () => {
     if (!window.ShareConfig) {
       logger.error('[ShareThemeUI] ShareConfig not available');
       return;
@@ -76,12 +79,12 @@ export async function shareThemeToDiscussions(): Promise<void> {
     `;
 
     await (window as any).CDEModal.open('Share Your Theme', html, []);
-
     logger.log('[ShareThemeUI] Share modal displayed');
-  } catch (err) {
-    logger.error('[ShareThemeUI] Failed to show share modal:', err);
-    await (window as any).CDEModal.alert('Failed to generate share URL.');
-  }
+  }, {
+    module: 'ShareThemeUI',
+    action: 'shareThemeToDiscussions',
+    severity: ErrorSeverity.LOW
+  });
 }
 
 // Export to global scope
