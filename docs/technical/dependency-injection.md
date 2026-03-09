@@ -280,5 +280,5 @@ Legacy APIs will be removed in future versions.
 ## Further Reading
 
 - [Architecture Overview](./architecture.md)
-- [SettingsManager Migration](./migration-settingsmanager.md)
-- [WindowManager Migration](./migration-windowmanager.md)
+- [Error Handling](./error-handling.md)
+- [Event Bus](./event-bus.md)

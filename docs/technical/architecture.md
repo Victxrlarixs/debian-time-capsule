@@ -538,3 +538,6 @@ Service worker enables:
 - [Dependency Injection Architecture](dependency-injection.md)
 - [Error Handling](error-handling.md)
 - [Event Bus](event-bus.md)
+- [Window Management](window-management.md)
+- [Virtual File System](virtual-filesystem.md)
+- [Module Loading](module-loading.md)
