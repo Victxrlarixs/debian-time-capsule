@@ -1,0 +1,10 @@
+export * from './types';
+export { VFSPathResolver } from './vfs-path-resolver';
+export { VFSNodeAccessor } from './vfs-node-accessor';
+export { VFSFileOperations } from './vfs-file-operations';
+export { VFSFolderOperations } from './vfs-folder-operations';
+export { VFSTransferOperations } from './vfs-transfer-operations';
+export { VFSTrashManager } from './vfs-trash-manager';
+export { VFSSearch } from './vfs-search';
+export { VFSEventDispatcher } from './vfs-event-dispatcher';
+export { VFSInitializer } from './vfs-initializer';
