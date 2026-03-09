@@ -39,7 +39,9 @@ export class BeepModule extends StyleModuleBase<BeepSettings> {
   public load(): void {
     const settingsManager = container.get<ISettingsManager>('settings');
     const saved = this.config.settingsKey
-      ? settingsManager.getSection(this.config.settingsKey as keyof import('../../core/settingsmanager').SystemSettings)
+      ? settingsManager.getSection(
+          this.config.settingsKey as keyof import('../../core/settingsmanager').SystemSettings
+        )
       : {};
     if (saved && Object.keys(saved).length > 0) {
       Object.assign(this.settings, saved);

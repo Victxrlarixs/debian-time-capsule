@@ -40,7 +40,9 @@ export class WindowPositionManager {
     win.style.transform = 'none';
     win.style.margin = '0';
 
-    logger.log(`[WindowPositionManager] Centered window "${win.id}" at ${win.style.left}, ${win.style.top}`);
+    logger.log(
+      `[WindowPositionManager] Centered window "${win.id}" at ${win.style.left}, ${win.style.top}`
+    );
   }
 
   /**
@@ -79,7 +81,9 @@ export class WindowPositionManager {
     win.style.left = Math.max(0, Math.min(maxX, newLeft)) + 'px';
     win.style.transform = 'none';
 
-    logger.log(`[WindowPositionManager] Normalized "${win.id}" to top: ${win.style.top}, left: ${win.style.left}`);
+    logger.log(
+      `[WindowPositionManager] Normalized "${win.id}" to top: ${win.style.top}, left: ${win.style.left}`
+    );
   }
 
   /**

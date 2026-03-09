@@ -109,7 +109,9 @@ export class DragManager {
     e.preventDefault();
     e.stopPropagation();
 
-    const accelStr = getComputedStyle(document.documentElement).getPropertyValue('--mouse-acceleration');
+    const accelStr = getComputedStyle(document.documentElement).getPropertyValue(
+      '--mouse-acceleration'
+    );
     const acceleration = parseFloat(accelStr) || 1;
 
     const deltaX = e.clientX - this.dragState.lastX;

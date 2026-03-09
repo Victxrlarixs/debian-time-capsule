@@ -57,7 +57,9 @@ export class WorkspaceManager {
     // Update pager UI
     this.updatePagerUI(id);
 
-    logger.log(`[WorkspaceManager] Workspace switch complete: ${previousWorkspace} -> ${this.currentWorkspace}`);
+    logger.log(
+      `[WorkspaceManager] Workspace switch complete: ${previousWorkspace} -> ${this.currentWorkspace}`
+    );
   }
 
   public assignWorkspaceToWindow(win: HTMLElement): void {

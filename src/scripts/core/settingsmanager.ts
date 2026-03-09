@@ -74,14 +74,14 @@ class SettingsManager implements ISettingsManager, ISessionStorage {
 
   private getDefaultSettings(): SystemSettings {
     return {
-      theme: { 
-        colors: {}, 
-        fonts: {}, 
+      theme: {
+        colors: {},
+        fonts: {},
         paletteId: undefined,
         backdrop: undefined,
         screen: undefined,
         startup: undefined,
-        windowBehavior: undefined
+        windowBehavior: undefined,
       },
       mouse: {},
       keyboard: {},

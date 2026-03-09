@@ -1,7 +1,7 @@
 /**
  * Window Management Module
  * Exports all specialized window management classes
- * 
+ *
  * This module follows the Single Responsibility Principle by splitting
  * the original 900+ line WindowManager into focused, cohesive classes.
  */

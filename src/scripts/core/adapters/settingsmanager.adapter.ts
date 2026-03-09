@@ -36,7 +36,10 @@ export class SettingsManagerAdapter implements ISettingsManager, ISessionStorage
     return settingsManager.getAll();
   }
 
-  saveWindowState(id: string, state: import('../interfaces/window-manager.interface').WindowState): void {
+  saveWindowState(
+    id: string,
+    state: import('../interfaces/window-manager.interface').WindowState
+  ): void {
     settingsManager.saveWindowState(id, state);
   }
 

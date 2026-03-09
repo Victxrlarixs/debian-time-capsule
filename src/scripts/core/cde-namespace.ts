@@ -30,12 +30,7 @@ import type { ISettingsManager } from './interfaces/settings-manager.interface';
 export interface CDENamespace {
   core: {
     fs: IFileReader & IFileWriter & IFileOperations & ITrashManager & IFileSearch & IPathResolver;
-    audio: IBasicAudio &
-      ISystemSounds &
-      IWindowSounds &
-      IMenuSounds &
-      IMusicPlayer &
-      IAudioControl;
+    audio: IBasicAudio & ISystemSounds & IWindowSounds & IMenuSounds & IMusicPlayer & IAudioControl;
     settings: ISettingsManager;
   };
   ui: {

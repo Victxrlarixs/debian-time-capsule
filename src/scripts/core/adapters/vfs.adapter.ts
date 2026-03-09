@@ -16,13 +16,7 @@ import type { VFSNode } from '../vfs';
  * Wraps the existing VFS implementation
  */
 export class VFSAdapter
-  implements
-    IFileReader,
-    IFileWriter,
-    IFileOperations,
-    ITrashManager,
-    IFileSearch,
-    IPathResolver
+  implements IFileReader, IFileWriter, IFileOperations, ITrashManager, IFileSearch, IPathResolver
 {
   // IFileReader
   getNode(path: string): VFSNode | null {

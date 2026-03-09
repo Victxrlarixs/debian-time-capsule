@@ -15,13 +15,7 @@ import type {
  * Wraps the existing AudioManager singleton
  */
 export class AudioManagerAdapter
-  implements
-    IBasicAudio,
-    ISystemSounds,
-    IWindowSounds,
-    IMenuSounds,
-    IMusicPlayer,
-    IAudioControl
+  implements IBasicAudio, ISystemSounds, IWindowSounds, IMenuSounds, IMusicPlayer, IAudioControl
 {
   // IBasicAudio
   beep(frequency?: number, duration?: number): void {

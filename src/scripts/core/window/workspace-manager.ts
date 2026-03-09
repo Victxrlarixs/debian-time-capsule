@@ -69,7 +69,9 @@ export class WorkspaceManager {
       }
     });
 
-    logger.log(`[WorkspaceManager] Workspace switch complete: ${previousWorkspace} -> ${this.currentWorkspace}`);
+    logger.log(
+      `[WorkspaceManager] Workspace switch complete: ${previousWorkspace} -> ${this.currentWorkspace}`
+    );
   }
 
   /**
