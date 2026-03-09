@@ -449,3 +449,5 @@ Use browser DevTools:
 ## Further Reading
 
 - [Architecture Overview](architecture.md)
+- [Dependency Injection Architecture](dependency-injection.md)
+- [Error Handling](error-handling.md)

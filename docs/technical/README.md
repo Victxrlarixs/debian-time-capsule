@@ -7,17 +7,32 @@ Welcome to the internal engine of the Debian Time Capsule. This project is built
 ## 🏗️ Core Architecture
 
 - **[System Architecture](architecture.md)**
-  Detailed overview of the modular design, event-driven communication, and component structure. Includes details on:
-  - **VFS (Virtual File System)**: In-memory Unix-like filesystem.
-  - **Window Manager**: Z-index management and window lifecycle.
-  - **Web Workers**: Offloading heavy tasks like XPM parsing and filesystem operations.
-  - **Lazy Loading**: Dynamic hydration of applications on demand.
+  Detailed overview of the modular design, event-driven communication, and component structure.
+
+- **[Window Management](window-management.md)**
+  Complete window system with specialized managers for z-index, workspaces, positioning, dragging, states, and focus.
+
+- **[Virtual File System](virtual-filesystem.md)**
+  Unix-like filesystem abstraction with O(1) lookups, CRUD operations, trash management, and IndexedDB persistence.
+
+- **[Module Loading](module-loading.md)**
+  Sophisticated lazy loading system with 5-tier priority, dependency resolution, and code splitting for optimal performance.
+
+- **[Dependency Injection](dependency-injection.md)**
+  Modern DI architecture with SOLID principles. Includes:
+  - **Interface Segregation**: Small, focused interfaces instead of monolithic ones.
+  - **DI Container**: Service registration and resolution.
+  - **Adapters**: Wrapping legacy code with new interfaces.
+  - **Migration Guide**: Step-by-step guide to migrate components.
 
 - **[Storage & Cache](storage.md)**
   Deep dive into data persistence using IndexedDB and localStorage, and our multi-layered caching strategy.
 
-- **[Mintlify Proxy](mintlify-proxy.md)**
-  Technical implementation of the documentation proxy that serves Mintlify docs from the main domain without exposing external URLs.
+- **[Error Handling](error-handling.md)**
+  Centralized error handling system with severity levels, context tracking, and user-friendly error messages.
+
+- **[Event Bus](event-bus.md)**
+  Type-safe event system for decoupled component communication with wildcard support and error handling integration.
 
 ---
 

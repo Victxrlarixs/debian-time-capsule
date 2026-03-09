@@ -535,3 +535,9 @@ Service worker enables:
 ## Further Reading
 
 - [Storage & Cache](storage.md)
+- [Dependency Injection Architecture](dependency-injection.md)
+- [Error Handling](error-handling.md)
+- [Event Bus](event-bus.md)
+- [Window Management](window-management.md)
+- [Virtual File System](virtual-filesystem.md)
+- [Module Loading](module-loading.md)

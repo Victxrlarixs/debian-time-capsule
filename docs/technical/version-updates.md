@@ -194,3 +194,9 @@ const preserveKeys: string[] = [
 - Show changelog after update completes
 - Add rollback capability for failed updates
 - Track update history in IndexedDB
+
+## Further Reading
+
+- [Architecture Overview](architecture.md)
+- [Storage & Cache](storage.md)
+- [Error Handling](error-handling.md)
