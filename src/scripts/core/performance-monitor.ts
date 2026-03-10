@@ -181,7 +181,7 @@ class PerformanceMonitor {
     }, 2000);
 
     setTimeout(() => {
-      moduleLoader.loadOnIdle(['timemanager', 'appmanager']);
+      moduleLoader.loadOnIdle(['appmanager']);
     }, 5000);
 
     logger.log('[PerformanceMonitor] Initial load optimization complete');

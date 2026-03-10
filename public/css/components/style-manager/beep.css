@@ -24,6 +24,15 @@
   background: var(--dock-icon-hover);
 }
 
+.audio-mixer-menubar .menu-item-link {
+  text-decoration: none;
+  display: inline-block;
+}
+
+.audio-mixer-menubar .menu-item-link .menu-item {
+  cursor: pointer;
+}
+
 .audio-mixer-content {
   padding: 10px;
   background: var(--window-color);

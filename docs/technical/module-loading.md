@@ -50,7 +50,6 @@ The 5-tier priority system provides fine-grained control over module loading tim
 - 2-second delay before loading
 
 **IDLE (4)** - Optional features loaded on idle after 5s
-- TimeManager
 - AppManager
 - Lowest priority
 - 5-second delay before loading
@@ -105,7 +104,7 @@ moduleLoader.register('filemanager', () => import('../features/filemanager'), {
 
 **Idle Module:**
 ```typescript
-moduleLoader.register('timemanager', () => import('../features/timemanager'), {
+moduleLoader.register('appmanager', () => import('../features/appmanager'), {
   priority: LoadPriority.IDLE,
   dependencies: ['windowmanager'],
 });
@@ -349,7 +348,7 @@ setTimeout(() => {
   moduleLoader.loadOnIdle(['netscape', 'lynx', 'manviewer', 'terminal']);
 }, 2000);
 setTimeout(() => {
-  moduleLoader.loadOnIdle(['timemanager', 'appmanager']);
+  moduleLoader.loadOnIdle(['appmanager']);
 }, 5000);
 ```
 
@@ -379,7 +378,6 @@ manviewer          // Man Pages
 terminal           // Terminal Lab
 
 // IDLE (4)
-timemanager        // Time Settings
 appmanager         // App Launcher
 ```
 
@@ -480,7 +478,7 @@ async optimizeInitialLoad(): Promise<void> {
   }, 2000);
   
   setTimeout(() => {
-    moduleLoader.loadOnIdle(['timemanager', 'appmanager']);
+    moduleLoader.loadOnIdle(['appmanager']);
   }, 5000);
 }
 ```

@@ -1,6 +1,7 @@
 ---
 import WindowControls from '../../common/WindowControls.astro';
 import WindowMinimize from '../../common/WindowMinimize.astro';
+import { CONFIG } from '../../../scripts/core/config';
 ---
 
 <div class="cde-retro-modal style-manager-beep" id="styleManagerBeep">
@@ -22,7 +23,9 @@ import WindowMinimize from '../../common/WindowMinimize.astro';
   <div class="audio-mixer-menubar">
     <div class="menu-item">File</div>
     <div class="menu-item">Options</div>
-    <div class="menu-item" style="margin-left: auto;">Help</div>
+    <a href={CONFIG.META.ISSUES_URL} target="_blank" class="menu-item-link" style="margin-left: auto;">
+      <div class="menu-item">Help</div>
+    </a>
   </div>
 
   <div class="modal-body">

@@ -1,94 +1,220 @@
 ---
 import WindowControls from '../common/WindowControls.astro';
 import WindowMinimize from '../common/WindowMinimize.astro';
+import { CONFIG } from '../../scripts/core/config';
 ---
 
-<div class="cde-retro-modal app-manager-window" id="appManager" data-no-maximize="true">
+<div class="cde-retro-modal app-manager-window" id="appManager">
   <div class="titlebar" id="appManagerTitlebar" onmousedown="window.drag(event, 'appManager')">
     <WindowMinimize windowId="appManager" />
-    <span class="titlebar-text">Application Manager - /usr/dt/appconfig/appmanager</span>
-    <WindowControls windowId="appManager" closeFunction="appManager.close" disableMaximize={true} />
+    <span class="titlebar-text">Application Manager</span>
+    <WindowControls windowId="appManager" closeFunction="appManager.close" />
+  </div>
+
+  <!-- Menu Bar -->
+  <div class="app-manager-menubar">
+    <button class="menu-button">File</button>
+    <button class="menu-button">Selected</button>
+    <button class="menu-button">View</button>
+    <a href={CONFIG.META.ISSUES_URL} target="_blank" class="menu-button-link">
+      <button class="menu-button">Help</button>
+    </a>
   </div>
 
   <div class="modal-body app-manager-body">
-    <div class="app-grid">
-      <div class="app-item" onclick="TerminalLab.open(); appManager.close()">
-        <img src="/icons/devices/computer.png" alt="Terminal Lab" />
-        <span>Terminal Lab</span>
+    <!-- Main view: Application Groups (folders) -->
+    <div class="app-manager-view" id="appManagerMainView">
+      <div class="app-group-item" data-group="Accessories">
+        <img src="/icons/categories/applications-accessories.png" alt="Accessories" class="folder-icon" />
+        <span>Accessories</span>
       </div>
 
-      <div class="app-item" onclick="toggleFileManager(); appManager.close()">
-        <img src="/icons/apps/filemanager.png" alt="File Manager" />
-        <span>File Manager</span>
+      <div class="app-group-item" data-group="Internet">
+        <img src="/icons/categories/applications-internet.png" alt="Internet" class="folder-icon" />
+        <span>Internet</span>
       </div>
 
-      <div class="app-item" onclick="styleManager.openMain(); appManager.close()">
-        <img src="/icons/apps/org.xfce.settings.appearance.png" alt="Style Manager" />
-        <span>Style Manager</span>
+      <div class="app-group-item" data-group="Office">
+        <img src="/icons/categories/applications-office.png" alt="Office" class="folder-icon" />
+        <span>Office</span>
       </div>
 
-      <div class="app-item" onclick="styleManager.openBeep(); appManager.close()">
-        <img src="/icons/devices/multimedia-volume-control.png" alt="Audio Manager" />
-        <span>Audio Setup</span>
+      <div class="app-group-item" data-group="System">
+        <img src="/icons/categories/applications-system.png" alt="System" class="folder-icon" />
+        <span>System</span>
       </div>
 
-      <div class="app-item" onclick="openTaskManagerInTerminal(); appManager.close()">
-        <img src="/icons/apps/org.xfce.taskmanager.png" alt="Process Monitor" />
-        <span>Process Monitor</span>
+      <div class="app-group-item" data-group="Utilities">
+        <img src="/icons/categories/applications-utilities.png" alt="Utilities" class="folder-icon" />
+        <span>Utilities</span>
       </div>
 
-      <div class="app-item" onclick="openCalendar(); appManager.close()">
-        <img src="/icons/system/calendar.png" alt="Calendar" />
+      <div class="app-group-item" data-group="Preferences">
+        <img src="/icons/categories/preferences-desktop.png" alt="Preferences" class="folder-icon" />
+        <span>Preferences</span>
+      </div>
+
+      <div class="app-group-item" data-group="Help">
+        <img src="/icons/categories/system-help.png" alt="Help" class="folder-icon" />
+        <span>Help</span>
+      </div>
+    </div>
+
+    <!-- Accessories group content -->
+    <div class="app-manager-view app-group-content" id="appGroup_Accessories" style="display: none;">
+      <div class="app-action-item go-up-item" onclick="appManager.goBack()">
+        <img src="/icons/actions/go-up.png" alt="Go Up" class="action-icon" />
+        <span>.. (go up)</span>
+      </div>
+
+      <div class="app-action-item" onclick="openCalendar()">
+        <img src="/icons/system/calendar.png" alt="Calendar" class="action-icon" />
         <span>Calendar</span>
       </div>
 
-      <div class="app-item" onclick="timeManager.open(); appManager.close()">
-        <img src="/icons/system/gtkclocksetup.png" alt="Clock" />
-        <span>Clock</span>
-      </div>
-
-      <div class="app-item" onclick="window.Emacs?.openSplash(); appManager.close()">
-        <img src="/icons/apps/xemacs.png" alt="XEmacs" class="emacs-pixelated" />
-        <span>XEmacs</span>
-      </div>
-
-      <div class="app-item" onclick="captureFullPageScreenshot(); appManager.close()">
-        <img src="/icons/apps/org.xfce.screenshooter.png" alt="Screenshot" />
+      <div class="app-action-item" onclick="captureFullPageScreenshot()">
+        <img src="/icons/apps/org.xfce.screenshooter.png" alt="Screenshot" class="action-icon" />
         <span>Screenshooter</span>
       </div>
 
-      <div class="app-item" onclick="window.Netscape?.open(); appManager.close()">
-        <img src="/icons/apps/netscape_classic.png" alt="Netscape Navigator" />
-        <span>Netscape</span>
+      <div class="app-action-item" onclick="AccessibilityManager.showShortcutsHelp()">
+        <img src="/icons/apps/preferences-desktop-keyboard-shortcuts.png" alt="Shortcuts" class="action-icon" />
+        <span>Keyboard Shortcuts</span>
+      </div>
+    </div>
+
+    <!-- Internet group content -->
+    <div class="app-manager-view app-group-content" id="appGroup_Internet" style="display: none;">
+      <div class="app-action-item go-up-item" onclick="appManager.goBack()">
+        <img src="/icons/actions/go-up.png" alt="Go Up" class="action-icon" />
+        <span>.. (go up)</span>
       </div>
 
-      <div class="app-item" onclick="window.Lynx?.open(); appManager.close()">
-        <img src="/icons/apps/Lynx.svg" alt="Lynx Browser" />
-        <span>Lynx</span>
+      <div class="app-action-item" onclick="window.Netscape?.open()">
+        <img src="/icons/apps/netscape_classic.png" alt="Netscape" class="action-icon" />
+        <span>Netscape Navigator</span>
       </div>
 
-      <div class="app-item" onclick="window.ManViewer?.open(); appManager.close()">
-        <img src="/icons/apps/man.png" alt="Man Page Viewer" />
+      <div class="app-action-item" onclick="window.Lynx?.open()">
+        <img src="/icons/apps/Lynx.svg" alt="Lynx" class="action-icon" />
+        <span>Lynx Browser</span>
+      </div>
+    </div>
+
+    <!-- Office group content -->
+    <div class="app-manager-view app-group-content" id="appGroup_Office" style="display: none;">
+      <div class="app-action-item go-up-item" onclick="appManager.goBack()">
+        <img src="/icons/actions/go-up.png" alt="Go Up" class="action-icon" />
+        <span>.. (go up)</span>
+      </div>
+
+      <div class="app-action-item" onclick="window.Emacs?.openSplash()">
+        <img src="/icons/apps/xemacs.png" alt="XEmacs" class="action-icon" />
+        <span>Text Editor</span>
+      </div>
+    </div>
+
+    <!-- System group content -->
+    <div class="app-manager-view app-group-content" id="appGroup_System" style="display: none;">
+      <div class="app-action-item go-up-item" onclick="appManager.goBack()">
+        <img src="/icons/actions/go-up.png" alt="Go Up" class="action-icon" />
+        <span>.. (go up)</span>
+      </div>
+
+      <div class="app-action-item" onclick="openFileManager()">
+        <img src="/icons/apps/filemanager.png" alt="File Manager" class="action-icon" />
+        <span>File Manager</span>
+      </div>
+
+      <div class="app-action-item" onclick="TerminalLab.open()">
+        <img src="/icons/apps/konsole.png" alt="Terminal" class="action-icon" />
+        <span>Terminal</span>
+      </div>
+
+      <div class="app-action-item" onclick="openTaskManagerInTerminal()">
+        <img src="/icons/apps/org.xfce.taskmanager.png" alt="Process Monitor" class="action-icon" />
+        <span>Process Monitor</span>
+      </div>
+    </div>
+
+    <!-- Utilities group content -->
+    <div class="app-manager-view app-group-content" id="appGroup_Utilities" style="display: none;">
+      <div class="app-action-item go-up-item" onclick="appManager.goBack()">
+        <img src="/icons/actions/go-up.png" alt="Go Up" class="action-icon" />
+        <span>.. (go up)</span>
+      </div>
+
+      <div class="app-action-item" onclick="shareThemeToDiscussions()">
+        <img src="/icons/apps/org.xfce.PanelProfiles.png" alt="Share Theme" class="action-icon" />
+        <span>Share Theme</span>
+      </div>
+    </div>
+
+    <!-- Preferences group content -->
+    <div class="app-manager-view app-group-content" id="appGroup_Preferences" style="display: none;">
+      <div class="app-action-item go-up-item" onclick="appManager.goBack()">
+        <img src="/icons/actions/go-up.png" alt="Go Up" class="action-icon" />
+        <span>.. (go up)</span>
+      </div>
+
+      <div class="app-action-item" onclick="styleManager.openMain()">
+        <img src="/icons/apps/org.xfce.settings.manager.png" alt="Style Manager" class="action-icon" />
+        <span>Style Manager</span>
+      </div>
+
+      <div class="app-action-item" onclick="styleManager.openColor()">
+        <img src="/icons/apps/org.xfce.settings.appearance.png" alt="Color" class="action-icon" />
+        <span>Color</span>
+      </div>
+
+      <div class="app-action-item" onclick="styleManager.openFont()">
+        <img src="/icons/mimetypes/font-x-generic.png" alt="Font" class="action-icon" />
+        <span>Font</span>
+      </div>
+
+      <div class="app-action-item" onclick="styleManager.openBackdrop()">
+        <img src="/icons/places/desktop.png" alt="Backdrop" class="action-icon" />
+        <span>Backdrop</span>
+      </div>
+
+      <div class="app-action-item" onclick="styleManager.openMouse()">
+        <img src="/icons/apps/org.xfce.settings.mouse.png" alt="Mouse" class="action-icon" />
+        <span>Mouse</span>
+      </div>
+
+      <div class="app-action-item" onclick="styleManager.openKeyboard()">
+        <img src="/icons/apps/org.xfce.settings.keyboard.png" alt="Keyboard" class="action-icon" />
+        <span>Keyboard</span>
+      </div>
+
+      <div class="app-action-item" onclick="styleManager.openWindow()">
+        <img src="/icons/apps/org.xfce.xfwm4.png" alt="Window" class="action-icon" />
+        <span>Window</span>
+      </div>
+
+      <div class="app-action-item" onclick="styleManager.openBeep()">
+        <img src="/icons/devices/audio-volume-low.png" alt="Beep" class="action-icon" />
+        <span>Beep</span>
+      </div>
+    </div>
+
+    <!-- Help group content -->
+    <div class="app-manager-view app-group-content" id="appGroup_Help" style="display: none;">
+      <div class="app-action-item go-up-item" onclick="appManager.goBack()">
+        <img src="/icons/actions/go-up.png" alt="Go Up" class="action-icon" />
+        <span>.. (go up)</span>
+      </div>
+
+      <div class="app-action-item" onclick="window.ManViewer?.open()">
+        <img src="/icons/apps/man.png" alt="Man Pages" class="action-icon" />
         <span>Man Pages</span>
       </div>
 
-      <div class="app-item" onclick="shareThemeToDiscussions(); appManager.close()">
-        <img src="/icons/apps/org.xfce.PanelProfiles.png" alt="Share Theme" />
-        <span>Share Theme</span>
-      </div>
-
-      <div class="app-item" onclick="AccessibilityManager.showShortcutsHelp(); appManager.close()">
-        <img
-          src="/icons/apps/preferences-desktop-keyboard-shortcuts.png"
-          alt="Keyboard Shortcuts"
-        />
-        <span>Keyboard shortcuts</span>
-      </div>
     </div>
   </div>
 
   <div class="cde-statusbar">
-    <div class="cde-statusleft">Application Manager</div>
-    <div class="cde-statusright">14 Objects</div>
+    <div class="cde-statusleft" id="appManagerStatus">7 Folders</div>
+    <div class="cde-statusright" id="appManagerPath">/var/dt/appconfig/appmanager/C</div>
   </div>
 </div>

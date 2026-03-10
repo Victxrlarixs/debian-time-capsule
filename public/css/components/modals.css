@@ -206,3 +206,13 @@
   z-index: 99999;
   box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
 }
+
+/* Link wrapper for buttons */
+.cde-btn-link {
+  text-decoration: none;
+  display: inline-block;
+}
+
+.cde-btn-link .cde-btn {
+  cursor: pointer;
+}

@@ -45,7 +45,6 @@ export interface CDENamespace {
     styleManager?: () => void;
     processMonitor?: () => void;
     calendar?: () => void;
-    timeManager?: () => void;
   };
   // Legacy compatibility (deprecated, use core.* instead)
   VirtualFS: typeof VFS;

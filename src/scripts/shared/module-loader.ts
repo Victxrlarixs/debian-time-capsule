@@ -11,7 +11,7 @@ import { logger } from '../utilities/logger';
  * - HIGH (1): Essential UI loaded synchronously (Desktop, StyleManager)
  * - MEDIUM (2): Features loaded on idle with no delay (FileManager, Emacs, Calendar, ProcessMonitor)
  * - LOW (3): Secondary features loaded on idle after 2s (Netscape, Lynx, ManViewer, Terminal)
- * - IDLE (4): Optional features loaded on idle after 5s (TimeManager, AppManager)
+ * - IDLE (4): Optional features loaded on idle after 5s (AppManager)
  *
  * This staggered loading prevents UI blocking and distributes network/CPU load.
  * Simplifying to 2 tiers would change timing behavior and risk race conditions.
@@ -317,11 +317,6 @@ export function registerModules(): void {
   });
 
   // IDLE - Load when browser is idle
-  moduleLoader.register('timemanager', () => import('../features/timemanager'), {
-    priority: LoadPriority.IDLE,
-    dependencies: ['windowmanager'],
-  });
-
   moduleLoader.register('appmanager', () => import('../features/appmanager'), {
     priority: LoadPriority.IDLE,
     dependencies: ['windowmanager'],

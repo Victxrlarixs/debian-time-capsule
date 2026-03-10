@@ -2,6 +2,7 @@
 import WindowControls from '../../common/WindowControls.astro';
 import WindowMinimize from '../../common/WindowMinimize.astro';
 import XPM_BACKDROPS from '../../../data/backdrops.json';
+import { CONFIG } from '../../../scripts/core/config';
 ---
 
 <div class="cde-retro-modal" id="styleManagerBackdrop">
@@ -52,7 +53,9 @@ import XPM_BACKDROPS from '../../../data/backdrops.json';
   <div class="cde-actionbar">
     <button class="cde-btn cde-btn-default" onclick="styleManager.closeBackdrop()">OK</button>
     <button class="cde-btn" onclick="styleManager.closeBackdrop()">Cancel</button>
-    <button class="cde-btn" onclick="styleManager.showMessage('Help not implemented')">Help</button>
+    <a href={CONFIG.META.ISSUES_URL} target="_blank" class="cde-btn-link">
+      <button class="cde-btn">Help</button>
+    </a>
   </div>
 </div>
 

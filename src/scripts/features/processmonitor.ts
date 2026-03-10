@@ -80,7 +80,7 @@ function scanProcesses(): ProcessInfo[] {
 
 const ProcessMonitor = (() => {
   const WINDOW_ID = 'process-monitor';
-  let zIndex = 3000;
+  // Removed local zIndex - now using global WindowManager z-index system
   let processes: ProcessInfo[] = [];
   let selectedIndex = 0;
   let contentDiv: HTMLElement | null = null;
@@ -300,9 +300,8 @@ const ProcessMonitor = (() => {
 
     isOpen = true;
     winElement.style.display = 'block';
-    winElement.style.zIndex = String(++zIndex);
+    // Don't use local z-index - let focusWindow() handle it with the global z-index manager
     WindowManager.centerWindow(winElement);
-    winElement.focus();
     if (window.focusWindow) window.focusWindow(WINDOW_ID);
     if (window.AudioManager) window.AudioManager.windowOpen();
 

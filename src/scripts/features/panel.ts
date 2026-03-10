@@ -50,7 +50,6 @@ function createStub(moduleName: string, globalName: string, method: string = 'op
 (window as any).ManViewer = createStub('manviewer', 'ManViewer');
 (window as any).Netscape = createStub('netscape', 'Netscape');
 (window as any).Lynx = createStub('lynx', 'Lynx');
-(window as any).timeManager = createStub('timemanager', 'timeManager');
 
 /**
  * Initialize panel functionality

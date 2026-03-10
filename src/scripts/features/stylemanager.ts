@@ -310,11 +310,7 @@ export class StyleManager {
 
   private showWindow(id: string): void {
     WindowManager.showWindow(id);
-
-    const win = document.getElementById(id);
-    if (win) {
-      win.style.zIndex = '10000';
-    }
+    // Don't set z-index here - WindowManager.showWindow() calls focusWindow() which handles it dynamically
   }
 
   private hideWindow(id: string): void {

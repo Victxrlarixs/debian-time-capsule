@@ -151,7 +151,6 @@ export class WorkspacePreview {
       'process-monitor': '/icons/apps/org.xfce.taskmanager.png',
       'calendar-window': '/icons/system/calendar.png',
       appManager: '/icons/system/applications-other.png',
-      timeManager: '/icons/system/gtkclocksetup.png',
     };
 
     return iconMap[windowId] || '/icons/mimetypes/gtk-file.png';

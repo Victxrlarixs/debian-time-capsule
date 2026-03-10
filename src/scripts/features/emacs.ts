@@ -234,15 +234,14 @@ class EmacsManager {
     this.message(`Loaded: ${filename}`);
 
     WindowManager.showWindow('emacs');
-    this.win.style.zIndex = String(WindowManager.getNextZIndex());
+    // Don't set z-index manually - WindowManager.showWindow() already calls focusWindow() which handles it
 
     // Reset size to defaults
     this.win.style.width = 'min(900px, 95vw)';
     this.win.style.height = 'min(700px, 85vh)';
 
     WindowManager.centerWindow(this.win);
-    if (window.focusWindow) window.focusWindow('emacs');
-    if (window.AudioManager) window.AudioManager.windowOpen();
+    // Don't call focusWindow again - already called by showWindow()
     this.textarea.focus();
   }
 

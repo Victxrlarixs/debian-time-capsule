@@ -1,6 +1,7 @@
 ---
 import WindowControls from '../../common/WindowControls.astro';
 import WindowMinimize from '../../common/WindowMinimize.astro';
+import { CONFIG } from '../../../scripts/core/config';
 ---
 
 <div class="cde-retro-modal style-manager-mouse" id="styleManagerMouse">
@@ -115,5 +116,8 @@ import WindowMinimize from '../../common/WindowMinimize.astro';
   <div class="cde-actionbar">
     <button class="cde-btn cde-btn-default" onclick="styleManager.closeMouse()">OK</button>
     <button class="cde-btn" onclick="styleManager.closeMouse()">Cancel</button>
+    <a href={CONFIG.META.ISSUES_URL} target="_blank" class="cde-btn-link">
+      <button class="cde-btn">Help</button>
+    </a>
   </div>
 </div>

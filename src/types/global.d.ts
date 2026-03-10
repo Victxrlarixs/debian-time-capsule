@@ -39,15 +39,6 @@ interface CalendarManager {
 }
 
 /**
- * Time Manager interface
- */
-interface TimeManager {
-  open(): void;
-  close(): void;
-  updateFormat(): void;
-}
-
-/**
  * Share Config interface
  */
 interface ShareConfig {
@@ -112,9 +103,6 @@ declare global {
 
     // App Manager
     appManager: AppManager;
-
-    // Time Manager
-    timeManager: TimeManager;
 
     // Share Config
     ShareConfig?: ShareConfig;
