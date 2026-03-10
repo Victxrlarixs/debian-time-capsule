@@ -820,6 +820,9 @@ export function closeEmacs(): void {
 }
 
 if (typeof window !== 'undefined') {
+  // Initialize Emacs immediately when module loads to ensure event subscription
+  getInstance();
+  
   (window as any).closeEmacs = closeEmacs;
   (window as any).Emacs = {
     // Splash / lifecycle

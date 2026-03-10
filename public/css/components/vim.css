@@ -34,19 +34,12 @@
 
 /* Normal mode - block cursor simulation */
 #vim-textarea.vim-normal-mode {
-  caret-color: transparent;
-  background-image: 
-    linear-gradient(to right, #00ff00 0%, #00ff00 8px, transparent 8px),
-    linear-gradient(to bottom, #000000 0%, #000000 100%);
-  background-size: 8px 1.4em;
-  background-repeat: no-repeat;
-  background-position: 0 0;
+  caret-color: #00ff00;
 }
 
 /* Insert mode - line cursor */
 #vim-textarea.vim-insert-mode {
   caret-color: #00ff00;
-  caret-shape: bar;
 }
 
 /* Visual mode - selection highlight */
@@ -136,22 +129,6 @@
   font-size: 13px;
   padding: 0;
   margin: 0;
-}
-
-/* Authentic cursor blinking animation */
-@keyframes vim-cursor-blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
-}
-
-#vim-textarea.vim-normal-mode {
-  animation: vim-cursor-blink 1s infinite;
-}
-
-/* Search highlighting */
-#vim-textarea.vim-search-highlight {
-  background-color: #ffff00;
-  color: #000000;
 }
 
 /* Responsive */
