@@ -54,24 +54,27 @@ export async function pasteFromClipboard(destDir: string): Promise<boolean> {
   const destPath = destDir + name + (window.fmClipboard.path.endsWith('/') ? '/' : '');
 
   const { errorHandler } = await import('../core/error-handler');
-  const result = await errorHandler.wrapAsync(async () => {
-    if (window.fmClipboard!.operation === 'copy') {
-      await VFS.copy(window.fmClipboard!.path, destPath);
-      logger.log(`[Clipboard] Pasted (copy): ${window.fmClipboard!.path} -> ${destPath}`);
-    } else {
-      await VFS.move(window.fmClipboard!.path, destPath);
-      logger.log(`[Clipboard] Pasted (move): ${window.fmClipboard!.path} -> ${destPath}`);
-      window.fmClipboard = null;
-    }
+  const result = await errorHandler.wrapAsync(
+    async () => {
+      if (window.fmClipboard!.operation === 'copy') {
+        await VFS.copy(window.fmClipboard!.path, destPath);
+        logger.log(`[Clipboard] Pasted (copy): ${window.fmClipboard!.path} -> ${destPath}`);
+      } else {
+        await VFS.move(window.fmClipboard!.path, destPath);
+        logger.log(`[Clipboard] Pasted (move): ${window.fmClipboard!.path} -> ${destPath}`);
+        window.fmClipboard = null;
+      }
 
-    if (window.AudioManager) window.AudioManager.success();
-    return true;
-  }, {
-    module: 'Clipboard',
-    action: 'paste',
-    severity: ErrorSeverity.MEDIUM,
-    data: { source: window.fmClipboard.path, dest: destPath }
-  });
+      if (window.AudioManager) window.AudioManager.success();
+      return true;
+    },
+    {
+      module: 'Clipboard',
+      action: 'paste',
+      severity: ErrorSeverity.MEDIUM,
+      data: { source: window.fmClipboard.path, dest: destPath },
+    }
+  );
 
   return result ?? false;
 }

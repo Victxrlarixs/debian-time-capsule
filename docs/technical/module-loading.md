@@ -22,18 +22,21 @@ The 5-tier priority system provides fine-grained control over module loading tim
 ### Priority Levels
 
 **CRITICAL (0)** - Core systems loaded synchronously during boot
+
 - VFS (Virtual File System)
 - WindowManager
 - Must be available immediately
 - Loaded before desktop appears
 
 **HIGH (1)** - Essential UI loaded synchronously
+
 - Desktop (icon system)
 - StyleManager
 - Loaded during boot sequence
 - Required for basic functionality
 
 **MEDIUM (2)** - Features loaded on idle with no delay
+
 - FileManager
 - Emacs (text editor)
 - Calendar
@@ -42,6 +45,7 @@ The 5-tier priority system provides fine-grained control over module loading tim
 - No artificial delay
 
 **LOW (3)** - Secondary features loaded on idle after 2s
+
 - Netscape (browser)
 - Lynx (text browser)
 - ManViewer (documentation)
@@ -50,6 +54,7 @@ The 5-tier priority system provides fine-grained control over module loading tim
 - 2-second delay before loading
 
 **IDLE (4)** - Optional features loaded on idle after 5s
+
 - AppManager
 - Lowest priority
 - 5-second delay before loading
@@ -57,12 +62,14 @@ The 5-tier priority system provides fine-grained control over module loading tim
 ### Why 5 Tiers?
 
 The multi-tier system prevents:
+
 - UI blocking during startup
 - Network congestion
 - CPU spikes
 - Race conditions between dependencies
 
 Simplifying to 2 tiers would:
+
 - Change timing behavior
 - Risk race conditions
 - Reduce control over load distribution
@@ -87,6 +94,7 @@ moduleLoader.register(
 ### Registration Examples
 
 **Critical Module:**
+
 ```typescript
 moduleLoader.register('vfs', () => import('../core/vfs'), {
   priority: LoadPriority.CRITICAL,
@@ -95,6 +103,7 @@ moduleLoader.register('vfs', () => import('../core/vfs'), {
 ```
 
 **Module with Dependencies:**
+
 ```typescript
 moduleLoader.register('filemanager', () => import('../features/filemanager'), {
   priority: LoadPriority.MEDIUM,
@@ -103,6 +112,7 @@ moduleLoader.register('filemanager', () => import('../features/filemanager'), {
 ```
 
 **Idle Module:**
+
 ```typescript
 moduleLoader.register('appmanager', () => import('../features/appmanager'), {
   priority: LoadPriority.IDLE,
@@ -116,15 +126,15 @@ Each registered module stores metadata:
 
 ```typescript
 interface ModuleMetadata {
-  name: string;                    // Module identifier
-  priority: LoadPriority;          // Loading priority (0-4)
-  loader: () => Promise<any>;      // Dynamic import function
-  dependencies?: string[];         // Required modules
-  preload?: boolean;               // Force preload
-  loaded: boolean;                 // Load status
-  loading: boolean;                // Currently loading
-  module?: any;                    // Loaded module reference
-  loadTime?: number;               // Load duration (ms)
+  name: string; // Module identifier
+  priority: LoadPriority; // Loading priority (0-4)
+  loader: () => Promise<any>; // Dynamic import function
+  dependencies?: string[]; // Required modules
+  preload?: boolean; // Force preload
+  loaded: boolean; // Load status
+  loading: boolean; // Currently loading
+  module?: any; // Loaded module reference
+  loadTime?: number; // Load duration (ms)
 }
 ```
 
@@ -141,6 +151,7 @@ await initPerformanceOptimizations();
 ```
 
 **Process:**
+
 1. Load CRITICAL modules first (VFS, WindowManager)
 2. Wait for completion
 3. Load HIGH modules (Desktop, StyleManager)
@@ -156,6 +167,7 @@ moduleLoader.loadOnIdle(['filemanager', 'emacs', 'calendar', 'processmonitor']);
 ```
 
 **Process:**
+
 1. Wait for browser idle time
 2. Load next module in queue
 3. Wait for completion
@@ -163,6 +175,7 @@ moduleLoader.loadOnIdle(['filemanager', 'emacs', 'calendar', 'processmonitor']);
 5. Repeat until queue empty
 
 **Timing:**
+
 - MEDIUM: Immediate when idle
 - LOW: 2-second delay
 - IDLE: 5-second delay
@@ -177,6 +190,7 @@ await moduleLoader.preloadByPriority(LoadPriority.HIGH);
 ```
 
 **Use Cases:**
+
 - Boot sequence optimization
 - Prefetch critical modules
 - Warm up cache
@@ -194,6 +208,7 @@ moduleLoader.register('filemanager', () => import('../features/filemanager'), {
 ```
 
 **Resolution Process:**
+
 1. Check if module already loaded → return cached
 2. Check if module currently loading → wait
 3. Load dependencies recursively
@@ -215,7 +230,7 @@ moduleB depends on moduleA
 Dependencies are loaded in parallel:
 
 ```typescript
-await Promise.all(module.dependencies.map(dep => this.load(dep)));
+await Promise.all(module.dependencies.map((dep) => this.load(dep)));
 ```
 
 ## Loading Process
@@ -227,6 +242,7 @@ async load(name: string): Promise<any>
 ```
 
 **Steps:**
+
 1. Check if module exists in registry
 2. Return cached module if already loaded
 3. Wait if currently loading
@@ -239,14 +255,17 @@ async load(name: string): Promise<any>
 ### Load States
 
 **Not Started:**
+
 - `loaded: false`
 - `loading: false`
 
 **Loading:**
+
 - `loaded: false`
 - `loading: true`
 
 **Loaded:**
+
 - `loaded: true`
 - `loading: false`
 - `module: <cached>`
@@ -271,17 +290,19 @@ private async waitForModule(name: string): Promise<any> {
 ### Load Statistics
 
 ```typescript
-moduleLoader.getStats()
+moduleLoader.getStats();
 ```
 
 **Returns:**
+
 ```typescript
 {
-  total: number;              // Total registered modules
-  loaded: number;             // Successfully loaded
-  loading: number;            // Currently loading
-  avgLoadTime: number;        // Average load time (ms)
-  byPriority: {               // Count by priority
+  total: number; // Total registered modules
+  loaded: number; // Successfully loaded
+  loading: number; // Currently loading
+  avgLoadTime: number; // Average load time (ms)
+  byPriority: {
+    // Count by priority
     CRITICAL: number;
     HIGH: number;
     MEDIUM: number;
@@ -292,6 +313,7 @@ moduleLoader.getStats()
 ```
 
 **Usage:**
+
 ```typescript
 const stats = moduleLoader.getStats();
 console.log(`Loaded ${stats.loaded}/${stats.total} modules`);
@@ -309,6 +331,7 @@ module.loadTime = performance.now() - startTime;
 ```
 
 **Logged Output:**
+
 ```
 [ModuleLoader] Loaded: filemanager (45.23ms)
 ```
@@ -358,27 +381,27 @@ setTimeout(() => {
 
 ```typescript
 // CRITICAL (0)
-vfs                 // Virtual File System
-windowmanager       // Window Management
+vfs; // Virtual File System
+windowmanager; // Window Management
 
 // HIGH (1)
-desktop            // Desktop Icons
-stylemanager       // Theme System
+desktop; // Desktop Icons
+stylemanager; // Theme System
 
 // MEDIUM (2)
-filemanager        // File Browser
-emacs              // Text Editor
-calendar           // Calendar Widget
-processmonitor     // Process Monitor
+filemanager; // File Browser
+emacs; // Text Editor
+calendar; // Calendar Widget
+processmonitor; // Process Monitor
 
 // LOW (3)
-netscape           // Web Browser
-lynx               // Text Browser
-manviewer          // Man Pages
-terminal           // Terminal Lab
+netscape; // Web Browser
+lynx; // Text Browser
+manviewer; // Man Pages
+terminal; // Terminal Lab
 
 // IDLE (4)
-appmanager         // App Launcher
+appmanager; // App Launcher
 ```
 
 ## Code Splitting
@@ -388,10 +411,11 @@ appmanager         // App Launcher
 Each module uses dynamic imports for code splitting:
 
 ```typescript
-() => import('../features/filemanager')
+() => import('../features/filemanager');
 ```
 
 **Benefits:**
+
 - Separate bundle per module
 - Lazy loading
 - Reduced initial bundle size
@@ -468,15 +492,15 @@ async optimizeInitialLoad(): Promise<void> {
   // Load critical modules
   await moduleLoader.preloadByPriority(LoadPriority.CRITICAL);
   await moduleLoader.preloadByPriority(LoadPriority.HIGH);
-  
+
   // Schedule idle loading
   moduleLoader.loadOnIdle(['filemanager', 'emacs', 'calendar', 'processmonitor']);
-  
+
   // Delayed loading
   setTimeout(() => {
     moduleLoader.loadOnIdle(['netscape', 'lynx', 'manviewer', 'terminal']);
   }, 2000);
-  
+
   setTimeout(() => {
     moduleLoader.loadOnIdle(['appmanager']);
   }, 5000);
@@ -496,6 +520,7 @@ if ('requestIdleCallback' in window) {
 ```
 
 **Benefits:**
+
 - Loads during browser idle time
 - Doesn't block user interactions
 - Fallback for unsupported browsers

@@ -225,10 +225,7 @@ class Emacs {
   }
 
   private subscribeToEvents(): void {
-    const unsub = this.eventBus.on<FileEventData>(
-      SystemEvent.FILE_OPENED,
-      this.handleFileOpened
-    );
+    const unsub = this.eventBus.on<FileEventData>(SystemEvent.FILE_OPENED, this.handleFileOpened);
     this.unsubscribe.push(unsub);
   }
 

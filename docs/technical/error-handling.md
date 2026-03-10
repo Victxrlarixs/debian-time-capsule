@@ -49,9 +49,9 @@ window.addEventListener('unhandledrejection', (event) => {
 
 ```typescript
 enum ErrorSeverity {
-  LOW = 'low',       // Logged only, no user notification
+  LOW = 'low', // Logged only, no user notification
   MEDIUM = 'medium', // Logged as warning
-  HIGH = 'high',     // Logged + user notification
+  HIGH = 'high', // Logged + user notification
   CRITICAL = 'critical', // Logged + user notification
 }
 ```
@@ -60,11 +60,11 @@ enum ErrorSeverity {
 
 ```typescript
 interface ErrorContext {
-  module: string;           // Module name (e.g., 'FileManager')
-  action?: string;          // Action being performed (e.g., 'saveFile')
-  data?: any;              // Additional context data
+  module: string; // Module name (e.g., 'FileManager')
+  action?: string; // Action being performed (e.g., 'saveFile')
+  data?: any; // Additional context data
   severity?: ErrorSeverity; // Error severity (default: MEDIUM)
-  userMessage?: string;     // User-friendly message
+  userMessage?: string; // User-friendly message
 }
 ```
 
@@ -74,11 +74,11 @@ Maintains last 100 errors for debugging:
 
 ```typescript
 interface AppError {
-  id: string;              // Unique error ID (UUID)
-  timestamp: number;       // Unix timestamp
-  error: Error;           // Original error object
-  context: ErrorContext;  // Error context
-  stack?: string;         // Stack trace
+  id: string; // Unique error ID (UUID)
+  timestamp: number; // Unix timestamp
+  error: Error; // Original error object
+  context: ErrorContext; // Error context
+  stack?: string; // Stack trace
 }
 ```
 
@@ -89,10 +89,7 @@ interface AppError {
 ```typescript
 class ErrorHandler {
   // Async wrapper
-  async wrapAsync<T>(
-    fn: () => Promise<T>,
-    context: ErrorContext
-  ): Promise<T | null> {
+  async wrapAsync<T>(fn: () => Promise<T>, context: ErrorContext): Promise<T | null> {
     try {
       return await fn();
     } catch (error) {
@@ -284,10 +281,10 @@ errorHandler.handleError(error, { module: 'Unknown' });
 
 ```typescript
 // Good
-userMessage: 'The file could not be found. It may have been moved or deleted.'
+userMessage: 'The file could not be found. It may have been moved or deleted.';
 
 // Bad
-userMessage: 'ENOENT: no such file or directory'
+userMessage: 'ENOENT: no such file or directory';
 ```
 
 ### 4. Use Wrapper Functions
@@ -309,11 +306,11 @@ try {
 ```typescript
 // ERROR_OCCURRED event payload
 interface AppError {
-  id: string;              // Unique error ID
-  timestamp: number;       // Unix timestamp
-  error: Error;           // Original error object
-  context: ErrorContext;  // Error context
-  stack?: string;         // Stack trace
+  id: string; // Unique error ID
+  timestamp: number; // Unix timestamp
+  error: Error; // Original error object
+  context: ErrorContext; // Error context
+  stack?: string; // Stack trace
 }
 ```
 

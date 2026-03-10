@@ -376,104 +376,109 @@ class LynxBrowser {
 
   private async fetchExternalPage(url: string): Promise<LynxPage | null> {
     const { errorHandler } = await import('../core/error-handler');
-    
-    return errorHandler.wrapAsync(async () => {
-      const html = await fetchExternalContent(url);
-      if (!html) return null;
 
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
+    return errorHandler.wrapAsync(
+      async () => {
+        const html = await fetchExternalContent(url);
+        if (!html) return null;
 
-      const links: LynxLink[] = [];
-      let linkCounter = 1;
-      const processNode = (node: Node): string => {
-        if (node.nodeType === Node.TEXT_NODE) {
-          return this.escapeHtml(node.textContent || '');
-        }
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
 
-        if (node.nodeType === Node.ELEMENT_NODE) {
-          const el = node as HTMLElement;
-          const tagName = el.tagName.toLowerCase();
-
-          if (
-            ['script', 'style', 'head', 'meta', 'link', 'svg', 'canvas', 'iframe'].includes(tagName)
-          ) {
-            return '';
+        const links: LynxLink[] = [];
+        let linkCounter = 1;
+        const processNode = (node: Node): string => {
+          if (node.nodeType === Node.TEXT_NODE) {
+            return this.escapeHtml(node.textContent || '');
           }
 
-          if (tagName === 'a') {
-            const href = el.getAttribute('href');
-            if (href && !href.startsWith('#') && !href.startsWith('javascript:')) {
-              const num = linkCounter++;
-              const linkText = this.escapeHtml(el.textContent?.trim() || 'Link');
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            const el = node as HTMLElement;
+            const tagName = el.tagName.toLowerCase();
 
-              let absoluteUrl = href;
-              try {
-                absoluteUrl = new URL(href, url).href;
-              } catch (e) {}
-
-              links.push({ num, text: linkText, url: absoluteUrl });
-              return ` [${num}]${linkText} `;
+            if (
+              ['script', 'style', 'head', 'meta', 'link', 'svg', 'canvas', 'iframe'].includes(
+                tagName
+              )
+            ) {
+              return '';
             }
+
+            if (tagName === 'a') {
+              const href = el.getAttribute('href');
+              if (href && !href.startsWith('#') && !href.startsWith('javascript:')) {
+                const num = linkCounter++;
+                const linkText = this.escapeHtml(el.textContent?.trim() || 'Link');
+
+                let absoluteUrl = href;
+                try {
+                  absoluteUrl = new URL(href, url).href;
+                } catch (e) {}
+
+                links.push({ num, text: linkText, url: absoluteUrl });
+                return ` [${num}]${linkText} `;
+              }
+            }
+
+            if (tagName === 'img') {
+              const alt = el.getAttribute('alt');
+              return alt ? ` [IMAGE: ${alt}] ` : '[IMAGE]';
+            }
+
+            let childrenText = '';
+            node.childNodes.forEach((child) => {
+              childrenText += processNode(child);
+            });
+
+            if (
+              [
+                'p',
+                'div',
+                'h1',
+                'h2',
+                'h3',
+                'h4',
+                'li',
+                'tr',
+                'header',
+                'footer',
+                'nav',
+                'section',
+              ].includes(tagName)
+            ) {
+              return `\n${childrenText}\n`;
+            }
+
+            if (tagName === 'br') return '\n';
+
+            return childrenText;
           }
 
-          if (tagName === 'img') {
-            const alt = el.getAttribute('alt');
-            return alt ? ` [IMAGE: ${alt}] ` : '[IMAGE]';
-          }
+          return '';
+        };
 
-          let childrenText = '';
-          node.childNodes.forEach((child) => {
-            childrenText += processNode(child);
-          });
+        const rawContent = processNode(doc.body);
 
-          if (
-            [
-              'p',
-              'div',
-              'h1',
-              'h2',
-              'h3',
-              'h4',
-              'li',
-              'tr',
-              'header',
-              'footer',
-              'nav',
-              'section',
-            ].includes(tagName)
-          ) {
-            return `\n${childrenText}\n`;
-          }
+        const cleanContent = rawContent
+          .split('\n')
+          .map((line) => line.trim())
+          .filter((line, i, arr) => line !== '' || arr[i - 1] !== '')
+          .join('\n');
 
-          if (tagName === 'br') return '\n';
-
-          return childrenText;
-        }
-
-        return '';
-      };
-
-      const rawContent = processNode(doc.body);
-
-      const cleanContent = rawContent
-        .split('\n')
-        .map((line) => line.trim())
-        .filter((line, i, arr) => line !== '' || arr[i - 1] !== '')
-        .join('\n');
-
-      return {
-        title: doc.title || url,
-        url: url,
-        content: cleanContent,
-        links: links,
-      };
-    }, {
-      module: 'Lynx',
-      action: 'fetchExternalPage',
-      severity: ErrorSeverity.MEDIUM,
-      data: { url }
-    });
+        return {
+          title: doc.title || url,
+          url: url,
+          content: cleanContent,
+          links: links,
+        };
+      },
+      {
+        module: 'Lynx',
+        action: 'fetchExternalPage',
+        severity: ErrorSeverity.MEDIUM,
+        data: { url },
+      }
+    );
   }
 
   public printPage(): void {

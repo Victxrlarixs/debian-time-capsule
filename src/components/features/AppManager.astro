@@ -25,7 +25,11 @@ import { CONFIG } from '../../scripts/core/config';
     <!-- Main view: Application Groups (folders) -->
     <div class="app-manager-view" id="appManagerMainView">
       <div class="app-group-item" data-group="Accessories">
-        <img src="/icons/categories/applications-accessories.png" alt="Accessories" class="folder-icon" />
+        <img
+          src="/icons/categories/applications-accessories.png"
+          alt="Accessories"
+          class="folder-icon"
+        />
         <span>Accessories</span>
       </div>
 
@@ -45,12 +49,20 @@ import { CONFIG } from '../../scripts/core/config';
       </div>
 
       <div class="app-group-item" data-group="Utilities">
-        <img src="/icons/categories/applications-utilities.png" alt="Utilities" class="folder-icon" />
+        <img
+          src="/icons/categories/applications-utilities.png"
+          alt="Utilities"
+          class="folder-icon"
+        />
         <span>Utilities</span>
       </div>
 
       <div class="app-group-item" data-group="Preferences">
-        <img src="/icons/categories/preferences-desktop.png" alt="Preferences" class="folder-icon" />
+        <img
+          src="/icons/categories/preferences-desktop.png"
+          alt="Preferences"
+          class="folder-icon"
+        />
         <span>Preferences</span>
       </div>
 
@@ -61,7 +73,11 @@ import { CONFIG } from '../../scripts/core/config';
     </div>
 
     <!-- Accessories group content -->
-    <div class="app-manager-view app-group-content" id="appGroup_Accessories" style="display: none;">
+    <div
+      class="app-manager-view app-group-content"
+      id="appGroup_Accessories"
+      style="display: none;"
+    >
       <div class="app-action-item go-up-item" onclick="appManager.goBack()">
         <img src="/icons/actions/go-up.png" alt="Go Up" class="action-icon" />
         <span>.. (go up)</span>
@@ -78,7 +94,11 @@ import { CONFIG } from '../../scripts/core/config';
       </div>
 
       <div class="app-action-item" onclick="AccessibilityManager.showShortcutsHelp()">
-        <img src="/icons/apps/preferences-desktop-keyboard-shortcuts.png" alt="Shortcuts" class="action-icon" />
+        <img
+          src="/icons/apps/preferences-desktop-keyboard-shortcuts.png"
+          alt="Shortcuts"
+          class="action-icon"
+        />
         <span>Keyboard Shortcuts</span>
       </div>
     </div>
@@ -151,14 +171,22 @@ import { CONFIG } from '../../scripts/core/config';
     </div>
 
     <!-- Preferences group content -->
-    <div class="app-manager-view app-group-content" id="appGroup_Preferences" style="display: none;">
+    <div
+      class="app-manager-view app-group-content"
+      id="appGroup_Preferences"
+      style="display: none;"
+    >
       <div class="app-action-item go-up-item" onclick="appManager.goBack()">
         <img src="/icons/actions/go-up.png" alt="Go Up" class="action-icon" />
         <span>.. (go up)</span>
       </div>
 
       <div class="app-action-item" onclick="styleManager.openMain()">
-        <img src="/icons/apps/org.xfce.settings.manager.png" alt="Style Manager" class="action-icon" />
+        <img
+          src="/icons/apps/org.xfce.settings.manager.png"
+          alt="Style Manager"
+          class="action-icon"
+        />
         <span>Style Manager</span>
       </div>
 
@@ -209,7 +237,6 @@ import { CONFIG } from '../../scripts/core/config';
         <img src="/icons/apps/man.png" alt="Man Pages" class="action-icon" />
         <span>Man Pages</span>
       </div>
-
     </div>
   </div>
 

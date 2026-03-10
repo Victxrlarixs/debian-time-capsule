@@ -174,20 +174,20 @@ window.CDE.ui.modal.open('Info', 'Hello World');
 
 ### Available Services
 
-| Key              | Type                                | Description                      |
-| ---------------- | ----------------------------------- | -------------------------------- |
-| `fs`             | `IFileReader & IFileWriter & ...`   | Complete filesystem              |
-| `fileReader`     | `IFileReader`                       | Read-only operations             |
-| `fileWriter`     | `IFileWriter`                       | Write operations                 |
-| `fileOperations` | `IFileOperations`                   | Move, copy, delete operations    |
-| `trashManager`   | `ITrashManager`                     | Trash management                 |
-| `fileSearch`     | `IFileSearch`                       | File search                      |
-| `audio`          | `IBasicAudio & ISystemSounds & ...` | Complete audio system            |
-| `basicAudio`     | `IBasicAudio`                       | Basic sounds                     |
-| `systemSounds`   | `ISystemSounds`                     | System sounds                    |
-| `windowSounds`   | `IWindowSounds`                     | Window sounds                    |
-| `settings`       | `ISettingsManager`                  | Configuration                    |
-| `sessionStorage` | `ISessionStorage`                   | Session management               |
+| Key              | Type                                | Description                   |
+| ---------------- | ----------------------------------- | ----------------------------- |
+| `fs`             | `IFileReader & IFileWriter & ...`   | Complete filesystem           |
+| `fileReader`     | `IFileReader`                       | Read-only operations          |
+| `fileWriter`     | `IFileWriter`                       | Write operations              |
+| `fileOperations` | `IFileOperations`                   | Move, copy, delete operations |
+| `trashManager`   | `ITrashManager`                     | Trash management              |
+| `fileSearch`     | `IFileSearch`                       | File search                   |
+| `audio`          | `IBasicAudio & ISystemSounds & ...` | Complete audio system         |
+| `basicAudio`     | `IBasicAudio`                       | Basic sounds                  |
+| `systemSounds`   | `ISystemSounds`                     | System sounds                 |
+| `windowSounds`   | `IWindowSounds`                     | Window sounds                 |
+| `settings`       | `ISettingsManager`                  | Configuration                 |
+| `sessionStorage` | `ISessionStorage`                   | Session management            |
 
 ## Migration Guide
 

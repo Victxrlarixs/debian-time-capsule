@@ -25,17 +25,18 @@ declare global {
  */
 export async function shareThemeToDiscussions(): Promise<void> {
   const { errorHandler } = await import('../core/error-handler');
-  
-  await errorHandler.wrapAsync(async () => {
-    if (!window.ShareConfig) {
-      logger.error('[ShareThemeUI] ShareConfig not available');
-      return;
-    }
 
-    const themeUrl = window.ShareConfig.getURL();
-    const copied = await window.ShareConfig.copy();
+  await errorHandler.wrapAsync(
+    async () => {
+      if (!window.ShareConfig) {
+        logger.error('[ShareThemeUI] ShareConfig not available');
+        return;
+      }
 
-    const html = `
+      const themeUrl = window.ShareConfig.getURL();
+      const copied = await window.ShareConfig.copy();
+
+      const html = `
       <div style="padding: 15px; max-width: 500px;">
         <p style="margin-bottom: 15px; font-size: 12px; line-height: 1.5;">
           Share your custom CDE theme with the community! Your theme URL has been copied to clipboard.
@@ -78,13 +79,15 @@ export async function shareThemeToDiscussions(): Promise<void> {
       </div>
     `;
 
-    await (window as any).CDEModal.open('Share Your Theme', html, []);
-    logger.log('[ShareThemeUI] Share modal displayed');
-  }, {
-    module: 'ShareThemeUI',
-    action: 'shareThemeToDiscussions',
-    severity: ErrorSeverity.LOW
-  });
+      await (window as any).CDEModal.open('Share Your Theme', html, []);
+      logger.log('[ShareThemeUI] Share modal displayed');
+    },
+    {
+      module: 'ShareThemeUI',
+      action: 'shareThemeToDiscussions',
+      severity: ErrorSeverity.LOW,
+    }
+  );
 }
 
 // Export to global scope

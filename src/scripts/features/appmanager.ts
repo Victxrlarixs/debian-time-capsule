@@ -25,7 +25,7 @@ export class AppManager {
 
     // Setup folder navigation
     this.setupNavigation();
-    
+
     // Setup menu bar
     this.setupMenuBar();
   }
@@ -34,10 +34,10 @@ export class AppManager {
     // Wait for DOM to be ready
     setTimeout(() => {
       const menuButtons = document.querySelectorAll('#appManager .menu-button');
-      
+
       menuButtons.forEach((button) => {
         const buttonText = button.textContent?.trim();
-        
+
         button.addEventListener('click', () => {
           switch (buttonText) {
             case 'File':
@@ -63,7 +63,7 @@ export class AppManager {
     document.addEventListener('dblclick', (e) => {
       const target = e.target as HTMLElement;
       const groupItem = target.closest('.app-group-item') as HTMLElement;
-      
+
       if (groupItem && groupItem.dataset.group) {
         this.openGroup(groupItem.dataset.group);
       }

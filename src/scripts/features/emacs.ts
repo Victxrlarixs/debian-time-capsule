@@ -75,10 +75,7 @@ class EmacsManager {
   private subscribeToEvents(): void {
     this.eventBus = container.has('eventBus') ? container.get<EventBus>('eventBus') : null;
     if (this.eventBus) {
-      const unsub = this.eventBus.on<FileEventData>(
-        SystemEvent.FILE_OPENED,
-        this.handleFileOpened
-      );
+      const unsub = this.eventBus.on<FileEventData>(SystemEvent.FILE_OPENED, this.handleFileOpened);
       this.unsubscribe.push(unsub);
       logger.log('[Emacs] Subscribed to FILE_OPENED events');
     }
@@ -364,27 +361,30 @@ class EmacsManager {
       await this.saveAs();
       return;
     }
-    
+
     const { errorHandler } = await import('../core/error-handler');
-    const result = await errorHandler.wrapAsync(async () => {
-      const existing = VFS.getNode(this.currentFilePath);
-      if (!existing) {
-        const parts = this.currentFilePath.split('/');
-        const filename = parts.pop()!;
-        const parentDir = parts.join('/') + '/';
-        await VFS.touch(parentDir, filename);
+    const result = await errorHandler.wrapAsync(
+      async () => {
+        const existing = VFS.getNode(this.currentFilePath);
+        if (!existing) {
+          const parts = this.currentFilePath.split('/');
+          const filename = parts.pop()!;
+          const parentDir = parts.join('/') + '/';
+          await VFS.touch(parentDir, filename);
+        }
+        await VFS.writeFile(this.currentFilePath, this.textarea!.value);
+        this.isModified = false;
+        this.updateModeLine();
+        this.message(`Wrote ${this.currentFilePath}`);
+        if (window.AudioManager) window.AudioManager.success();
+      },
+      {
+        module: 'Emacs',
+        action: 'save',
+        severity: ErrorSeverity.HIGH,
+        data: { path: this.currentFilePath },
       }
-      await VFS.writeFile(this.currentFilePath, this.textarea!.value);
-      this.isModified = false;
-      this.updateModeLine();
-      this.message(`Wrote ${this.currentFilePath}`);
-      if (window.AudioManager) window.AudioManager.success();
-    }, {
-      module: 'Emacs',
-      action: 'save',
-      severity: ErrorSeverity.HIGH,
-      data: { path: this.currentFilePath }
-    });
+    );
 
     if (!result) {
       this.message('Error: could not save file.');

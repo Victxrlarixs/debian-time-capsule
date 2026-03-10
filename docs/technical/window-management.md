@@ -24,12 +24,14 @@ WindowManagerV2 (Orchestrator)
 Main coordinator that initializes and delegates to specialized managers.
 
 **Responsibilities:**
+
 - Initialize all specialized managers
 - Coordinate window registration
 - Handle viewport resize events
 - Provide unified API for window operations
 
 **Key Methods:**
+
 ```typescript
 init()                          // Initialize all managers
 registerWindow(win: HTMLElement) // Register new window
@@ -44,20 +46,23 @@ switchWorkspace(id: string)     // Change workspace
 Manages z-index layers to ensure proper stacking order.
 
 **Architecture:**
+
 - Separate counters for windows and modals
 - Windows: Start at `CONFIG.WINDOW.BASE_Z_INDEX` (typically 10000)
 - Modals: Start at 90000 (always above windows)
 
 **Methods:**
+
 ```typescript
 getNextZIndex(isModal?: boolean): number  // Increment and return
 getTopZIndex(): number                    // Current highest z-index
 ```
 
 **Usage:**
+
 ```typescript
 const zIndex = zIndexManager.getNextZIndex(false); // Window
-const modalZ = zIndexManager.getNextZIndex(true);  // Modal
+const modalZ = zIndexManager.getNextZIndex(true); // Modal
 ```
 
 ### WorkspaceManager
@@ -65,11 +70,13 @@ const modalZ = zIndexManager.getNextZIndex(true);  // Modal
 Manages 4 virtual workspaces (desktops).
 
 **Workspace Behavior:**
+
 - Each window is assigned to one workspace via `data-workspace` attribute
 - Switching workspaces hides current windows and shows target workspace windows
 - Windows remember their visibility state with `data-was-opened` attribute
 
 **Methods:**
+
 ```typescript
 getCurrentWorkspace(): string           // Returns '1', '2', '3', or '4'
 switchWorkspace(id: string): void       // Switch to workspace
@@ -78,6 +85,7 @@ initPager(): void                       // Initialize workspace switcher UI
 ```
 
 **Workspace Switching Flow:**
+
 1. Hide all windows in current workspace (mark with `data-was-opened`)
 2. Update `currentWorkspace` state
 3. Show windows in target workspace that were previously opened
@@ -89,12 +97,14 @@ initPager(): void                       // Initialize workspace switcher UI
 Handles window positioning, centering, and viewport constraints.
 
 **Positioning Rules:**
+
 - Windows must stay within viewport bounds
 - Minimum Y position: `TOP_BAR_HEIGHT` (typically 30px)
 - Mobile: Always centered
 - Desktop: Constrained to viewport with margins
 
 **Methods:**
+
 ```typescript
 centerWindow(win: HTMLElement): void           // Center in viewport
 normalizeWindowPosition(win: HTMLElement): void // Constrain to bounds
@@ -102,6 +112,7 @@ normalizeAllWindows(): void                    // Normalize all on resize
 ```
 
 **Normalization:**
+
 - Triggered on viewport resize
 - Ensures windows remain accessible
 - Prevents windows from being off-screen
@@ -112,6 +123,7 @@ normalizeAllWindows(): void                    // Normalize all on resize
 Manages window dragging with pointer events.
 
 **Features:**
+
 - Pointer capture for smooth dragging
 - Mouse acceleration support (CSS variable `--mouse-acceleration`)
 - Wireframe mode option
@@ -119,6 +131,7 @@ Manages window dragging with pointer events.
 - Session persistence on drag end
 
 **Drag Flow:**
+
 1. `pointerdown` on titlebar → Start drag
 2. Capture pointer and track movement
 3. Apply acceleration to delta movement
@@ -126,6 +139,7 @@ Manages window dragging with pointer events.
 5. `pointerup` → End drag, snap to grid (desktop icons), save position
 
 **Methods:**
+
 ```typescript
 startDrag(e: PointerEvent, id: string): void
 isDragging(): boolean
@@ -138,23 +152,27 @@ Manages window states: minimize, maximize, and shade.
 **States:**
 
 **Minimize:**
+
 - Hides window (`display: none`)
 - Plays minimize sound
 - Saves state to session
 
 **Maximize:**
+
 - Toggles `maximized` class
 - Expands to fill viewport (minus top bar and panel)
 - Updates maximize button icon
 - Saves state to session
 
 **Shade (Roll-up):**
+
 - Triggered by double-click on titlebar
 - Collapses window to show only titlebar
 - Toggles `shaded` class
 - Plays shade sound
 
 **Methods:**
+
 ```typescript
 minimizeWindow(id: string): void
 maximizeWindow(id: string): void
@@ -166,10 +184,12 @@ shadeWindow(id: string): void
 Manages window focus and active state.
 
 **Focus Modes:**
+
 - Click-to-focus (default)
 - Point-to-focus (optional, via settings)
 
 **Focus Behavior:**
+
 - Brings window to front (z-index)
 - Adds `active` class
 - Removes `active` from other windows
@@ -177,6 +197,7 @@ Manages window focus and active state.
 - Plays focus sound
 
 **Methods:**
+
 ```typescript
 focusWindow(id: string): void
 initGlobalInteraction(): void  // Setup click handlers
@@ -187,11 +208,13 @@ initGlobalInteraction(): void  // Setup click handlers
 Manages panel dropdown menus (Utilities, Style Manager, Terminal, Browser).
 
 **Behavior:**
+
 - Click to toggle dropdown
 - Click outside to close
 - Only one dropdown open at a time
 
 **Methods:**
+
 ```typescript
 initDropdowns(): void  // Setup all panel dropdowns
 ```
@@ -239,15 +262,17 @@ showWindow(id: string)
 Window positions and states are persisted via `ISessionStorage`:
 
 **Saved State:**
+
 ```typescript
 interface WindowState {
-  left: string;      // CSS left position
-  top: string;       // CSS top position
+  left: string; // CSS left position
+  top: string; // CSS top position
   maximized: boolean; // Maximized state
 }
 ```
 
 **Persistence Flow:**
+
 - Save: On drag end, state change
 - Load: On window registration
 - Storage: IndexedDB via SettingsManager
@@ -255,12 +280,14 @@ interface WindowState {
 ## Mobile vs Desktop
 
 ### Desktop Behavior
+
 - Windows can be positioned anywhere
 - Drag and drop enabled
 - Resize handles (if implemented)
 - Multiple windows visible
 
 ### Mobile Behavior
+
 - Windows always centered
 - Limited dragging
 - One window at a time recommended
@@ -271,24 +298,27 @@ interface WindowState {
 Window manager emits events via EventBus:
 
 ```typescript
-SystemEvent.WINDOW_FOCUSED    // Window gains focus
-SystemEvent.WINDOW_MINIMIZED  // Window minimized
-SystemEvent.WINDOW_MAXIMIZED  // Window maximized
+SystemEvent.WINDOW_FOCUSED; // Window gains focus
+SystemEvent.WINDOW_MINIMIZED; // Window minimized
+SystemEvent.WINDOW_MAXIMIZED; // Window maximized
 ```
 
 ## Performance Considerations
 
 ### Viewport Resize
+
 - Debounced normalization (300ms delay)
 - Prevents excessive recalculations
 - Batch updates all windows
 
 ### MutationObserver
+
 - Efficient DOM monitoring
 - Automatic window registration
 - No manual tracking needed
 
 ### Pointer Events
+
 - Better than mouse events
 - Touch and pen support
 - Pointer capture for smooth dragging

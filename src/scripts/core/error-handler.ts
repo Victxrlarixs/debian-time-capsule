@@ -104,10 +104,7 @@ export class ErrorHandler {
   /**
    * Wrap an async function with error handling.
    */
-  async wrapAsync<T>(
-    fn: () => Promise<T>,
-    context: ErrorContext
-  ): Promise<T | null> {
+  async wrapAsync<T>(fn: () => Promise<T>, context: ErrorContext): Promise<T | null> {
     try {
       return await fn();
     } catch (error) {
