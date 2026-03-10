@@ -384,7 +384,6 @@ class VimManager {
       return;
     }
     
-    // Simulate the last command
     if (this.state.lastCommand === 'dd') {
       this.editor.deleteLine();
     } else if (this.state.lastCommand === 'yy') {
@@ -396,7 +395,7 @@ class VimManager {
     }
   }
 
-  private repeatLastCommand(): void {
+  public async open(filename: string = '', content: string = '', path: string = ''): Promise<void> {
     if (!this.elements.win || !this.elements.textarea) return;
 
     this.state.currentFilePath = path || filename || '';
@@ -407,7 +406,6 @@ class VimManager {
       this.showSplash();
       this.handleModeChange('normal');
     } else {
-      // Clear splash when opening actual content
       this.clearSplashIfNeeded();
       this.elements.textarea.value = content;
       this.updateTitle(filename || '[No Name]');
