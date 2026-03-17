@@ -1,69 +1,99 @@
-// src/scripts/features/netscape.ts
 import { WindowManager } from '../core/windowmanager';
 import { logger } from '../utilities/logger';
 import { openWindow, closeWindow } from '../shared/window-helpers';
 import { HistoryManager } from '../shared/history-manager';
-import { getEngineUrl } from '../shared/browser-engine';
-
 import netscapePages from '../../data/netscape-pages.json';
 
-interface NSPage {
-  title: string;
-  url: string;
-  content: () => string;
-}
+import type { NSPage, NSElements } from './netscape/netscape-types';
+import { NetscapeAnimator } from './netscape/netscape-animator';
+import { NetscapeRenderer } from './netscape/netscape-renderer';
+import { NetscapeNavigatorEngine } from './netscape/netscape-navigator-engine';
 
-const NS_PAGES: Record<string, NSPage> = {};
-Object.entries(netscapePages).forEach(([key, value]) => {
-  NS_PAGES[key] = {
-    title: value.title,
-    url: value.url,
-    content: () => value.content,
-  };
-});
-
-// ─── Netscape Navigator class ────────────────────────────────────────────────
-
+/**
+ * Netscape Navigator - SOLID Implementation
+ * Coordinates Navigation Engine, History, UI Rendering, and Animations.
+ */
 class NetscapeNavigator {
   private id = 'netscape';
   private history: HistoryManager<string>;
   private currentPage = 'whats-new';
   private isLoading = false;
-  private animationFrame: number | null = null;
-  private starInterval: ReturnType<typeof setInterval> | null = null;
+  
+  private nsPages: Record<string, NSPage> = {};
+  private engine!: NetscapeNavigatorEngine;
+  private renderer!: NetscapeRenderer;
+  private animator!: NetscapeAnimator;
+  private elements!: NSElements;
 
   constructor() {
     this.history = new HistoryManager<string>('whats-new');
+    this.initPages();
     this.init();
   }
 
+  private initPages(): void {
+    Object.entries(netscapePages).forEach(([key, value]) => {
+      this.nsPages[key] = {
+        title: value.title,
+        url: value.url,
+        content: () => value.content,
+      };
+    });
+    this.engine = new NetscapeNavigatorEngine(this.nsPages);
+  }
+
   private init(): void {
-    logger.log('[Netscape] Initializing...');
+    if (typeof document === 'undefined') return;
+
+    this.elements = {
+      win: document.getElementById('netscape'),
+      content: document.getElementById('nsContent'),
+      externalView: document.getElementById('nsExternalView') as HTMLIFrameElement,
+      urlInput: document.getElementById('nsUrlInput') as HTMLInputElement,
+      title: document.getElementById('netscape-title'),
+      statusText: document.getElementById('nsStatusText'),
+      progressBar: document.getElementById('nsProgressBar'),
+      logo: document.getElementById('nsNLogo'),
+      starsContainer: document.getElementById('nsNStars'),
+      stopBtn: document.getElementById('ns-btn-stop') as HTMLButtonElement,
+      backBtn: document.getElementById('ns-btn-back') as HTMLButtonElement,
+      forwardBtn: document.getElementById('ns-btn-forward') as HTMLButtonElement,
+      scrollThumb: document.getElementById('nsScrollThumb'),
+      toolbar: document.getElementById('nsToolbar'),
+      locationBar: document.getElementById('nsLocationBar'),
+      dirBar: document.getElementById('nsDirBar'),
+    };
+
+    this.renderer = new NetscapeRenderer(this.elements);
+    this.animator = new NetscapeAnimator(this.elements.logo, this.elements.starsContainer);
+
+    logger.log('[Netscape] Initialized with SOLID architecture');
     this.renderPage('whats-new', false);
     this.setupScrollThumb();
   }
 
-  // ── Window controls ─────────────────────────────────────────────────────
+  // ── Window Controls ─────────────────────────────────────────────────────
 
   public open(): void {
     openWindow({
       id: this.id,
       zIndex: 10000,
       center: true,
-      playSound: false, // Netscape doesn't use standard window sound
+      playSound: false,
     });
     logger.log('[Netscape] Window opened');
   }
 
   public close(): void {
     closeWindow(this.id);
+    this.stopLoading();
     logger.log('[Netscape] Window closed');
   }
 
   // ── Navigation ──────────────────────────────────────────────────────────
 
   public navigate(path: string): void {
-    const target = this.normalizeUrl(path);
+    const target = this.engine.normalizeUrl(path);
     if (target === this.currentPage) return;
 
     this.history.push(target);
@@ -71,116 +101,57 @@ class NetscapeNavigator {
     this.updateHistoryMenu();
   }
 
-  private normalizeUrl(url: string): string {
-    if (!url) return '';
-    const target = url.trim();
-
-    if (target === 'net-search') return 'https://duckduckgo.com/';
-
-    if (NS_PAGES[target] || target.startsWith('about:')) return target;
-
-    if (!target.includes('.') || target.includes(' ')) {
-      return `https://duckduckgo.com/?q=${encodeURIComponent(target)}`;
-    }
-
-    return target.startsWith('http') ? target : `https://${target}`;
-  }
-
   public goBack(): void {
     const prev = this.history.back();
-    if (prev) {
-      this.renderPage(prev, true);
-    }
+    if (prev) this.renderPage(prev, true);
   }
 
   public goForward(): void {
-    if (window.AudioManager) window.AudioManager.click();
+    if ((window as any).AudioManager) (window as any).AudioManager.click();
     const next = this.history.forward();
-    if (next) {
-      this.renderPage(next, true);
-    }
+    if (next) this.renderPage(next, true);
   }
 
   public goHome(): void {
-    if (window.AudioManager) window.AudioManager.click();
+    if ((window as any).AudioManager) (window as any).AudioManager.click();
     this.navigate('welcome');
   }
 
   public reload(): void {
-    if (window.AudioManager) window.AudioManager.click();
+    if ((window as any).AudioManager) (window as any).AudioManager.click();
     this.renderPage(this.currentPage, true);
   }
 
   private renderPage(target: string, animate: boolean): void {
-    // Determine if we're loading an internal page or external URL
-    const internalKey = Object.keys(NS_PAGES).find(
-      (k) => k === target || NS_PAGES[k].url === target
-    );
-    const nsContent = document.getElementById('nsContent');
-    const nsExternalView = document.getElementById('nsExternalView') as HTMLIFrameElement;
-    const urlInput = document.getElementById('nsUrlInput') as HTMLInputElement;
-    const title = document.getElementById('netscape-title');
-
     this.currentPage = target;
+    const internalKey = this.engine.isInternalPage(target);
 
     if (internalKey) {
-      const page = NS_PAGES[internalKey];
-      if (urlInput) urlInput.value = page.url;
-      if (title) title.textContent = page.title;
-
-      // Toggle views
-      if (nsContent) nsContent.style.display = 'block';
-      if (nsExternalView) {
-        nsExternalView.style.display = 'none';
-        nsExternalView.src = 'about:blank';
-      }
-
-      // Active dir button
-      const dirBtns = document.querySelectorAll('.ns-dir-btn');
-      dirBtns.forEach((btn) => btn.classList.remove('active'));
-      const activeBtn = document.querySelector(`.ns-dir-btn[onclick*="${internalKey}"]`);
-      if (activeBtn) activeBtn.classList.add('active');
+      const page = this.nsPages[internalKey];
+      this.renderer.updateUIForInternal(page);
 
       if (animate) {
         this.startLoading(() => {
-          if (nsContent) {
-            nsContent.innerHTML = page.content();
-            nsContent.scrollTop = 0;
-          }
+          this.renderer.setContent(page.content());
         });
       } else {
-        if (nsContent) nsContent.innerHTML = page.content();
-        this.setStatus('Document: Done');
+        this.renderer.setContent(page.content());
+        this.renderer.setStatus('Document: Done');
       }
     } else {
-      if (urlInput) urlInput.value = target;
-      if (title) title.textContent = `${target} — Netscape`;
-
-      if (nsContent) nsContent.style.display = 'none';
-      if (nsExternalView) {
-        nsExternalView.style.display = 'block';
-      }
-
-      const dirBtns = document.querySelectorAll('.ns-dir-btn');
-      if (dirBtns) dirBtns.forEach((btn) => (btn as HTMLElement).classList.remove('active'));
-
-      // Restauramos el "Motor Invisible" que permite cargar Google/GNU
-      const engineUrl = `https://web.archive.org/web/2d_/${target}`;
-      this.setStatus(`Loading ${target}...`);
+      this.renderer.updateUIForExternal(target);
+      const engineUrl = this.engine.getExternalUrl(target);
+      this.renderer.setStatus(`Loading ${target}...`);
 
       if (animate) {
         this.startLoadingExternal(engineUrl);
       } else {
-        if (nsExternalView) nsExternalView.src = engineUrl;
-        this.setStatus('Document: Done');
+        if (this.elements.externalView) this.elements.externalView.src = engineUrl;
+        this.renderer.setStatus('Document: Done');
       }
     }
 
-    // Update nav buttons state
-    const backBtn = document.getElementById('ns-btn-back') as HTMLButtonElement | null;
-    const fwdBtn = document.getElementById('ns-btn-forward') as HTMLButtonElement | null;
-    if (backBtn) backBtn.disabled = !this.history.canGoBack();
-    if (fwdBtn) fwdBtn.disabled = !this.history.canGoForward();
+    this.renderer.updateNavButtons(this.history.canGoBack(), this.history.canGoForward());
   }
 
   private startLoading(onComplete: () => void): void {
@@ -188,8 +159,8 @@ class NetscapeNavigator {
     this.isLoading = true;
 
     this.toggleLoadingUI(true);
-    this.setStatus('Connecting...');
-    this.animateProgress(0);
+    this.renderer.setStatus('Connecting...');
+    this.renderer.setProgress(0);
 
     const steps = [
       { delay: 100, status: 'Connecting to host...', prog: 10 },
@@ -203,8 +174,8 @@ class NetscapeNavigator {
     steps.forEach(({ delay, status, prog }) => {
       setTimeout(() => {
         if (!this.isLoading) return;
-        this.setStatus(status);
-        this.animateProgress(prog);
+        this.renderer.setStatus(status);
+        this.renderer.setProgress(prog);
         if (prog === 100) {
           onComplete();
           this.stopLoading();
@@ -218,196 +189,102 @@ class NetscapeNavigator {
     this.isLoading = true;
 
     this.toggleLoadingUI(true);
-    this.setStatus(`Looking for site: ${url}...`);
-    this.animateProgress(10);
+    this.renderer.setStatus(`Looking for site: ${url}...`);
+    this.renderer.setProgress(10);
 
-    const nsExternalView = document.getElementById('nsExternalView') as HTMLIFrameElement;
-
-    // Security Notice for Users
     if (url.includes('google.com') || url.includes('github.com')) {
       setTimeout(() => {
-        this.setStatus('NOTICE: Site may block vintage view. Try a search term instead.');
+        if (this.isLoading) this.renderer.setStatus('NOTICE: Site may block vintage view. Try a search term instead.');
       }, 1500);
     }
 
-    if (nsExternalView) {
+    if (this.elements.externalView) {
+      setTimeout(() => { if (this.isLoading) { this.renderer.setStatus('Connect: Contacting host...'); this.renderer.setProgress(30); } }, 400);
       setTimeout(() => {
-        if (!this.isLoading) return;
-        this.setStatus('Connect: Contacting host...');
-        this.animateProgress(30);
-      }, 400);
-
-      setTimeout(() => {
-        if (!this.isLoading) return;
-        this.setStatus('Waiting for reply...');
-        this.animateProgress(50);
-        nsExternalView.src = url;
+        if (this.isLoading) {
+          this.renderer.setStatus('Waiting for reply...');
+          this.renderer.setProgress(50);
+          this.elements.externalView!.src = url;
+        }
       }, 800);
 
       const onIframeLoad = () => {
         if (!this.isLoading) return;
-        this.setStatus('Document: Done');
-        this.animateProgress(100);
+        this.renderer.setStatus('Document: Done');
+        this.renderer.setProgress(100);
         setTimeout(() => this.stopLoading(), 200);
-        nsExternalView.removeEventListener('load', onIframeLoad);
+        this.elements.externalView?.removeEventListener('load', onIframeLoad);
       };
+      this.elements.externalView.addEventListener('load', onIframeLoad);
 
-      nsExternalView.addEventListener('load', onIframeLoad);
-
-      // Safety stop
-      setTimeout(() => {
-        if (this.isLoading) {
-          this.setStatus('Document: Done');
-          this.animateProgress(100);
-          this.stopLoading();
-        }
-      }, 8000);
+      setTimeout(() => { if (this.isLoading) { this.renderer.setStatus('Document: Done'); this.renderer.setProgress(100); this.stopLoading(); } }, 8000);
     }
   }
 
   private toggleLoadingUI(active: boolean): void {
-    const stopBtn = document.getElementById('ns-btn-stop') as HTMLButtonElement | null;
-    if (stopBtn) stopBtn.disabled = !active;
-
-    const nsLogo = document.getElementById('nsNLogo');
-    if (nsLogo) {
-      if (active) nsLogo.classList.add('ns-loading');
-      else nsLogo.classList.remove('ns-loading');
-    }
-
-    if (active && !this.starInterval) {
-      this.starInterval = setInterval(() => {
-        const starsContainer = document.getElementById('nsNStars');
-        if (!starsContainer || !this.isLoading) return;
-        const star = document.createElement('div');
-        star.className = 'ns-n-star';
-        star.style.left = `${Math.random() * 50}px`;
-        star.style.top = `${Math.random() * 10}px`;
-        star.style.width = `${Math.random() > 0.5 ? 3 : 2}px`;
-        star.style.height = star.style.width;
-        starsContainer.appendChild(star);
-        setTimeout(() => star.remove(), 800);
-      }, 100);
-    } else if (!active && this.starInterval) {
-      clearInterval(this.starInterval);
-      this.starInterval = null;
-    }
+    this.renderer.toggleStopBtn(active);
+    if (active) this.animator.startLoading();
+    else this.animator.stopLoading();
   }
 
   private stopLoading(): void {
     this.isLoading = false;
-    const stopBtn = document.getElementById('ns-btn-stop') as HTMLButtonElement | null;
-    if (stopBtn) stopBtn.disabled = true;
-
-    const nsLogo = document.getElementById('nsNLogo');
-    if (nsLogo) nsLogo.classList.remove('ns-loading');
-
-    if (this.starInterval) {
-      clearInterval(this.starInterval);
-      this.starInterval = null;
-    }
-
-    setTimeout(() => this.animateProgress(0), 500);
+    this.toggleLoadingUI(false);
+    setTimeout(() => this.renderer.setProgress(0), 500);
   }
 
   public stop(): void {
-    if (window.AudioManager) window.AudioManager.click();
+    if ((window as any).AudioManager) (window as any).AudioManager.click();
     this.stopLoading();
-    this.setStatus('Transfer interrupted.');
+    this.renderer.setStatus('Transfer interrupted.');
   }
 
-  private animateProgress(value: number): void {
-    const bar = document.getElementById('nsProgressBar');
-    if (bar) bar.style.width = `${value}%`;
-  }
-
-  private setStatus(text: string): void {
-    const el = document.getElementById('nsStatusText');
-    if (el) el.textContent = text;
-  }
-
-  // ── URL bar ─────────────────────────────────────────────────────────────
+  // ── Browser Logic ───────────────────────────────────────────────────────
 
   public handleUrlKey(e: KeyboardEvent): void {
     if (e.key === 'Enter') {
-      const input = e.target as HTMLInputElement;
-      const url = input.value.trim();
-      if (url) {
-        this.navigate(url);
-      }
+      const url = (e.target as HTMLInputElement).value.trim();
+      if (url) this.navigate(url);
     }
   }
-
-  // ── Location dialog ─────────────────────────────────────────────────────
 
   public openLocation(): void {
-    const urlInput = document.getElementById('nsUrlInput') as HTMLInputElement;
-    if (urlInput) {
-      urlInput.focus();
-      urlInput.select();
+    if (this.elements.urlInput) {
+      this.elements.urlInput.focus();
+      this.elements.urlInput.select();
     }
-  }
-
-  public openFile(): void {
-    this.setStatus('Open File: not supported in this environment.');
   }
 
   public savePage(): void {
-    const content = document.getElementById('nsContent');
-    if (!content) return;
-    const blob = new Blob([`<html><body>${content.innerHTML}</body></html>`], {
-      type: 'text/html',
-    });
+    if (!this.elements.content) return;
+    const blob = new Blob([`<html><body>${this.elements.content.innerHTML}</body></html>`], { type: 'text/html' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = `${this.currentPage}.html`;
     a.click();
-    this.setStatus('Page saved.');
-  }
-
-  public printPage(): void {
-    window.print();
+    this.renderer.setStatus('Page saved.');
   }
 
   public findInPage(): void {
     const term = window.prompt('Find in page:');
-    if (!term) return;
-    const content = document.getElementById('nsContent');
-    if (!content) return;
-    const html = content.innerHTML;
+    if (!term || !this.elements.content) return;
     const regex = new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-    content.innerHTML = html.replace(
-      regex,
-      '<mark style="background:#ffff00;color:#000">$1</mark>'
-    );
-    this.setStatus(`Found: "${term}"`);
+    this.elements.content.innerHTML = this.elements.content.innerHTML.replace(regex, '<mark style="background:#ffff00;color:#000">$1</mark>');
+    this.renderer.setStatus(`Found: "${term}"`);
   }
 
+  public openFile(): void { this.renderer.setStatus('Open File: not supported in this environment.'); }
+  public printPage(): void { window.print(); }
   public viewSource(): void {
-    const content = document.getElementById('nsContent');
-    if (!content) return;
-    const src = content.innerHTML;
+    if (!this.elements.content) return;
     const w = window.open('', '_blank', 'width=600,height=400');
-    if (w) {
-      w.document.write(
-        `<pre style="font:12px monospace;white-space:pre-wrap">${src.replace(/</g, '&lt;')}</pre>`
-      );
-    }
+    if (w) w.document.write(`<pre style="font:12px monospace;white-space:pre-wrap">${this.elements.content.innerHTML.replace(/</g, '&lt;')}</pre>`);
   }
-
-  public newWindow(): void {
-    this.open();
-    this.setStatus('New window opened.');
-  }
-
-  public loadImages(): void {
-    this.setStatus('Images loaded.');
-  }
-
-  // ── Bookmarks ───────────────────────────────────────────────────────────
+  public newWindow(): void { this.open(); this.renderer.setStatus('New window opened.'); }
+  public loadImages(): void { this.renderer.setStatus('Images loaded.'); }
 
   public addBookmark(): void {
-    const page = NS_PAGES[this.currentPage];
+    const page = this.nsPages[this.currentPage];
     if (!page) return;
     const placeholder = document.getElementById('ns-bookmarks-placeholder');
     if (placeholder) {
@@ -422,40 +299,25 @@ class NetscapeNavigator {
         menu.appendChild(item);
       }
     }
-    this.setStatus(`Bookmark added: ${page.title}`);
+    this.renderer.setStatus(`Bookmark added: ${page.title}`);
   }
 
-  // ── Toolbar visibility ──────────────────────────────────────────────────
+  public toggleToolbar = () => this.toggleEl(this.elements.toolbar);
+  public toggleLocation = () => this.toggleEl(this.elements.locationBar);
+  public toggleDirectory = () => this.toggleEl(this.elements.dirBar);
 
-  public toggleToolbar(): void {
-    const bar = document.getElementById('nsToolbar');
-    if (bar) bar.style.display = bar.style.display === 'none' ? 'flex' : 'none';
+  private toggleEl(el: HTMLElement | null): void {
+    if (el) el.style.display = el.style.display === 'none' ? 'flex' : 'none';
   }
-
-  public toggleLocation(): void {
-    const bar = document.getElementById('nsLocationBar');
-    if (bar) bar.style.display = bar.style.display === 'none' ? 'flex' : 'none';
-  }
-
-  public toggleDirectory(): void {
-    const bar = document.getElementById('nsDirBar');
-    if (bar) bar.style.display = bar.style.display === 'none' ? 'flex' : 'none';
-  }
-
-  // ── Scroll thumb ────────────────────────────────────────────────────────
 
   private setupScrollThumb(): void {
-    const content = document.getElementById('nsContent');
-    const thumb = document.getElementById('nsScrollThumb');
-    if (!content || !thumb) return;
+    const { content, scrollThumb } = this.elements;
+    if (!content || !scrollThumb) return;
     content.addEventListener('scroll', () => {
       const ratio = content.scrollTop / (content.scrollHeight - content.clientHeight || 1);
-      const trackHeight = 200;
-      thumb.style.top = `${ratio * (trackHeight - 30)}px`;
+      scrollThumb.style.top = `${ratio * 170}px`;
     });
   }
-
-  // ── History menu ────────────────────────────────────────────────────────
 
   private updateHistoryMenu(): void {
     const placeholder = document.getElementById('ns-history-placeholder');
@@ -464,9 +326,8 @@ class NetscapeNavigator {
     const menu = placeholder.parentElement;
     if (!menu) return;
 
-    // Remove old dynamic history items
     menu.querySelectorAll('.ns-history-item').forEach((el) => el.remove());
-
+    
     const sep = document.createElement('div');
     sep.className = 'ns-separator';
     menu.appendChild(sep);
@@ -476,39 +337,26 @@ class NetscapeNavigator {
     const totalLength = this.history.length();
 
     recentHistory.forEach((key, idx) => {
-      const page = NS_PAGES[key];
+      const page = this.nsPages[key];
       const item = document.createElement('div');
       item.className = 'ns-item ns-history-item';
       const actualIndex = totalLength - 1 - idx;
-      if (actualIndex === currentIndex) {
-        item.style.fontWeight = 'bold';
-      }
-
-      // If internal page, show its title. If URL, show the truncated URL.
-      if (page) {
-        item.textContent = page.title.replace(' - Netscape', '');
-      } else {
-        item.textContent = key.length > 30 ? key.substring(0, 27) + '...' : key;
-      }
-
+      if (actualIndex === currentIndex) item.style.fontWeight = 'bold';
+      item.textContent = page ? page.title.replace(' - Netscape', '') : (key.length > 30 ? key.substring(0, 27) + '...' : key);
       item.onclick = () => {
         const histItem = this.history.jumpTo(actualIndex);
-        if (histItem) {
-          this.renderPage(histItem, true);
-        }
+        if (histItem) this.renderPage(histItem, true);
       };
       menu.appendChild(item);
     });
   }
 }
 
-// ─── Global exposure ─────────────────────────────────────────────────────────
+// ── Singleton & Global Exposure ─────────────────────────────────────────────
 
 if (typeof window !== 'undefined') {
   const netscape = new NetscapeNavigator();
   (window as any).Netscape = netscape;
-
-  // Global open function
   (window as any).openNetscape = () => netscape.open();
 }
 
