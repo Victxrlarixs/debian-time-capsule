@@ -201,7 +201,30 @@ class TerminalLabManager {
         this.ui.setInputValue(matches[0] + ' ');
       } else if (matches.length > 1) {
         this.ui.print(`<span class="lab-dim">${matches.join('  ')}</span>`);
+        this.ui.scrollBottom();
       }
+    } else {
+      this.completeFilePath(lastPart, parts);
+    }
+    
+    // Maintain focus after completion
+    requestAnimationFrame(() => this.ui.focus());
+  }
+
+  private completeFilePath(partial: string, parts: string[]): void {
+    const node = VFS.getNode(this.state.cwd);
+    if (!node || node.type !== 'folder') return;
+
+    const matches = Object.keys(node.children).filter((name) => name.startsWith(partial));
+
+    if (matches.length === 1) {
+      parts[parts.length - 1] = matches[0];
+      const childNode = node.children[matches[0]];
+      parts[parts.length - 1] += (childNode && childNode.type === 'folder') ? '/' : ' ';
+      this.ui.setInputValue(parts.join(' '));
+    } else if (matches.length > 1) {
+      this.ui.print(`<span class="lab-dim">${matches.join('  ')}</span>`);
+      this.ui.scrollBottom();
     }
   }
 
@@ -267,12 +290,13 @@ class TerminalLabManager {
     if (!this.state.freeMode) this.advance();
   }
 
-  public toggleFreeMode(enable: boolean): void {
-    this.state.freeMode = enable;
+  public toggleFreeMode(enable?: boolean): void {
+    this.state.freeMode = enable === undefined ? !this.state.freeMode : enable;
+    const isFree = this.state.freeMode;
     const btn = document.getElementById('lab-btn-free');
-    if (btn) btn.classList.toggle('lab-btn-active', enable);
+    if (btn) btn.classList.toggle('lab-btn-active', isFree);
     
-    if (enable) {
+    if (isFree) {
       this.ui.setHint('[FREE MODE] Type any command. Type "tutorial" to return to guided mode or "help".');
     } else {
       this.ui.setHint('Type the command shown below to proceed. Type "hint" or "skip" for help.');
