@@ -9,7 +9,7 @@
 ![GitHub stars](https://img.shields.io/github/stars/Victxrlarixs/debian-cde?style=flat&logo=github)
 
 <p>
-  <img src="/public/icons/system/debian-computer.png" width="150" alt="Debian Computer"/>
+  <img src="/public/icons/system/debian-computer.png" width="130" alt="Debian Computer"/>
 </p>
 
 > You’re not visiting a website.  
@@ -17,11 +17,11 @@
 
 ---
 
+https://github.com/user-attachments/assets/b12f0954-4ccd-4a50-b098-12c45692faa6
+
 There was a time when desktops were heavy, monitors were beige, and opening a terminal felt powerful.
 
 This project is a recreation of the **Unix Experience using Common Desktop Environment (CDE)** — running entirely in your browser.
-
-https://github.com/user-attachments/assets/d5e5447e-269d-4001-ba73-b656cac3c33f
 
 ## 🚀 [Try It →](https://debian.com.mx)
 
