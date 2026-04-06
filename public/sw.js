@@ -1,5 +1,5 @@
 // Cache version is automatically updated from package.json version
-const CACHE_VERSION = 'v0.0.10';
+const CACHE_VERSION = 'v1.0.10';
 const STATIC_CACHE = `static-cache-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = ['/', '/css/main.css', '/css/responsive.css'];
@@ -70,9 +70,9 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Static resources: standard strategy
+  // Static resources
   if (url.origin === self.location.origin) {
-    // CSS, backdrops, palettes: cache-first
+    // Cache-first
     if (
       url.pathname.startsWith('/css/') ||
       url.pathname.startsWith('/backdrops/') ||
