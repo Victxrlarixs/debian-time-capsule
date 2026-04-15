@@ -62,8 +62,8 @@ class StorageAdapter {
     if (this.useIndexedDB) {
       try {
         await indexedDBManager.set(STORES.SETTINGS, key, value);
-        // Also set in localStorage as backup
-        localStorage.setItem(key, value);
+        // Explicitly clear legacy duplicate from LocalStorage to reclaim the 5MB browser quota
+        localStorage.removeItem(key);
       } catch (error) {
         logger.warn(`[StorageAdapter] IndexedDB set failed for ${key}, using localStorage:`, error);
         localStorage.setItem(key, value);
@@ -82,6 +82,7 @@ class StorageAdapter {
     if (this.useIndexedDB) {
       try {
         await indexedDBManager.delete(STORES.SETTINGS, key);
+        // Explicitly clear from LocalStorage to prevent ghost data resurrecting on fallback
         localStorage.removeItem(key);
       } catch (error) {
         logger.warn(

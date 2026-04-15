@@ -45,18 +45,21 @@ class SettingsManager implements ISettingsManager, ISessionStorage {
 
   private constructor() {
     this.settings = this.getDefaultSettings();
-    this.load();
-    this.checkVersion();
   }
 
-  private checkVersion(): void {
-    const lastVersion = storageAdapter.getItemSync(`${STORAGE_KEY}-version`);
+  public async init(): Promise<void> {
+    await this.load();
+    await this.checkVersion();
+  }
+
+  private async checkVersion(): Promise<void> {
+    const lastVersion = await storageAdapter.getItem(`${STORAGE_KEY}-version`);
     if (lastVersion !== this.CURRENT_VERSION) {
       logger.log(
         `[SettingsManager] Version mismatch (${lastVersion} vs ${this.CURRENT_VERSION}). Resetting cache...`
       );
       this.resetToDefaults();
-      storageAdapter.setItemSync(`${STORAGE_KEY}-version`, this.CURRENT_VERSION);
+      await storageAdapter.setItem(`${STORAGE_KEY}-version`, this.CURRENT_VERSION);
     }
   }
 
@@ -92,16 +95,16 @@ class SettingsManager implements ISettingsManager, ISessionStorage {
   }
 
   /**
-   * Loads settings from storage (IndexedDB with localStorage fallback).
+   * Loads settings from storage (IndexedDB).
    */
-  private load(): void {
+  private async load(): Promise<void> {
     try {
-      const saved = storageAdapter.getItemSync(STORAGE_KEY);
+      const saved = await storageAdapter.getItem(STORAGE_KEY);
       if (saved) {
         this.settings = JSON.parse(saved);
         logger.log('[SettingsManager] Unified settings loaded.');
       } else {
-        this.migrateLegacySettings();
+        await this.migrateLegacySettings();
       }
     } catch (e) {
       console.error('[SettingsManager] Failed to load settings:', e);
@@ -111,27 +114,23 @@ class SettingsManager implements ISettingsManager, ISessionStorage {
   /**
    * Migrates settings from fragmented legacy keys to the new unified key.
    */
-  private migrateLegacySettings(): void {
+  private async migrateLegacySettings(): Promise<void> {
     logger.log('[SettingsManager] Attempting migration from legacy settings...');
 
-    // Migration for Style/Theme (cde-styles)
-    const oldStyles = storageAdapter.getItemSync('cde-styles');
+    const oldStyles = await storageAdapter.getItem('cde-styles');
     if (oldStyles) {
       const parsed = JSON.parse(oldStyles);
       this.settings.theme.colors = parsed.colors || {};
       this.settings.theme.fonts = parsed.fonts || {};
     }
 
-    // Migration for Mouse
-    const oldMouse = storageAdapter.getItemSync('cde-mouse-settings');
+    const oldMouse = await storageAdapter.getItem('cde-mouse-settings');
     if (oldMouse) this.settings.mouse = JSON.parse(oldMouse);
 
-    // Migration for Keyboard
-    const oldKeyboard = storageAdapter.getItemSync('cde-keyboard-settings');
+    const oldKeyboard = await storageAdapter.getItem('cde-keyboard-settings');
     if (oldKeyboard) this.settings.keyboard = JSON.parse(oldKeyboard);
 
-    // Migration for Beep
-    const oldBeep = storageAdapter.getItemSync('cde-beep-settings');
+    const oldBeep = await storageAdapter.getItem('cde-beep-settings');
     if (oldBeep) this.settings.beep = JSON.parse(oldBeep);
 
     this.save();
@@ -139,11 +138,9 @@ class SettingsManager implements ISettingsManager, ISessionStorage {
   }
 
   public save(): void {
-    try {
-      storageAdapter.setItemSync(STORAGE_KEY, JSON.stringify(this.settings));
-    } catch (e) {
-      console.error('[SettingsManager] Failed to save settings:', e);
-    }
+    storageAdapter.setItem(STORAGE_KEY, JSON.stringify(this.settings)).catch(e => {
+      console.error('[SettingsManager] Failed to save settings to storage:', e);
+    });
   }
 
   public setSection(section: keyof SystemSettings, data: any): void {

@@ -1,6 +1,6 @@
 // src/scripts/core/version-manager.ts
-
 import { logger } from '../utilities/logger';
+import { indexedDBManager, STORES } from '../utilities/indexeddb-manager';
 
 /**
  * Version Manager - Handles cache busting and version migrations
@@ -83,7 +83,14 @@ export class VersionManager {
   private async clearCache(): Promise<void> {
     logger.log('[VersionManager] Clearing storage cache...');
 
-    const preserveKeys: string[] = [];
+    // Keys that should survive version updates
+    const preserveKeys: string[] = [
+      'cde-system-settings', 
+      'cde-session', 
+      'cde-indexeddb-migrated',
+      'dtmail-mailboxes',
+      'cde-workspace-config'
+    ];
 
     // Get all keys from localStorage
     const allKeys = Object.keys(localStorage);
@@ -96,11 +103,10 @@ export class VersionManager {
       }
     });
 
-    // Also clear IndexedDB settings store
+    // Also clear IndexedDB cache, not settings! Settings and filesystem should survive updates.
     try {
-      const { indexedDBManager, STORES } = await import('../utilities/indexeddb-manager');
-      await indexedDBManager.clear(STORES.SETTINGS);
-      logger.log('[VersionManager] Cleared IndexedDB settings');
+      await indexedDBManager.clear(STORES.CACHE);
+      logger.log('[VersionManager] Cleared IndexedDB cached data');
     } catch (error) {
       logger.warn('[VersionManager] Could not clear IndexedDB:', error);
     }

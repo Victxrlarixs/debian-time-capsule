@@ -5,6 +5,7 @@ import { logger } from '../utilities/logger';
 import { indexedDBManager } from '../utilities/indexeddb-manager';
 import { performanceMonitor } from './performance-monitor';
 import { moduleLoader } from '../shared/module-loader';
+import { storageAdapter } from '../utilities/storage-adapter';
 
 /**
  * Initialize all performance optimizations
@@ -18,7 +19,6 @@ export async function initPerformanceOptimizations(): Promise<void> {
     performanceMonitor.mark('perf-init-start');
 
     // 2. Initialize storage adapter (IndexedDB with localStorage fallback)
-    const { storageAdapter } = await import('../utilities/storage-adapter');
     await storageAdapter.init();
     logger.log('[Performance] Storage adapter initialized');
 

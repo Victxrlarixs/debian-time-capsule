@@ -28,9 +28,10 @@ export type {
 } from './system-events';
 
 // Start backdrop preload IMMEDIATELY (before boot sequence)
-import { startBackdropPreload } from '../boot/backdrop-preloader';
 if (typeof window !== 'undefined') {
-  startBackdropPreload();
+  import('../boot/backdrop-preloader').then(module => {
+    module.startBackdropPreload();
+  });
 }
 
 // Initialize PWA installer

@@ -3,12 +3,11 @@
 import { CONFIG } from '../core/config';
 import { initClock } from '../utilities/clock';
 import type { StyleManager } from '../features/stylemanager';
-
 import '../utilities/screenshot'; // side-effect: registers window.captureFullPageScreenshot
 import '../ui/external-links';
 import { logger } from '../utilities/logger';
-import { AudioManager } from '../core/audiomanager';
 import VersionManager from '../core/version-manager';
+import { settingsManager } from '../core/settingsmanager';
 import { initPerformanceOptimizations } from '../core/performance-integration';
 import { registerModules, moduleLoader } from '../shared/module-loader';
 import { initWorkspacePreview } from '../features/workspace-preview';
@@ -94,9 +93,9 @@ class DebianRealBoot {
           const timestamp = totalTime.toFixed(6).padStart(12, ' ');
           text =
             phase.name === 'kernel' ||
-            phase.name === 'cpu' ||
-            phase.name === 'fs' ||
-            phase.name === 'memory'
+              phase.name === 'cpu' ||
+              phase.name === 'fs' ||
+              phase.name === 'memory'
               ? `[ ${timestamp} ] ${msg.text}`
               : msg.text;
         }
@@ -246,10 +245,18 @@ class DebianRealBoot {
       desktop.style.display = 'block';
     }
 
-    // 2. Initialize all desktop modules (including backdrop rendering)
+    // 2. Initialize asynchronous settings
+    try {
+      await settingsManager.init();
+      logger.log('[DebianRealBoot] Asynchronous settings initialized');
+    } catch (error) {
+      logger.error('[DebianRealBoot] Failed to initialize settings:', error);
+    }
+
+    // 3. Initialize all desktop modules (including backdrop rendering)
     await initDesktop();
 
-    // 3. Wait a small cushion to let the initial backdrop render start
+    // 4. Wait a small cushion to let the initial backdrop render start
     setTimeout(() => {
       if (this.bootScreen) {
         this.bootScreen.style.transition = 'opacity 0.8s ease-out';
