@@ -65,7 +65,7 @@ import { CONFIG } from '../../scripts/core/config';
       role="button"
       tabindex="0"
       aria-label="Style Manager"
-      onclick="styleManager.openMain()"
+      onclick="appRegistry.launch('style-manager')"
       data-keyboard-hint="Ctrl+Alt+S"
     >
       <div class="control-content">
@@ -122,7 +122,7 @@ import { CONFIG } from '../../scripts/core/config';
       role="button"
       tabindex="0"
       aria-label="Terminal"
-      onclick="TerminalLab.open()"
+      onclick="appRegistry.launch('terminal')"
       data-keyboard-hint="Ctrl+Alt+T"
     >
       <div class="control-content">
@@ -211,7 +211,7 @@ import { CONFIG } from '../../scripts/core/config';
       tabindex="0"
       aria-label="File Manager"
       id="fileManagerBtn"
-      onclick="toggleFileManager()"
+      onclick="appRegistry.launch('file-manager')"
       data-keyboard-hint="Ctrl+Alt+F"
     >
       <div class="control-content">
@@ -230,7 +230,7 @@ import { CONFIG } from '../../scripts/core/config';
       role="button"
       tabindex="0"
       aria-label="Text Editor"
-      onclick="window.Emacs?.openSplash()"
+      onclick="appRegistry.launch('emacs')"
       data-keyboard-hint="Ctrl+Alt+E"
     >
       <div class="control-content">
@@ -249,7 +249,7 @@ import { CONFIG } from '../../scripts/core/config';
       role="button"
       tabindex="0"
       aria-label="Vim"
-      onclick="(async () => { await window.moduleLoader?.load('vim'); window.Vim?.open(); })()"
+      onclick="appRegistry.launch('vim')"
       data-keyboard-hint="Ctrl+Alt+V"
     >
       <div class="control-content">
@@ -268,7 +268,7 @@ import { CONFIG } from '../../scripts/core/config';
       role="button"
       tabindex="0"
       aria-label="Screenshot"
-      onclick="captureFullPageScreenshot()"
+      onclick="appRegistry.launch('screenshooter')"
     >
       <div class="control-content">
         <div class="control-icon">
@@ -286,7 +286,7 @@ import { CONFIG } from '../../scripts/core/config';
       role="button"
       tabindex="0"
       aria-label="Process Monitor"
-      onclick="openTaskManagerInTerminal()"
+      onclick="appRegistry.launch('process-monitor')"
     >
       <div class="control-content">
         <div class="control-icon">
@@ -303,27 +303,23 @@ import { CONFIG } from '../../scripts/core/config';
 </div>
 
 <div class="dropdown-menu" id="utilitiesDropdown" role="menu" aria-label="Utilities menu">
-  <div class="menu-item" onclick="captureFullPageScreenshot()" role="menuitem" tabindex="0">
+  <div class="menu-item" onclick="appRegistry.launch('screenshooter')" role="menuitem" tabindex="0">
     <img src="/icons/apps/org.xfce.screenshooter.png" alt="" /> Screenshot
   </div>
-  <div class="menu-item" onclick="window.Emacs?.openSplash()" role="menuitem" tabindex="0">
+  <div class="menu-item" onclick="appRegistry.launch('emacs')" role="menuitem" tabindex="0">
     <img src="/icons/apps/xemacs.png" alt="" class="emacs-pixelated" /> XEmacs
   </div>
-  <div
-    class="menu-item"
-    onclick="(async () => { await window.moduleLoader?.load('vim'); window.Vim?.open(); })()"
-    role="menuitem"
-    tabindex="0"
-  >
+  <div class="menu-item" onclick="appRegistry.launch('vim')" role="menuitem" tabindex="0">
     <img src="/icons/apps/vim.png" alt="" /> Vim
   </div>
-  <div class="menu-item" onclick="openCalendar()" role="menuitem" tabindex="0">
+
+  <div class="menu-item" onclick="appRegistry.launch('calendar')" role="menuitem" tabindex="0">
     <img src="/icons/system/calendar.png" alt="" /> Calendar
   </div>
   <div class="menu-separator" role="separator"></div>
   <div
     class="menu-item"
-    onclick="AccessibilityManager.showShortcutsHelp()"
+    onclick="appRegistry.launch('shortcuts')"
     role="menuitem"
     tabindex="0"
     data-keyboard-hint="Ctrl+Shift+?"
@@ -336,41 +332,56 @@ import { CONFIG } from '../../scripts/core/config';
   role="menu"
   aria-label="Style Manager menu"
 >
-  <div class="menu-item" onclick="styleManager.openColor()" role="menuitem" tabindex="0">
+  <div class="menu-item" onclick="appRegistry.launch('style-color')" role="menuitem" tabindex="0">
     <img src="/icons/apps/org.xfce.settings.appearance.png" alt="" /> Color
   </div>
-  <div class="menu-item" onclick="styleManager.openFont()" role="menuitem" tabindex="0">
+  <div class="menu-item" onclick="appRegistry.launch('style-font')" role="menuitem" tabindex="0">
     <img src="/icons/mimetypes/font-x-generic.png" alt="" /> Font
   </div>
-  <div class="menu-item" onclick="styleManager.openBackdrop()" role="menuitem" tabindex="0">
+  <div
+    class="menu-item"
+    onclick="appRegistry.launch('style-backdrop')"
+    role="menuitem"
+    tabindex="0"
+  >
     <img src="/icons/apps/org.xfce.PanelProfiles.png" alt="" /> Backdrop
   </div>
-  <div class="menu-item" onclick="styleManager.openKeyboard()" role="menuitem" tabindex="0">
+  <div
+    class="menu-item"
+    onclick="appRegistry.launch('style-keyboard')"
+    role="menuitem"
+    tabindex="0"
+  >
     <img src="/icons/apps/org.xfce.settings.keyboard.png" alt="" /> Keyboard
   </div>
-  <div class="menu-item" onclick="styleManager.openMouse()" role="menuitem" tabindex="0">
+  <div class="menu-item" onclick="appRegistry.launch('style-mouse')" role="menuitem" tabindex="0">
     <img src="/icons/apps/org.xfce.settings.mouse.png" alt="" /> Mouse
   </div>
-  <div class="menu-item" onclick="styleManager.openBeep()" role="menuitem" tabindex="0">
+  <div class="menu-item" onclick="appRegistry.launch('style-beep')" role="menuitem" tabindex="0">
     <img src="/icons/devices/multimedia-volume-control.png" alt="" /> Audio
   </div>
-  <div class="menu-item" onclick="styleManager.openWindow()" role="menuitem" tabindex="0">
+  <div class="menu-item" onclick="appRegistry.launch('style-window')" role="menuitem" tabindex="0">
     <img src="/icons/apps/org.xfce.xfwm4.png" alt="" /> Window
   </div>
-  <div class="menu-item" onclick="styleManager.openScreen()" role="menuitem" tabindex="0">
+  <div class="menu-item" onclick="appRegistry.launch('style-screen')" role="menuitem" tabindex="0">
     <img src="/icons/devices/display.png" alt="" /> Screen
   </div>
-  <div class="menu-item" onclick="styleManager.openStartup()" role="menuitem" tabindex="0">
+  <div class="menu-item" onclick="appRegistry.launch('style-startup')" role="menuitem" tabindex="0">
     <img src="/icons/system/gcr-key.png" alt="" /> Startup
   </div>
 </div>
 
 <div class="dropdown-menu" id="terminalDropdown" role="menu" aria-label="Terminal menu">
-  <div class="menu-item" onclick="openTaskManagerInTerminal()" role="menuitem" tabindex="0">
+  <div
+    class="menu-item"
+    onclick="appRegistry.launch('process-monitor')"
+    role="menuitem"
+    tabindex="0"
+  >
     <img src="/icons/apps/org.xfce.taskmanager.png" alt="" /> Process Monitor
   </div>
   <div class="menu-separator" role="separator"></div>
-  <div class="menu-item" onclick="TerminalLab.open()" role="menuitem" tabindex="0">
+  <div class="menu-item" onclick="appRegistry.launch('terminal')" role="menuitem" tabindex="0">
     <img src="/icons/devices/computer.png" alt="" /> Terminal Laboratory
   </div>
 </div>
@@ -378,24 +389,26 @@ import { CONFIG } from '../../scripts/core/config';
 <div class="dropdown-menu" id="browserDropdown" role="menu" aria-label="Browser menu">
   <div
     class="menu-item"
-    onclick="window.Netscape?.open()"
+    onclick="appRegistry.launch('netscape')"
     role="menuitem"
     tabindex="0"
     data-keyboard-hint="Ctrl+Alt+N"
   >
     <img src="/icons/apps/netscape_classic.png" alt="" /> Netscape Navigator
   </div>
+
   <div
     class="menu-item"
-    onclick="window.Lynx?.open()"
+    onclick="appRegistry.launch('lynx')"
     role="menuitem"
     tabindex="0"
     data-keyboard-hint="Ctrl+Alt+L"
   >
     <img src="/icons/apps/Lynx.svg" alt="" /> Lynx Browser
   </div>
+
   <div class="menu-separator" role="separator"></div>
-  <div class="menu-item" onclick="shareThemeToDiscussions()" role="menuitem" tabindex="0">
+  <div class="menu-item" onclick="appRegistry.launch('share-theme')" role="menuitem" tabindex="0">
     <img src="/icons/apps/org.xfce.PanelProfiles.png" alt="" /> Share Theme
   </div>
 </div>

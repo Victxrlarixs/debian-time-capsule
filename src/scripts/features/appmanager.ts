@@ -1,226 +1,173 @@
 import { logger } from '../utilities/logger';
 import { WindowManager } from '../core/windowmanager';
+import { appRegistry } from '../core/app-registry';
+import type { AppCategory, AppManifest } from '../core/interfaces/application.interface';
 
 export class AppManager {
   private id = 'appManager';
   private currentView: 'main' | string = 'main';
-  private breadcrumb: string[] = [];
 
   constructor() {
     this.init();
   }
 
   private init(): void {
-    logger.log('[AppManager] Initializing...');
+    logger.log('[AppManager] Initializing dynamic system...');
 
-    // Bind the menu button if it exists
     const menuBtn = document.querySelector('.cde-menu-btn');
     if (menuBtn) {
       menuBtn.addEventListener('click', (e) => {
         e.preventDefault();
         this.open();
       });
-      logger.log('[AppManager] Menu button listener attached');
     }
 
-    // Setup folder navigation
     this.setupNavigation();
-
-    // Setup menu bar
     this.setupMenuBar();
   }
 
   private setupMenuBar(): void {
-    // Wait for DOM to be ready
     setTimeout(() => {
       const menuButtons = document.querySelectorAll('#appManager .menu-button');
-
       menuButtons.forEach((button) => {
         const buttonText = button.textContent?.trim();
-
         button.addEventListener('click', () => {
-          switch (buttonText) {
-            case 'File':
-              // File menu: Close window
-              logger.log('[AppManager] File menu - Close');
-              break;
-            case 'Selected':
-              // Selected menu: Actions on selected items
-              logger.log('[AppManager] Selected menu clicked');
-              break;
-            case 'View':
-              // View menu: Update, Set Preferences, etc
-              logger.log('[AppManager] View menu clicked');
-              break;
-          }
+          if (buttonText === 'File') this.close();
         });
       });
     }, 100);
   }
 
   private setupNavigation(): void {
-    // Handle folder double-clicks
-    document.addEventListener('dblclick', (e) => {
+    // Handle folder clicks
+    document.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
       const groupItem = target.closest('.app-group-item') as HTMLElement;
 
       if (groupItem && groupItem.dataset.group) {
-        this.openGroup(groupItem.dataset.group);
+        this.openGroup(groupItem.dataset.group as AppCategory);
       }
     });
 
-    // Handle back navigation (could be triggered by a back button if added)
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Backspace' && this.currentView !== 'main') {
-        const win = document.getElementById(this.id);
-        if (win && win.style.display !== 'none') {
-          e.preventDefault();
-          this.goBack();
-        }
+    // Handle back button clicks (delegated)
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('.go-up-item')) {
+        this.goBack();
       }
     });
   }
 
-  private openGroup(groupName: string): void {
+  private renderAppItem(manifest: AppManifest): string {
+    return `
+      <div class="app-action-item" data-app-id="${manifest.id}">
+        <img src="${manifest.icon}" alt="${manifest.name}" class="action-icon" />
+        <span>${manifest.name}</span>
+      </div>
+    `;
+  }
+
+  private openGroup(category: AppCategory): void {
     const mainView = document.getElementById('appManagerMainView');
-    const groupView = document.getElementById(`appGroup_${groupName}`);
+    const dynamicView = document.getElementById('appGroupDynamicView');
     const statusLeft = document.getElementById('appManagerStatus');
     const statusRight = document.getElementById('appManagerPath');
 
-    if (mainView && groupView) {
-      // Hide main view
+    if (mainView && dynamicView) {
+      const apps = appRegistry.getManifestsByCategory(category);
+
+      // Build internal HTML
+      let html = `
+        <div class="app-action-item go-up-item">
+          <img src="/icons/actions/go-up.png" alt="Go Up" class="action-icon" />
+          <span>.. (go up)</span>
+        </div>
+      `;
+
+      html += apps.map((app) => this.renderAppItem(app)).join('');
+
+      dynamicView.innerHTML = html;
+
+      // Add event listeners to app items
+      dynamicView.querySelectorAll('.app-action-item[data-app-id]').forEach((el) => {
+        el.addEventListener('click', () => {
+          const id = (el as HTMLElement).dataset.appId;
+          if (id) {
+            appRegistry.launch(id);
+            if (window.innerWidth < 768) this.close();
+          }
+        });
+      });
+
+      // UI Swapping
       mainView.style.display = 'none';
+      dynamicView.style.display = 'grid';
 
-      // Show group view
-      groupView.style.display = 'grid';
+      this.currentView = category;
 
-      // Update current view
-      this.currentView = groupName;
-      this.breadcrumb.push(groupName);
+      // Status Updates
+      if (statusLeft) statusLeft.textContent = `${apps.length} Items`;
+      if (statusRight) statusRight.textContent = `/var/dt/appconfig/appmanager/C/${category}`;
 
-      // Update status bar
-      const itemCount = groupView.querySelectorAll('.app-action-item').length;
-      if (statusLeft) {
-        statusLeft.textContent = `${itemCount} Items`;
-      }
-      if (statusRight) {
-        statusRight.textContent = `/var/dt/appconfig/appmanager/C/${groupName}`;
-      }
-
-      // Update window title
+      // Window Title
       const titlebar = document.querySelector('#appManagerTitlebar .titlebar-text');
-      if (titlebar) {
-        titlebar.textContent = `Application Manager - ${groupName}`;
-      }
+      if (titlebar) titlebar.textContent = `Application Manager - ${category}`;
 
-      logger.log(`[AppManager] Opened group: ${groupName}`);
+      logger.log(`[AppManager] Rendered category: ${category}`);
     }
   }
 
   public goBack(): void {
     if (this.currentView === 'main') return;
 
+    this.goBackToMain();
+  }
+
+  private goBackToMain(): void {
     const mainView = document.getElementById('appManagerMainView');
-    const currentGroupView = document.getElementById(`appGroup_${this.currentView}`);
+    const dynamicView = document.getElementById('appGroupDynamicView');
     const statusLeft = document.getElementById('appManagerStatus');
     const statusRight = document.getElementById('appManagerPath');
+    const titlebar = document.querySelector('#appManagerTitlebar .titlebar-text');
 
-    if (mainView && currentGroupView) {
-      // Hide current group view
-      currentGroupView.style.display = 'none';
-
-      // Show main view
+    if (mainView && dynamicView) {
+      dynamicView.style.display = 'none';
       mainView.style.display = 'grid';
-
-      // Update current view
-      this.breadcrumb.pop();
       this.currentView = 'main';
 
-      // Update status bar
       const folderCount = mainView.querySelectorAll('.app-group-item').length;
-      if (statusLeft) {
-        statusLeft.textContent = `${folderCount} Folders`;
-      }
-      if (statusRight) {
-        statusRight.textContent = '/var/dt/appconfig/appmanager/C';
-      }
+      if (statusLeft) statusLeft.textContent = `${folderCount} Folders`;
+      if (statusRight) statusRight.textContent = '/var/dt/appconfig/appmanager/C';
+      if (titlebar) titlebar.textContent = 'Application Manager';
 
-      // Update window title
-      const titlebar = document.querySelector('#appManagerTitlebar .titlebar-text');
-      if (titlebar) {
-        titlebar.textContent = 'Application Manager';
-      }
-
-      logger.log('[AppManager] Returned to main view');
+      logger.log('[AppManager] Returned to main menu');
     }
   }
 
   public open(): void {
     const win = document.getElementById(this.id);
     if (win) {
-      // Reset to main view
       this.goBackToMain();
-
       win.style.display = 'flex';
-      // Don't set z-index here - let WindowManager's focus system handle it dynamically
 
       requestAnimationFrame(() => {
         WindowManager.centerWindow(win);
-        if (window.focusWindow) {
-          window.focusWindow(this.id);
-        }
+        if (window.focusWindow) window.focusWindow(this.id);
       });
 
-      if (window.AudioManager) {
-        window.AudioManager.windowOpen();
-      }
-
-      logger.log('[AppManager] Window opened');
+      if (window.AudioManager) window.AudioManager.windowOpen();
     }
-  }
-
-  private goBackToMain(): void {
-    // Hide all group views
-    const groupViews = document.querySelectorAll('.app-group-content');
-    groupViews.forEach((view) => {
-      (view as HTMLElement).style.display = 'none';
-    });
-
-    // Show main view
-    const mainView = document.getElementById('appManagerMainView');
-    if (mainView) {
-      mainView.style.display = 'grid';
-    }
-
-    // Reset state
-    this.currentView = 'main';
-    this.breadcrumb = [];
-
-    // Reset UI elements
-    const statusLeft = document.getElementById('appManagerStatus');
-    const statusRight = document.getElementById('appManagerPath');
-    const titlebar = document.querySelector('#appManagerTitlebar .titlebar-text');
-
-    if (statusLeft) statusLeft.textContent = '7 Folders';
-    if (statusRight) statusRight.textContent = '/var/dt/appconfig/appmanager/C';
-    if (titlebar) titlebar.textContent = 'Application Manager';
   }
 
   public close(): void {
     const win = document.getElementById(this.id);
     if (win) {
       win.style.display = 'none';
-
-      if (window.AudioManager) {
-        window.AudioManager.windowClose();
-      }
-
-      logger.log('[AppManager] Window closed');
+      if (window.AudioManager) window.AudioManager.windowClose();
     }
   }
 }
 
-// Global exposure
 if (typeof window !== 'undefined') {
   window.appManager = new AppManager();
 }
