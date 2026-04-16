@@ -1,24 +1,24 @@
 import { logger } from '../../utilities/logger';
 import { AudioManager } from '../audiomanager';
+import { $currentWorkspace } from '../../stores/workspace.store';
 
 /**
  * Manages virtual workspaces (4 spaces)
  */
 export class WorkspaceManager {
-  private currentWorkspace: string = '1';
-
+  // No longer stores state locally — truth lives in the NanoStore
   public getCurrentWorkspace(): string {
-    return this.currentWorkspace;
+    return $currentWorkspace.get();
   }
 
   public switchWorkspace(id: string): void {
-    if (id === this.currentWorkspace) return;
+    const previousWorkspace = $currentWorkspace.get();
+    if (id === previousWorkspace) return;
 
     AudioManager.click();
-    logger.log(`[WorkspaceManager] Switching from workspace ${this.currentWorkspace} to ${id}`);
+    logger.log(`[WorkspaceManager] Switching from workspace ${previousWorkspace} to ${id}`);
 
     const windows = document.querySelectorAll('.window, .cde-retro-modal');
-    const previousWorkspace = this.currentWorkspace;
 
     // Hide all windows of current workspace and remember which ones were open
     windows.forEach((win) => {
@@ -34,18 +34,18 @@ export class WorkspaceManager {
       }
     });
 
-    // Update current workspace
-    this.currentWorkspace = id;
+    // Update reactive state — all subscribers will react automatically
+    $currentWorkspace.set(id);
 
     // Show windows that belong to new workspace
     windows.forEach((win) => {
       const el = win as HTMLElement;
       const winWorkspace = el.getAttribute('data-workspace');
 
-      if (winWorkspace === this.currentWorkspace) {
+      if (winWorkspace === id) {
         if (el.getAttribute('data-was-opened') === 'true') {
           el.style.display = 'flex';
-          logger.log(`[WorkspaceManager] Showing ${el.id} in WS ${this.currentWorkspace}`);
+          logger.log(`[WorkspaceManager] Showing ${el.id} in WS ${id}`);
         }
       } else {
         if (window.getComputedStyle(el).display !== 'none') {
@@ -58,14 +58,15 @@ export class WorkspaceManager {
     this.updatePagerUI(id);
 
     logger.log(
-      `[WorkspaceManager] Workspace switch complete: ${previousWorkspace} -> ${this.currentWorkspace}`
+      `[WorkspaceManager] Workspace switch complete: ${previousWorkspace} -> ${id}`
     );
   }
 
   public assignWorkspaceToWindow(win: HTMLElement): void {
+    const current = $currentWorkspace.get();
     if (!win.getAttribute('data-workspace')) {
-      win.setAttribute('data-workspace', this.currentWorkspace);
-      logger.log(`[WorkspaceManager] Assigned workspace ${this.currentWorkspace} to ${win.id}`);
+      win.setAttribute('data-workspace', current);
+      logger.log(`[WorkspaceManager] Assigned workspace ${current} to ${win.id}`);
     }
   }
 

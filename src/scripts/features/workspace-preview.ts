@@ -1,6 +1,8 @@
 // src/scripts/features/workspace-preview.ts
 
 import { logger } from '../utilities/logger';
+import { $currentWorkspace } from '../stores/workspace.store';
+import type { StoreValue } from 'nanostores';
 
 /**
  * Workspace Preview Manager
@@ -22,6 +24,7 @@ export class WorkspacePreview {
   private previewContainer: HTMLElement | null = null;
   private currentHoveredWorkspace: string | null = null;
   private previewTimeout: number | null = null;
+  private unsubscribeStore: (() => void) | null = null;
 
   constructor() {
     this.init();
@@ -37,7 +40,16 @@ export class WorkspacePreview {
     // Attach hover listeners to pager items
     this.attachPagerListeners();
 
-    logger.log('[WorkspacePreview] Initialized');
+    // Subscribe to workspace store — pager highlight updates reactively
+    this.unsubscribeStore = $currentWorkspace.subscribe((activeId) => {
+      this.updatePagerHighlight(activeId);
+      // If a preview is open for the workspace we just left, refresh it
+      if (this.currentHoveredWorkspace) {
+        this.refresh();
+      }
+    });
+
+    logger.log('[WorkspacePreview] Initialized with reactive store subscription');
   }
 
   private attachPagerListeners(): void {
@@ -61,6 +73,9 @@ export class WorkspacePreview {
         this.hidePreview();
       });
     });
+
+    // Sync initial highlight state from the store
+    this.updatePagerHighlight($currentWorkspace.get());
   }
 
   private showPreview(workspaceId: string, pagerItem: HTMLElement): void {
@@ -214,6 +229,18 @@ export class WorkspacePreview {
         this.showPreview(this.currentHoveredWorkspace, pagerItem);
       }
     }
+  }
+
+  private updatePagerHighlight(activeId: string): void {
+    const pagerItems = document.querySelectorAll('.pager-workspace');
+    pagerItems.forEach((item) => {
+      const el = item as HTMLElement;
+      if (el.dataset.workspace === activeId) {
+        el.classList.add('active');
+      } else {
+        el.classList.remove('active');
+      }
+    });
   }
 
   public destroy(): void {

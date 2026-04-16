@@ -7,14 +7,17 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "astro": "^6.1.1",
-    "marked": "^17.0.3"
+    "marked": "^17.0.3",
+    "nanostores": "^1.2.0"
   },
   "devDependencies": {
     "prettier": "^3.8.1",
-    "prettier-plugin-astro": "^0.14.1"
+    "prettier-plugin-astro": "^0.14.1",
+    "typescript": "^5.9.3"
   }
 }

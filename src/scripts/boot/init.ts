@@ -180,7 +180,7 @@ class DebianRealBoot {
 
     if (!this.container) {
       console.error('[DebianRealBoot] Cannot start boot sequence: container missing');
-      this.completeBoot();
+      this.finishAndHide();
       return;
     }
 

@@ -66,6 +66,21 @@ function processQueue(): void {
   }
 }
 
+function hexToRgba(hex: string): {r: number, g: number, b: number, a: number} {
+  if (hex === 'transparent') return {r:0, g:0, b:0, a:0};
+  
+  let cleanHex = hex.replace('#', '');
+  if (cleanHex.length === 3) {
+    cleanHex = cleanHex.split('').map(c => c + c).join('');
+  }
+  
+  const r = parseInt(cleanHex.substring(0, 2), 16) || 0;
+  const g = parseInt(cleanHex.substring(2, 4), 16) || 0;
+  const b = parseInt(cleanHex.substring(4, 6), 16) || 0;
+  
+  return {r, g, b, a: 255};
+}
+
 /** Convert 16-bit-per-channel XPM hex (#RRRRGGGGBBBB) to CSS #RRGGBB */
 function normalizeXpmColor(raw: string): string {
   if (!raw.startsWith('#')) return raw;
@@ -212,15 +227,31 @@ async function parseXpmMainThread(xpmText: string): Promise<string | null> {
     const ctx = canvas.getContext('2d');
     if (!ctx) return null;
 
-    for (let y = 0; y < pixelRows.length; y++) {
+    const imageData = ctx.createImageData(width, height);
+    const data = imageData.data;
+    
+    // Pre-compile color table to RGBA for ultra-fast binary buffer insertion
+    const rgbaTable = new Map<string, {r: number, g: number, b: number, a: number}>();
+    colorTable.forEach((colorHex, symbol) => {
+        rgbaTable.set(symbol, hexToRgba(colorHex));
+    });
+    const fallbackColor = {r: 128, g: 128, b: 128, a: 255};
+
+    let offset = 0;
+    for (let y = 0; y < height; y++) {
       const row = pixelRows[y];
       for (let x = 0; x < width; x++) {
         const symbol = row.slice(x * cpp, x * cpp + cpp);
-        const color = colorTable.get(symbol) ?? '#808080';
-        ctx.fillStyle = color;
-        ctx.fillRect(x, y, 1, 1);
+        const color = rgbaTable.get(symbol) ?? fallbackColor;
+        
+        data[offset++] = color.r;
+        data[offset++] = color.g;
+        data[offset++] = color.b;
+        data[offset++] = color.a;
       }
     }
+    
+    ctx.putImageData(imageData, 0, 0);
 
     const dataUrl = canvas.toDataURL('image/png');
     return dataUrl;
