@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "astro": "^6.1.1",
+    "astro": "^6.1.6",
     "marked": "^17.0.3",
     "nanostores": "^1.2.0"
   },
